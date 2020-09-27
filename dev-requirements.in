@@ -1,0 +1,5 @@
+requests
+djangorestframework
+drf-writable-nested
+Django
+django-filter

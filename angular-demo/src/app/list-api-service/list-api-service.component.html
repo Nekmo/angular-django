@@ -1,0 +1,11 @@
+<label>
+  <select [(ngModel)]="page" (ngModelChange)="setSpecies()">
+    <option [value]="item" *ngFor="let item of pagesArray">Page {{item}}</option>
+  </select>
+</label>
+<label>Search: <input type="text" [(ngModel)]="search" (ngModelChange)="setSpecies(true)"></label>
+
+<p *ngFor="let specie of species|async">{{ specie.identifier }}</p>
+<div>
+  <p>Count: {{ count }}</p>
+</div>

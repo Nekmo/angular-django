@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'lib-angular-django',
   template: `
     <p>
-      angular-django works!
+      Ey, angular-django works!! :)
     </p>
   `,
   styles: [
