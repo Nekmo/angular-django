@@ -79,9 +79,9 @@ export class ApiService {
     //     return this.pipeHttp(this.http.get(this.getUrlDetail(pk)));
     // }
     //
-    // create(data) {
-    //     return this.pipeHttp(this.http.post(this.getUrlList(), data, this.defaultHttpOptions()));
-    // }
+    create(data): Observable<object> {
+        return this.pipeHttp(this.http.post(this.getUrlList(), data, this.defaultHttpOptions()));
+    }
     //
     // save(pk, data) {
     //     return this.pipeHttp(this.http.put(this.getUrlDetail(pk), data, this.defaultHttpOptions()));
@@ -95,10 +95,10 @@ export class ApiService {
     //     return this.http.delete(this.getUrlDetail(pk), this.defaultHttpOptions());
     // }
     //
-    // defaultHttpOptions() {
-    //     return {headers: {'X-CSRFToken': getCookie('csrftoken') || ''}};
-    // }
-    //
+    defaultHttpOptions(): {headers: {}} {
+        return {headers: {'X-CSRFToken': getCookie('csrftoken') || ''}};
+    }
+
     pipeHttp(observable: Observable<object>, listMode: boolean = false): Observable<object> {
         return observable.pipe(
             map((resp) => this.convert(resp, listMode))
@@ -120,9 +120,9 @@ export class ApiService {
     //     return `${this.url}${pk}/`;
     // }
     //
-    // getUrlList() {
-    //     return `${this.url}`;
-    // }
+    getUrlList(): string {
+        return `${this.url}`;
+    }
     //
     // orderBy(...orderList: string[]) {
     //     let order: string = orderList.join(',');
@@ -177,7 +177,7 @@ export class ApiService {
     // }
     //
     public list(): Observable<object | object[]> {
-        return this.pipeHttp(this.http.get(this.url, {params: this.queryParams}), true);
+        return this.pipeHttp(this.http.get(this.getUrlList(), {params: this.queryParams}), true);
     }
     //
     copy(): any {
