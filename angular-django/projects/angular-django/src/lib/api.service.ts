@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {SerializerService} from './serializer.service';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {isString} from "util";
+import {toTitleCase} from './form';
 // import {Observable} from 'rxjs/Rx';
 // import {isEqual} from "lodash";
 
@@ -218,5 +220,45 @@ export class ApiService {
     // getChoices(name) {
     //     return (this.getOptionField(name) || {})['choices'];
     // }
+
+  public getFormFields(fields = null): any {
+    const data: any = [];
+    for (const field of fields) {
+      let item: any;
+      if (typeof field === 'string') {
+        item = {
+          key: field
+        };
+      }else if (Array.isArray(field)) {
+        item = {
+          fieldGroupClassName: 'display-flex',
+          fieldGroup: this.getFormFields(field),
+          // type: 'flex-layout',
+          // templateOptions: {
+          //   fxLayout: 'row',
+          // },
+        };
+      } else {
+        item = field;
+      }
+      if ( item.key && !item.type ) {
+        item.type = 'input';  // Get type for input here
+      }
+      if ( item.key && !item.className ) {
+        item.className = 'flex-1';  // Get type for input here
+      }
+      if ( item.key && !item.templateOptions ) {
+        item.templateOptions = {};
+      }
+      if ( item.key && !item.templateOptions.label ) {
+        item.templateOptions.label = toTitleCase(item.key);
+      }
+      if ( item.key && !item.templateOptions.placeholder ) {
+        item.templateOptions.placeholder = `Enter ${item.templateOptions.label.toLowerCase()}`;
+      }
+      data.push(item);
+    }
+    return data;
+  }
 
 }

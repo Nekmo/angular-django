@@ -15,21 +15,24 @@ export class FormApiServiceComponent implements OnInit {
 
   form = new FormGroup({});
   model = { identifier: 'foo' };
-  fields: FormlyFieldConfig[] = [{
-    key: 'identifier',
-    type: 'input',
-    templateOptions: {
-      type: 'text',
-      label: 'Identifier',
-      placeholder: 'Enter identifier',
-      required: false,
-    }
-  }];
+  fields: FormlyFieldConfig[];
+  // fields: FormlyFieldConfig[] = [{
+  //   key: 'identifier',
+  //   type: 'input',
+  //   templateOptions: {
+  //     type: 'text',
+  //     label: 'Identifier',
+  //     placeholder: 'Enter identifier',
+  //     required: false,
+  //   }
+  // }];
 
 
   constructor(public specieApi: SpecieApi) { }
 
   ngOnInit(): void {
+    this.fields = this.specieApi.getFormFields(['identifier', ['height', 'weight']]);
+    console.log(this.fields);
   }
 
   submit(model): void {

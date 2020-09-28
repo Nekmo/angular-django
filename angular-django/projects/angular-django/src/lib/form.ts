@@ -2,6 +2,17 @@ import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 
 
+export function toTitleCase(str: string): string {
+  return str.replace(
+    /\w\S*/g,
+    (txt) => {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    }
+  );
+}
+
+
+
 export function catchFormError(form): any {
   // @ts-ignore
   return catchError((err: any) => {

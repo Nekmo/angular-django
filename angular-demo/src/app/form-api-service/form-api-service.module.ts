@@ -7,6 +7,7 @@ import {FormlyModule} from '@ngx-formly/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {MatButtonModule} from '@angular/material/button';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
     CommonModule,
     SharedModule,
     MatButtonModule,
+    FlexLayoutModule,
 
     ReactiveFormsModule,
     FormlyModule.forRoot(),
