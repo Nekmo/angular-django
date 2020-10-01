@@ -64,7 +64,7 @@ class Generation(models.Model):
 
 
 class Specie(models.Model):
-    identifier = models.CharField(max_length=50)
+    identifier = models.CharField(_('Specie identifier'), max_length=50)
     generation = models.ForeignKey(Generation, on_delete=models.PROTECT)
     evolves_from_specie = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
     # evolution_chain =

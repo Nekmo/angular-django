@@ -1,13 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import {FormlyFieldConfig} from '@ngx-formly/core';
+import {FieldType, FormlyFieldConfig} from '@ngx-formly/core';
 import {FormGroup} from '@angular/forms';
 import {SpecieApi} from '../shared/api.service';
 import {catchError} from 'rxjs/operators';
 import {EMPTY} from 'rxjs';
-import {catchFormError} from '../../../../angular-django/projects/angular-django/src/lib/form';
+import {catchFormError} from 'angular-django';
+
 
 @Component({
-  selector: 'app-form-api-service',
+  // tslint:disable-next-line:component-selector
+ selector: 'django-select',
+ template: `
+   <mat-form-field class="example-form-field">
+     <input matInput type="text" [formControl]="formControl" [formlyAttributes]="field">
+   </mat-form-field>
+
+ `,
+})
+export class DjangoSelectComponent extends FieldType {}
+
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'django-select',
   templateUrl: './form-api-service.component.html',
   styleUrls: ['./form-api-service.component.scss']
 })
@@ -31,8 +46,11 @@ export class FormApiServiceComponent implements OnInit {
   constructor(public specieApi: SpecieApi) { }
 
   ngOnInit(): void {
-    this.fields = this.specieApi.getFormFields(['identifier', ['height', 'weight']]);
-    console.log(this.fields);
+    // this.specieApi.options().subscribe(() => {
+    //   this.fields = this.specieApi.getFormFields(['identifier', ['color', 'gender_rate']]);
+    // });
+
+    this.fields = this.specieApi.getFormFields(['identifier', ['color', 'gender_rate']]);
   }
 
   submit(model): void {
