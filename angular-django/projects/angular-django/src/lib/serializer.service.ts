@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import 'reflect-metadata';
 
 
 // TODO: remove
@@ -46,27 +46,37 @@ import { Injectable } from '@angular/core';
 // }
 
 
-// export function Field(type?: any, many: boolean = false, required: boolean = true, defaultValue?: any,
-//                       readOnly: boolean = false, writeOnly: boolean = false,
-//                       helpText?: string) {
-//     return (target: Object, key: string) => {
-//         let metadata = (<any>Reflect).getMetadata("design:type", target, key);
-//         if(!type) {
-//             type = metadata;
-//         }
-//         if(target.constructor['fields'] === undefined) {
-//             target.constructor['fields'] = {};
-//         }
-//         let isSerializer = (type && type.prototype['__proto__'] &&
-//             type.prototype['__proto__'].constructor.name == 'SerializerService');
-//         target.constructor['fields'][key] = {
-//             typeName: (type ? type.name.toLowerCase() : ''), type: type, isSerializer: isSerializer,
-//             required: required, defaultValue: defaultValue,
-//             readOnly: readOnly, writeOnly: writeOnly, helpText: helpText,
-//             many: many,
-//         };
-//     }
-// }
+export interface FieldOptions {
+  type?: any;
+  formType?: string;
+  many?: boolean;
+  required?: boolean;
+  defaultValue?: any;
+  readOnly?: boolean;
+  writeOnly?: boolean;
+  helpText?: string;
+  isSerializer?: boolean;
+}
+
+
+export function Field(options?: FieldOptions) {
+  if (!options) {
+    options = {};
+  }
+  return (target: object, key: string) => {
+    const metadata = (Reflect as any).getMetadata('design:type', target, key);
+    if (!options.type) {
+      options.type = metadata;
+    }
+    if (target.constructor['fields'] === undefined) {
+      target.constructor['fields'] = {};
+    }
+    options.isSerializer = (options.type && options.type.prototype['__proto__'] &&
+      options.type.prototype['__proto__'].constructor.name === 'SerializerService');
+    target.constructor['fields'][key] = options;
+    console.log(target);
+  };
+}
 
 
 // @Injectable({

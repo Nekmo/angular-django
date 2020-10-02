@@ -1,5 +1,6 @@
 import {Injectable, Injector} from '@angular/core';
-import {Api, ApiService, SerializerService} from 'angular-django';
+import {Api, ApiService, Field, SerializerService} from 'angular-django';
+import 'reflect-metadata';
 import {HttpClient} from '@angular/common/http';
 
 
@@ -39,7 +40,9 @@ export class Specie extends SerializerService {
     // @Field() habitat: Habitat;
     // @Field() generation: Generation;
     // @Field() identifier: string;
-    // @Field() color: string;
+    // @Field({formType: 'select'}) color: string;
+    @Field({formType: 'select'}) color: string;
+    // @Reflect.metadata("foo2", "bar2") color: string;
     // @Field() gender_rate: number;
     // @Field() capture_rate: number;
     // @Field() base_happiness: number;

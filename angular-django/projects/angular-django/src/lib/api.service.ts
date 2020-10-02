@@ -4,7 +4,8 @@ import {SerializerService} from './serializer.service';
 import {map, shareReplay} from 'rxjs/operators';
 import {Observable, Subscriber} from 'rxjs';
 import {isString} from "util";
-import {toTitleCase} from './form';
+import {DjangoFormlyField, toTitleCase} from './form';
+import {Serializer} from '@angular/compiler';
 // import {Observable} from 'rxjs/Rx';
 // import {isEqual} from "lodash";
 
@@ -32,6 +33,7 @@ export class OptionField {
   // tslint:disable-next-line:variable-name
   read_only: boolean;
   label: string;
+  choices: {value: string | number, display_name: string}[];
   children?: Dictionary<{OptionField}>;
 }
 
@@ -255,47 +257,9 @@ export class ApiService {
   // }
 
   public getFormFields(fields = null): any {
-    const data: any = [];
+    const data: DjangoFormlyField[] = [];
     for (const field of fields) {
-      let item: any;
-      if (typeof field === 'string') {
-        item = {
-          key: field
-        };
-      }else if (Array.isArray(field)) {
-        item = {
-          fieldGroupClassName: 'display-flex',
-          fieldGroup: this.getFormFields(field),
-        };
-      } else {
-        item = field;
-      }
-      if ( item.key && !item.type ) {
-        item.type = 'input';  // Get type for input here
-      }
-      if ( item.key && !item.className ) {
-        item.className = 'flex-1';  // Get type for input here
-      }
-      if ( item.key && !item.templateOptions ) {
-        item.templateOptions = {};
-      }
-      if ( item.key && !item.templateOptions.label ) {
-        const optionField: OptionField = this.getOptionField(item.key);
-        item.templateOptions.label = (optionField ? optionField.label : '') || toTitleCase(item.key);
-      }
-      if ( item.key && !item.templateOptions.placeholder ) {
-        item.templateOptions.placeholder = `Enter ${item.templateOptions.label.toLowerCase()}`;
-      }
-      item.lifecycle = {
-        onInit: (form, formField) => {
-          this.options().subscribe(() => {
-            // TODO: refactor
-            const optionField: OptionField = this.getOptionField(item.key);
-            item.templateOptions.label = (optionField ? optionField.label : '') || toTitleCase(item.key);
-          });
-        },
-      };
-      data.push(item);
+      data.push(new DjangoFormlyField(field, this));
     }
     return data;
   }
