@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import {Widget} from './widgets';
 
 
 // TODO: remove
@@ -48,7 +49,7 @@ import 'reflect-metadata';
 
 export interface FieldOptions {
   type?: any;
-  formType?: string;
+  widget?: string | Widget;
   many?: boolean;
   required?: boolean;
   defaultValue?: any;
@@ -65,7 +66,6 @@ export function Field(options?: FieldOptions) {
   }
   return (target: object, key: string) => {
     const metadata = (Reflect as any).getMetadata('design:type', target, key);
-    console.log(metadata);
     if (!options.type) {
       options.type = metadata;
     }
@@ -181,7 +181,7 @@ export class SerializerService {
     //     return this.getFieldOptions(field)['type'];
     // }
     //
-    // static getType(field) {
+    // static getWidget(field) {
     //     return this.getNestedSerializer(field);
     // }
     //

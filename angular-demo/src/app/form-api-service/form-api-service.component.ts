@@ -37,7 +37,9 @@ export class FormApiServiceComponent implements OnInit {
     //   this.fields = this.specieApi.getFormFields(['identifier', ['color', 'gender_rate']]);
     // });
 
-    this.fields = this.specieApi.getFormFields(['identifier', 'habitat', ['color', 'gender_rate']]);
+    this.fields = this.specieApi.getFormFields([
+      'identifier', 'habitat', ['color', 'gender_rate', 'capture_rate', 'is_baby']
+    ]);
   }
 
   submit(model): void {

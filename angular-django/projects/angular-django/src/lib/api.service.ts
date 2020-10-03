@@ -258,6 +258,9 @@ export class ApiService {
 
   public getFormFields(fields = null): any {
     const data: DjangoFormlyField[] = [];
+    if (fields === null) {
+      fields = Object.keys(this.serializer.fields);
+    }
     for (const field of fields) {
       data.push(new DjangoFormlyField(field, this));
     }

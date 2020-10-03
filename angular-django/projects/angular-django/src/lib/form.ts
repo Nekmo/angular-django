@@ -1,15 +1,9 @@
+import "reflect-metadata";
 import {catchError, shareReplay} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {ApiService, OptionField} from './api.service';
-import "reflect-metadata";
 import {FieldOptions} from './serializer.service';
-
-
-const FORM_TYPES = {
-  choice: 'select',
-  'nested object': 'autocomplete',
-};
-const DEFAULT_TYPE = 'input';
+import {getWidgetFromName, Widget, DEFAULT_TYPE, FORM_TYPES} from './widgets';
 
 
 export interface FormlyTemplateOptions {
@@ -68,6 +62,7 @@ export class DjangoFormlyField {
   key: string;
   type: string;
   className?: string;
+  defaultValue?: any;
   fieldGroupClassName?: string;
   fieldGroup?: DjangoFormlyField;
   templateOptions: FormlyTemplateOptions;
@@ -82,16 +77,25 @@ export class DjangoFormlyField {
     } else {
       Object.assign(this, field);
     }
+    let widget: Widget | null = null;
+    let fieldOptions: FieldOptions | null = null;
     if ( this.key && !this.type ) {
-      this.type = this.getType();  // Get type for input here
+      widget = this.getWidget();  // Get type for input here
+    }
+    if (this.key) {
+      this.type = (widget ? widget.type : DEFAULT_TYPE);
+      fieldOptions = this.getFieldOptions();
     }
     if ( this.key && !this.className ) {
       this.className = 'flex-1';  // Get type for input here
     }
     if ( this.key && !this.templateOptions ) {
-      this.templateOptions = this.getTemplateOptions();
+      this.templateOptions = this.getTemplateOptions(widget);
     }
-    if (this.key) {
+    if (fieldOptions && fieldOptions.defaultValue !== undefined) {
+      this.defaultValue = this.getFieldOptions().defaultValue;
+    }
+    if (this.key && !this.api.hasOptions) {
       this.lifecycle = {
         onInit: (form, formField) => {
           this.api.options().subscribe(() => {
@@ -102,17 +106,30 @@ export class DjangoFormlyField {
     }
   }
 
-  getType(): string {
-    const optionField: OptionField = this.api.getOptionField(this.key);
-    let type: string | null = (optionField ? FORM_TYPES[optionField.type] : null);
-    if (!type) {
-      const fieldOptions: FieldOptions | null = this.api.serializer.fields[this.key];
-      type = (fieldOptions ? fieldOptions.formType : null);
-    }
-    return type || DEFAULT_TYPE;
+  getFieldOptions(): FieldOptions | null {
+    return this.api.serializer.fields[this.key];
   }
 
-  getTemplateOptions(): FormlyTemplateOptions {
+  getWidget(): Widget | null {
+    // Try to get widget from api serializer field
+    const fieldOptions: FieldOptions | null = this.getFieldOptions();
+    let widget: string | Widget | null = (fieldOptions ? fieldOptions.widget : null);
+    if (typeof widget === 'string') {
+      widget = getWidgetFromName(widget);
+    }
+    if (!widget && fieldOptions && fieldOptions.type) {
+      // Try to get widget from type in field serializer
+      widget = ((fieldOptions ? FORM_TYPES[fieldOptions.type.name.toLowerCase()] : null) as Widget);
+    }
+    if (!widget) {
+      // Try to get widget from api OPTIONS request
+      const optionField: OptionField = this.api.getOptionField(this.key);
+      widget = ((optionField ? FORM_TYPES[optionField.type] : null) as Widget);
+    }
+    return widget;
+  }
+
+  getTemplateOptions(widget: Widget): FormlyTemplateOptions {
     const templateOptions: FormlyTemplateOptions = {};
     if ( this.key && !templateOptions.label ) {
       const optionField: OptionField = this.api.getOptionField(this.key);
@@ -121,22 +138,8 @@ export class DjangoFormlyField {
     if ( this.key && !templateOptions.placeholder ) {
       templateOptions.placeholder = `Enter ${templateOptions.label.toLowerCase()}`;
     }
-    if ( this.type === 'select' && this.api.hasOptions ) {
-      templateOptions.options = this.api.getOptionField(this.key).choices.map((item => {
-        return {value: item.value, label: item.display_name};
-      }));
-    } else if (this.type === 'select') {
-      templateOptions.options = [];
-    }
-    if ( this.type === 'autocomplete' ) {
-      const field: FieldOptions = this.api.serializer.fields[this.key];
-      // Improvement: cache term results;
-      templateOptions.filter = (term) => {
-        if (typeof term !== 'string') {
-          term = '';
-        }
-        return this.api.injector.get(field.type.api_class).search(term).list();
-      };
+    if (widget) {
+      widget.updateTemplateOptions(templateOptions, this);
     }
     return templateOptions;
   }
