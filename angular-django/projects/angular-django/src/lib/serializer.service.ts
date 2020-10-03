@@ -65,6 +65,7 @@ export function Field(options?: FieldOptions) {
   }
   return (target: object, key: string) => {
     const metadata = (Reflect as any).getMetadata('design:type', target, key);
+    console.log(metadata);
     if (!options.type) {
       options.type = metadata;
     }
@@ -74,7 +75,6 @@ export function Field(options?: FieldOptions) {
     options.isSerializer = (options.type && options.type.prototype['__proto__'] &&
       options.type.prototype['__proto__'].constructor.name === 'SerializerService');
     target.constructor['fields'][key] = options;
-    console.log(target);
   };
 }
 

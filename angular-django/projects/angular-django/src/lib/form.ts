@@ -1,4 +1,4 @@
-import {catchError} from 'rxjs/operators';
+import {catchError, shareReplay} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {ApiService, OptionField} from './api.service';
 import "reflect-metadata";
@@ -7,6 +7,7 @@ import {FieldOptions} from './serializer.service';
 
 const FORM_TYPES = {
   choice: 'select',
+  'nested object': 'autocomplete',
 };
 const DEFAULT_TYPE = 'input';
 
@@ -108,7 +109,6 @@ export class DjangoFormlyField {
       const fieldOptions: FieldOptions | null = this.api.serializer.fields[this.key];
       type = (fieldOptions ? fieldOptions.formType : null);
     }
-    console.log(type);
     return type || DEFAULT_TYPE;
   }
 
@@ -127,6 +127,16 @@ export class DjangoFormlyField {
       }));
     } else if (this.type === 'select') {
       templateOptions.options = [];
+    }
+    if ( this.type === 'autocomplete' ) {
+      const field: FieldOptions = this.api.serializer.fields[this.key];
+      // Improvement: cache term results;
+      templateOptions.filter = (term) => {
+        if (typeof term !== 'string') {
+          term = '';
+        }
+        return this.api.injector.get(field.type.api_class).search(term).list();
+      };
     }
     return templateOptions;
   }

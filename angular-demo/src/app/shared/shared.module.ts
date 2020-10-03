@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
-import {RegionApi, SpecieApi} from './api.service';
+import {HabitatApi, RegionApi, SpecieApi} from './api.service';
 
 
 
@@ -9,6 +9,7 @@ import {RegionApi, SpecieApi} from './api.service';
   declarations: [],
   providers: [
     RegionApi,
+    HabitatApi,
     SpecieApi,
   ],
   imports: [

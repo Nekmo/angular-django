@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {DjangoSelectComponent, FormApiServiceComponent} from './form-api-service.component';
+import {FormApiServiceComponent} from './form-api-service.component';
 import {FormlyMaterialModule} from '@ngx-formly/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FormlyModule} from '@ngx-formly/core';
@@ -11,6 +11,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {AutocompleteTypeComponent} from './autocomplete-type.component';
 
 
 const routes: Routes = [
@@ -22,19 +24,24 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [FormApiServiceComponent, DjangoSelectComponent],
+  declarations: [
+    FormApiServiceComponent,
+    AutocompleteTypeComponent,
+  ],
   imports: [
     FormlyModule.forRoot({
-      types: [
-        {name: 'django-select', component: DjangoSelectComponent},
-      ],
-    }),
+      types: [{
+        name: 'autocomplete',
+        component: AutocompleteTypeComponent,
+        wrappers: ['form-field'],
+      }],    }),
 
     CommonModule,
     SharedModule,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
+    MatAutocompleteModule,
     FlexLayoutModule,
 
     FormsModule,

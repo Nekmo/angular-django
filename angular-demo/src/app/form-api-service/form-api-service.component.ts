@@ -9,19 +9,6 @@ import {catchFormError} from 'angular-django';
 
 @Component({
   // tslint:disable-next-line:component-selector
- selector: 'django-select',
- template: `
-   <mat-form-field class="example-form-field">
-     <input matInput type="text" [formControl]="formControl" [formlyAttributes]="field">
-   </mat-form-field>
-
- `,
-})
-export class DjangoSelectComponent extends FieldType {}
-
-
-@Component({
-  // tslint:disable-next-line:component-selector
   selector: 'django-select',
   templateUrl: './form-api-service.component.html',
   styleUrls: ['./form-api-service.component.scss']
@@ -50,7 +37,7 @@ export class FormApiServiceComponent implements OnInit {
     //   this.fields = this.specieApi.getFormFields(['identifier', ['color', 'gender_rate']]);
     // });
 
-    this.fields = this.specieApi.getFormFields(['identifier', ['color', 'gender_rate']]);
+    this.fields = this.specieApi.getFormFields(['identifier', 'habitat', ['color', 'gender_rate']]);
   }
 
   submit(model): void {

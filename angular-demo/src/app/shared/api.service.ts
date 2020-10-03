@@ -31,13 +31,41 @@ export class RegionApi extends ApiService {
 
 
 ///////////////////////////////////////
+// Habitat API
+///////////////////////////////////////
+export class Habitat extends SerializerService {
+     @Field() url: string;
+     @Field() identifier: string;
+     @Field() id: number;
+
+    getName() {
+        return this.identifier;
+    }
+
+}
+
+@Api(Habitat)
+@Injectable()
+export class HabitatApi extends ApiService {
+
+    url = '/api/habitats/';
+    serializer = Habitat;
+
+    constructor(injector: Injector) {
+        super(injector);
+    }
+}
+
+
+///////////////////////////////////////
 // Specie API
 ///////////////////////////////////////
 export class Specie extends SerializerService {
     // @Field() url: string;
     // @Field() growth_rate: GrowthRate;
     // @Field() shape: Shape;
-    // @Field() habitat: Habitat;
+    // @Field({formType: 'autocomplete'}) habitat: Habitat;
+    @Field({formType: 'autocomplete'}) habitat: Habitat;
     // @Field() generation: Generation;
     // @Field() identifier: string;
     // @Field({formType: 'select'}) color: string;
@@ -59,6 +87,7 @@ export class Specie extends SerializerService {
     //     return this.identifier;
     // }
 }
+
 
 @Api(Specie)
 @Injectable()
