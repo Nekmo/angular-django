@@ -13,6 +13,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {AutocompleteTypeComponent} from './autocomplete-type.component';
+import {MatNativeDateModule} from '@angular/material/core';
+import {FormlyMatDatepickerModule} from '@ngx-formly/material/datepicker';
 
 
 const routes: Routes = [
@@ -43,7 +45,8 @@ const routes: Routes = [
     MatIconModule,
     MatAutocompleteModule,
     FlexLayoutModule,
-
+    MatNativeDateModule,
+    FormlyMatDatepickerModule,
     FormsModule,
     ReactiveFormsModule,
     // FormlyModule.forRoot(),

@@ -99,7 +99,9 @@ export class DjangoFormlyField {
       this.lifecycle = {
         onInit: (form, formField) => {
           this.api.options().subscribe(() => {
-            Object.assign(formField, (new DjangoFormlyField(field, this.api)));
+            const djangoFormlyField: DjangoFormlyField = (new DjangoFormlyField(field, this.api));
+            formField.defaultValue = djangoFormlyField.defaultValue;
+            Object.assign(formField.templateOptions, djangoFormlyField.templateOptions);
           });
         },
       };

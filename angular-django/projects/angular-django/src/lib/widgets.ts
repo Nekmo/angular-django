@@ -55,6 +55,7 @@ export class AutocompleteWidget extends Widget {
 export const FORM_TYPES = {
   number: new Widget({type: 'input', name: 'number', templateOptionsType: 'number'}),
   boolean: new Widget({type: 'checkbox', name: 'boolean'}),
+  date: new Widget({type: 'datepicker', name: 'date'}),
   choice: new SelectWidget(),
   'nested object': new AutocompleteWidget(),
 };

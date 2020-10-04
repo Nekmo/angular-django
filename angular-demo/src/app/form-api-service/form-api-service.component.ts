@@ -16,27 +16,12 @@ import {catchFormError} from 'angular-django';
 export class FormApiServiceComponent implements OnInit {
 
   form = new FormGroup({});
-  model = { identifier: 'foo' };
+  model = {};
   fields: FormlyFieldConfig[];
-  // fields: FormlyFieldConfig[] = [{
-  //   key: 'identifier',
-  //   type: 'input',
-  //   templateOptions: {
-  //     type: 'text',
-  //     label: 'Identifier',
-  //     placeholder: 'Enter identifier',
-  //     required: false,
-  //   }
-  // }];
-
 
   constructor(public specieApi: SpecieApi) { }
 
   ngOnInit(): void {
-    // this.specieApi.options().subscribe(() => {
-    //   this.fields = this.specieApi.getFormFields(['identifier', ['color', 'gender_rate']]);
-    // });
-
     this.fields = this.specieApi.getFormFields([
       'identifier', 'habitat', ['color', 'gender_rate', 'capture_rate', 'is_baby']
     ]);
