@@ -94,11 +94,14 @@ export class ApiService {
     this.http = injector.get(HttpClient);
   }
 
+  get(pk): Observable<any> {
+    return this.retrieve(pk);
+  }
 
-  // get(pk) {
-  //     return this.pipeHttp(this.http.get(this.getUrlDetail(pk)));
-  // }
-  //
+  retrieve(pk): Observable<any> {
+      return this.pipeHttp(this.http.get(this.getUrlDetail(pk)));
+  }
+
   create(data): Observable<object> {
     return this.pipeHttp(this.http.post(this.getUrlList(), data, this.defaultHttpOptions()));
   }
@@ -135,11 +138,11 @@ export class ApiService {
     }
     return new this.serializer(this, data);
   }
-  //
-  // getUrlDetail(pk) {
-  //     return `${this.url}${pk}/`;
-  // }
-  //
+
+  getUrlDetail(pk: string | number): string {
+      return `${this.url}${pk}/`;
+  }
+
   getUrlList(): string {
     return `${this.url}`;
   }

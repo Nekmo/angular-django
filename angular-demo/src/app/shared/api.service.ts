@@ -216,3 +216,32 @@ export class PokemonApi extends ApiService {
     super(injector);
   }
 }
+
+
+///////////////////////////////////////
+// Pokemon API
+///////////////////////////////////////
+export class User extends SerializerService {
+  @Field() url: string;
+  @Field() id: number;
+  @Field() username: string;
+  @Field() date_joined: Date;
+
+  getName() {
+    return this.username;
+  }
+}
+
+@Api(User)
+@Injectable({
+  providedIn: 'root'
+})
+export class UserApi extends ApiService {
+
+  url = '/api/users/';
+  serializer = User;
+
+  constructor(injector: Injector) {
+    super(injector);
+  }
+}

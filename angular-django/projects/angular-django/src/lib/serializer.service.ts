@@ -83,37 +83,38 @@ export function Field(options?: FieldOptions) {
 //     providedIn: 'root'
 // })
 export class SerializerService {
-    // _api;
+    _api: any;
 
     constructor(api, data) {
-        // this._api = api;
-        // this.transformData(data);
+        this._api = api;
+        this.transformData(data);
         Object.assign(this, data);
     }
 
-    // transformData(data) {
-    //     let fields = this.constructor['fields'] || {};
-    //     if(data === null) {
-    //         // Instance is null on model
-    //         return null
-    //     }
-    //     Object.entries(fields).forEach(([name, options]) => {
-    //         let type = options['type'];
-    //         if(data[name] === undefined) {
-    //             return
-    //         }
-    //         if(options['isSerializer'] && options['many']) {
-    //             data[name] = data[name].map((item) => new type(this._api, item));
-    //         } else if(options['isSerializer']) {
-    //             // TODO: no es su propio serializer
-    //             data[name] = new type(this._api, data[name]);
-    //         } else if(type == Date) {
-    //             data[name] = new type(data[name]);
-    //         } else if(type) {
-    //             data[name] = type(data[name]);
-    //         }
-    //     })
-    // }
+    transformData(data) {
+        let fields = this.constructor['fields'] || {};
+        if(data === null) {
+            // Instance is null on model
+            return null;
+        }
+        Object.entries(fields).forEach(([name, options]) => {
+
+            let type = options['type'];
+            if(data[name] === undefined) {
+                return
+            }
+            if(options['isSerializer'] && options['many']) {
+                data[name] = data[name].map((item) => new type(this._api, item));
+            } else if(options['isSerializer']) {
+                // TODO: no es su propio serializer
+                data[name] = new type(this._api, data[name]);
+            } else if (type === Date) {
+                data[name] = new type(data[name]);
+            } else if (type) {
+                data[name] = type(data[name]);
+            }
+        })
+    }
     //
     // getData() {
     //     let newData = {};

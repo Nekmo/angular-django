@@ -14,6 +14,7 @@ router.register(r'shares', views.ShapeViewSet)
 router.register(r'habitats', views.HabitatViewSet)
 router.register(r'generations', views.GenerationViewSet)
 router.register(r'regions', views.RegionViewSet)
+router.register(r'users', views.UserViewSet)
 
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.
