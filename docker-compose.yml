@@ -1,0 +1,27 @@
+version: '3.6'
+services:
+
+  nginx:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: nginx-build
+
+  angular:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: angular-build
+
+  gunicorn:
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: gunicorn-build

@@ -1,0 +1,8 @@
+*
+!angular-demo/src
+!angular-demo/*.json
+!angular-django/projects
+!angular-django/*.json
+!django_demo/*.txt
+!django_demo/demo
+!django_demo/pokedex
