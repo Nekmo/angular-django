@@ -5,12 +5,19 @@
 #    pip-compile requirements.in
 #
 asgiref==3.2.10           # via django
+certifi==2020.6.20        # via requests
+chardet==3.0.4            # via requests
+django-filter==2.4.0      # via -r requirements.in
 django-rest-framework==0.1.0  # via -r requirements.in
-django==3.1.1             # via -r requirements.in, djangorestframework
+django==3.1.1             # via -r requirements.in, django-filter, djangorestframework
 djangorestframework==3.11.1  # via django-rest-framework
+drf-writable-nested==0.6.1  # via -r requirements.in
 gunicorn==20.0.4          # via -r requirements.in
+idna==2.10                # via requests
 pytz==2020.1              # via django
+requests==2.24.0          # via -r requirements.in
 sqlparse==0.3.1           # via django
+urllib3==1.25.10          # via requests
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

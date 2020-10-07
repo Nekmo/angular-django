@@ -7,6 +7,11 @@ services:
       context: .
       dockerfile: ./Dockerfile
       target: nginx-build
+    volumes:
+      - ./conf/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./data/nginx/log/:/var/log/nginx/
+    ports:
+    - 80:80
 
   angular:
     build:
@@ -25,3 +30,8 @@ services:
       context: .
       dockerfile: ./Dockerfile
       target: gunicorn-build
+    environment:
+      DATA_DIRECTORY: /data
+    volumes:
+      - ./data/gunicorn/:/data/
+

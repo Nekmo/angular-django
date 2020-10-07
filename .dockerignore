@@ -4,5 +4,7 @@
 !angular-django/projects
 !angular-django/*.json
 !django_demo/*.txt
+!django_demo/*.py
 !django_demo/demo
 !django_demo/pokedex
+!compose/
