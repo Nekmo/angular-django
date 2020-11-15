@@ -3,11 +3,11 @@ ENV PYTHONUNBUFFERED 1
 
 RUN mkdir -p /app
 WORKDIR /app
-COPY django_demo/requirements.txt .
+COPY demo/django/requirements.txt .
 RUN pip install -r requirements.txt
 COPY compose/gunicorn/entrypoint.sh /
 RUN chmod +x "/entrypoint.sh"
-COPY django_demo ./
+COPY demo/django ./
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/local/bin/gunicorn", "-b", "0.0.0.0:8000", "demo.wsgi:application"]
@@ -18,12 +18,12 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 RUN mkdir -p /app /angular-django
 WORKDIR /app
-COPY angular-demo/package.json angular-demo/package-lock.json ./
+COPY demo/angular/package.json demo/angular/package-lock.json ./
 RUN npm install
-COPY angular-demo ./
+COPY demo/angular ./
 
 WORKDIR /angular-django
-COPY angular-django ./
+COPY src/angular ./
 RUN npm install && ng build
 WORKDIR /app
 RUN ls /angular-django/
