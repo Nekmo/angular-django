@@ -23,9 +23,13 @@ DATA_DIRECTORY = os.environ.get('DATA_DIRECTORY', str(BASE_DIR))
 SECRET_KEY = '3c3f-#e&%506f^q1+vh3)*lx230fca9v=nv4&+93)^*r=lwrhi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'angular-django.nekmo.org',
+]
 
 
 # Application definition
