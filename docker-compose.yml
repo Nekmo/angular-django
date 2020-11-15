@@ -11,7 +11,7 @@ services:
       - ./conf/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./data/nginx/log/:/var/log/nginx/
     ports:
-    - "80:80"
+    - "${ANGULAR_DJANGO_HTTP_PORT:-80:80}"
 
   angular:
     build:
