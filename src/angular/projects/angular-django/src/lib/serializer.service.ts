@@ -47,6 +47,17 @@ import {Widget} from './widgets';
 // }
 
 
+function isConstructor(f: any): boolean {
+  try {
+    // tslint:disable-next-line:no-unused-expression
+    new f();
+  } catch (err) {
+    return false;
+  }
+  return true;
+}
+
+
 export interface FieldOptions {
   type?: any;
   widget?: string | Widget;
@@ -60,7 +71,7 @@ export interface FieldOptions {
 }
 
 
-export function Field(options?: FieldOptions) {
+export function Field(options?: FieldOptions): (target: object, key: string) => void {
   if (!options) {
     options = {};
   }
@@ -83,6 +94,7 @@ export function Field(options?: FieldOptions) {
 //     providedIn: 'root'
 // })
 export class SerializerService {
+    // tslint:disable-next-line:variable-name
     _api: any;
 
     constructor(api, data) {
@@ -91,29 +103,30 @@ export class SerializerService {
         Object.assign(this, data);
     }
 
-    transformData(data) {
-        let fields = this.constructor['fields'] || {};
-        if(data === null) {
+    transformData(data): void {
+        const fields = this.constructor['fields'] || {};
+        if (data === null) {
             // Instance is null on model
             return null;
         }
         Object.entries(fields).forEach(([name, options]) => {
-
-            let type = options['type'];
-            if(data[name] === undefined) {
-                return
+            const type = options['type'];
+            if (data[name] === undefined) {
+                return;
             }
-            if(options['isSerializer'] && options['many']) {
+            if (options['isSerializer'] && options['many']) {
                 data[name] = data[name].map((item) => new type(this._api, item));
-            } else if(options['isSerializer']) {
-                // TODO: no es su propio serializer
+            } else if (options['isSerializer']) {
                 data[name] = new type(this._api, data[name]);
             } else if (type === Date) {
                 data[name] = new type(data[name]);
+            } else if (type && isConstructor(type)) {
+                data[name] = new type(data[name]);
             } else if (type) {
-                data[name] = type(data[name]);
+              console.log(type);
+                // data[name] = type(data[name]);
             }
-        })
+        });
     }
     //
     // getData() {
