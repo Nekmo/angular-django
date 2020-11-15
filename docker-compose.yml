@@ -15,9 +15,9 @@ services:
     labels:
       - "traefik.enable=true"
 
-      - "traefik.http.routers.homeassistant.rule=Host(`${ANGULAR_DJANGO_DOMAIN}`)"
-      - "traefik.http.routers.homeassistant.entrypoints=websecure"
-      - "traefik.http.routers.homeassistant.tls.certresolver=certbot"
+      - "traefik.http.routers.angular-django.rule=Host(`${ANGULAR_DJANGO_DOMAIN}`)"
+      - "traefik.http.routers.angular-django.entrypoints=websecure"
+      - "traefik.http.routers.angular-django.tls.certresolver=certbot"
 
   angular:
     build:
