@@ -3,8 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
     {
-        path        : 'tutorial',
-        loadChildren : () => import('./tutorial/tutorial.module').then(m => m.TutorialModule),
+        path        : 'installation',
+        loadChildren : () => import('./installation/installation.module').then(m => m.InstallationModule),
     },
     {
         path        : 'retrieve-api-service',

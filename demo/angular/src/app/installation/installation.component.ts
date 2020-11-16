@@ -3,10 +3,10 @@ import {GithubFile} from '../github-code/github-code.component';
 
 @Component({
   selector: 'app-tutorial',
-  templateUrl: './tutorial.component.html',
-  styleUrls: ['./tutorial.component.scss']
+  templateUrl: './installation.component.html',
+  styleUrls: ['./installation.component.scss']
 })
-export class TutorialComponent implements OnInit {
+export class InstallationComponent implements OnInit {
 
   constructor() { }
 
