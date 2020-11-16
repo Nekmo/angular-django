@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {GithubFile} from '../github-code/github-code.component';
 
 @Component({
   selector: 'app-tutorial',
@@ -9,8 +10,11 @@ export class TutorialComponent implements OnInit {
 
   constructor() { }
 
-  link = 'https://raw.githubusercontent.com/Nekmo/angular-django/master/demo/angular/src/app/retrieve-api-service/retrieve-api-service.component.ts';
-  code = 'foo = "bar"';
+
+  tutorialFiles: GithubFile[] = [
+    {name: 'retrieve-api-service.component.html', directory: 'retrieve-api-service'},
+    {name: 'retrieve-api-service.component.ts', directory: 'retrieve-api-service'},
+  ];
 
   ngOnInit(): void {
   }
