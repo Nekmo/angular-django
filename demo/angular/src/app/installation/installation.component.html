@@ -1,10 +1,19 @@
 
-<!--<pre>-->
-<!--  <code [highlight]="code"></code>-->
-<!--</pre>-->
+<h2>Installation</h2>
+<p>angular-django consists of two packages: a package for Angular and an optional package for Django. To install the
+  <strong>Angular package</strong>:</p>
+<app-code-highlight>$ npm i angular-django</app-code-highlight>
 
-<!--<pre>-->
-<!--  <code [highlight]="link | codeFromUrl | async"></code>-->
-<!--</pre>-->
+<p>Import AngularDjangoModule in your app:</p>
+<app-code-highlight><pre>
+import &#123; AngularDjangoModule } from 'angular-django';
 
-<app-github-code [files]="tutorialFiles"></app-github-code>
+  @NgModule(&#123;
+    imports: [
+       AngularDjangoModule,
+    ],
+  &#125;)
+  export class AppModule &#123; &#125;
+</pre></app-code-highlight>
+
+<!--<app-github-code [files]="tutorialFiles"></app-github-code>-->

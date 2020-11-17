@@ -13,12 +13,13 @@ export class AppComponent implements OnDestroy {
 
   // tslint:disable-next-line:variable-name
   private _mobileQueryListener: () => void;
-
+  openedByDefault = false;
 
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+
   }
 
   ngOnDestroy(): void {
