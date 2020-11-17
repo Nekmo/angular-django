@@ -6,23 +6,12 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@a
   templateUrl: './code-highlight.component.html',
   styleUrls: ['./code-highlight.component.scss']
 })
-export class CodeHighlightComponent implements OnInit, AfterViewInit {
+export class CodeHighlightComponent implements OnInit {
 
   constructor() { }
 
-  code: string;
-  @ViewChild('contentWrapper') content: ElementRef;
+  @Input() code: string;
 
   ngOnInit(): void {
   }
-
-  ngAfterViewInit(): void {
-    let el: any = this.content.nativeElement;
-    if (el.firstElementChild) {
-      el = el.firstElementChild;
-    }
-    console.log(el);
-    this.code = el.textContent;
-  }
-
 }

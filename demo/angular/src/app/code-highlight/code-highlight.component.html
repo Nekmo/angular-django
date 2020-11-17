@@ -1,8 +1,5 @@
 <mat-card>
   <mat-card-content>
-    <pre><code [highlight]="code"></code></pre>
-    <div #contentWrapper style="display: none">
-      <ng-content></ng-content>
-    </div>
+    <pre><code [highlight]="code.trim()"></code></pre>
   </mat-card-content>
 </mat-card>
