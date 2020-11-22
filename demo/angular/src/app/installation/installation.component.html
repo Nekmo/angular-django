@@ -16,4 +16,14 @@ import &#123; AngularDjangoModule } from 'angular-django';
   export class AppModule &#123; &#125;
 "></app-code-highlight>
 
+Enable <code>emitDecoratorMetadata</code> in the <code>compilerOptions</code> section of your <code>tsconfig.json</code>:
+
+<app-code-highlight code='
+{
+  "compilerOptions": {
+    "emitDecoratorMetadata": true
+  }
+}
+'></app-code-highlight>
+
 <!--<app-github-code [files]="tutorialFiles"></app-github-code>-->
