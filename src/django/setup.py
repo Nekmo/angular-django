@@ -67,11 +67,6 @@ classifiers.extend([
 
 
 setup(
-    entry_points={
-        'console_scripts': [
-            'angular-django = angular_django:manage'
-        ],
-    },
     classifiers=classifiers,
     platforms=PLATFORMS,
     install_requires=read_file(REQUIREMENT_FILE),
