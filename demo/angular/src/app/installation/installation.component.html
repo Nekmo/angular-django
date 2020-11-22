@@ -26,4 +26,18 @@ Enable <code>emitDecoratorMetadata</code> in the <code>compilerOptions</code> se
 }
 '></app-code-highlight>
 
+<p>Install the <strong>Django package</strong> in your project:</p>
+
+<app-code-highlight code="$ pip install -U angular-django"></app-code-highlight>
+
+<p>Add the app in the <code>INSTALLED_APPS</code> list in your <code>settings.py</code> file:</p>
+
+<app-code-highlight code="
+INSTALLED_APPS = [
+    # ...
+    'rest_framework',
+    'angular_django',
+]
+"></app-code-highlight>
+
 <!--<app-github-code [files]="tutorialFiles"></app-github-code>-->
