@@ -3,6 +3,10 @@
 !demo/angular/*.json
 !src/angular/projects
 !src/angular/*.json
+!src/django/LICENSE
+!src/django/*.in
+!src/django/setup.*
+!src/django/angular_django
 !demo/django/*.txt
 !demo/django/*.py
 !demo/django/demo

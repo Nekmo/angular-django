@@ -7,6 +7,8 @@ COPY demo/django/requirements.txt .
 RUN pip install -r requirements.txt
 COPY compose/gunicorn/entrypoint.sh /
 RUN chmod +x "/entrypoint.sh"
+COPY src/django /tmp/django
+RUN cd /tmp/django && python setup.py install && rm -rf /tmp/django
 COPY demo/django ./
 
 ENTRYPOINT ["/entrypoint.sh"]
