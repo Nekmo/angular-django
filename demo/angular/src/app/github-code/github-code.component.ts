@@ -12,8 +12,25 @@ export interface GithubFile {
   directory: string;
 }
 
-const GITHUB_URL = 'https://raw.githubusercontent.com/Nekmo/angular-django/master/demo/angular/src/app/';
-const GITHUB_PREVIEW_URL = 'https://github.com/Nekmo/angular-django/blob/master/demo/angular/src/app/';
+export interface GithubRoot {
+  url: string;
+  previewUrl: string;
+}
+
+export interface Dictionary<T> {
+    [Key: string]: T;
+}
+
+const GITHUB_ROOT: Dictionary<GithubRoot> = {
+  angularDemo: {
+    url: 'https://raw.githubusercontent.com/Nekmo/angular-django/master/demo/angular/src/app/',
+    previewUrl: 'https://github.com/Nekmo/angular-django/blob/master/demo/angular/src/app/',
+  },
+  djangoDemo: {
+    url: 'https://raw.githubusercontent.com/Nekmo/angular-django/master/demo/django/',
+    previewUrl: 'https://github.com/Nekmo/angular-django/blob/master/demo/django',
+  },
+};
 
 
 @Component({
@@ -38,12 +55,13 @@ export class GithubCodeComponent implements OnInit {
     }))
   );
 
-  GITHUB_URL: string;
   @Input() files: GithubFile[];
+  @Input() root = 'angularDemo';
   @ViewChild(MatTabGroup) tab: MatTabGroup;
+  GITHUB_ROOT: Dictionary<GithubRoot>;
 
   constructor(public hljsLoader: HighlightLoader) {
-    this.GITHUB_URL = GITHUB_URL;
+    this.GITHUB_ROOT = GITHUB_ROOT;
   }
 
   ngOnInit() {
@@ -64,9 +82,8 @@ export class GithubCodeComponent implements OnInit {
       return;
     }
     const file: GithubFile = this.files[this.tab.selectedIndex];
-    return GITHUB_PREVIEW_URL + file.directory + '/' + file.name;
+    return GITHUB_ROOT[this.root].previewUrl + '/' + file.directory + '/' + file.name;
   }
-
 }
 
 interface GistState {

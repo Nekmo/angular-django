@@ -7,6 +7,10 @@ const routes: Routes = [
         loadChildren : () => import('./installation/installation.module').then(m => m.InstallationModule),
     },
     {
+        path        : 'first-steps',
+        loadChildren : () => import('./first-steps/first-steps.module').then(m => m.FirstStepsModule),
+    },
+    {
         path        : 'retrieve-api-service',
         loadChildren : () => import('./retrieve-api-service/retrieve-api-service.module').then(m => m.RetrieveApiServiceModule),
     },

@@ -18,7 +18,8 @@
 <!--    </div>-->
     <mat-tab-group mat-align-tabs="start" dynamicHeight #tab>
       <mat-tab label="{{ file.name }}" *ngFor="let file of files">
-        <pre><code [highlight]="GITHUB_URL + file.directory + '/' + file.name | codeFromUrl | async"></code></pre>
+        <pre><code
+          [highlight]="GITHUB_ROOT[root].url + file.directory + '/' + file.name | codeFromUrl | async"></code></pre>
       </mat-tab>
     </mat-tab-group>
 

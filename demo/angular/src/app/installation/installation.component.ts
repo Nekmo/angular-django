@@ -10,12 +10,6 @@ export class InstallationComponent implements OnInit {
 
   constructor() { }
 
-
-  tutorialFiles: GithubFile[] = [
-    {name: 'retrieve-api-service.component.html', directory: 'retrieve-api-service'},
-    {name: 'retrieve-api-service.component.ts', directory: 'retrieve-api-service'},
-  ];
-
   ngOnInit(): void {
   }
 
