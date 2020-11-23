@@ -1,1 +1,6 @@
-<p *ngIf="(user$ | async) as user"><span>{{ user.getName() }} {{ user.date_joined.getFullYear() }}</span></p>
+<h2>Retrieve api service</h2>
+<p>
+  To get an object by its identifier use the <code>retrieve</code> method of the Api class. The object returned by the
+  subscriber is of the serializer type of your model.
+</p>
+<app-retrieve-user></app-retrieve-user>

@@ -10,12 +10,10 @@ import {Observable} from 'rxjs';
 })
 export class RetrieveApiServiceComponent implements OnInit {
 
-  user$: Observable<User>;
 
-  constructor(public apiUser: UserApi) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.user$ = this.apiUser.retrieve(1);
   }
 
 }

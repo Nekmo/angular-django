@@ -4,6 +4,7 @@ import { RetrieveApiServiceComponent } from './retrieve-api-service.component';
 import {SharedModule} from '../shared/shared.module';
 import {RouterModule, Routes} from '@angular/router';
 import {AngularDjangoModule} from 'angular-django';
+import { RetrieveUserComponent } from './retrieve-user/retrieve-user.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,7 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [RetrieveApiServiceComponent],
+  declarations: [RetrieveApiServiceComponent, RetrieveUserComponent],
   imports: [
     CommonModule,
     SharedModule,
