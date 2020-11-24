@@ -1,1 +1,10 @@
-<p *ngIf="(user$ | async) as user"><span>{{ user.getName() }} {{ user.date_joined.getFullYear() }}</span></p>
+<dl *ngIf="(user$ | async) as user">
+  <dt>User:</dt>
+  <dd>{{ user.getName() }}</dd>
+  <dt>Joined at:</dt>
+  <dd>{{ user.date_joined.toLocaleString() }}</dd>
+  <dt>Email:</dt>
+  <dd>{{ user.email }}</dd>
+  <dt>Is active:</dt>
+  <dd>{{ user.is_active }}</dd>
+</dl>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {User, UserApi} from '../shared/api.service';
 import {Observable} from 'rxjs';
+import {GithubFile} from '../github-code/github-code.component';
 
 
 @Component({
@@ -10,6 +11,11 @@ import {Observable} from 'rxjs';
 })
 export class RetrieveApiServiceComponent implements OnInit {
 
+  retrieveUserFiles: GithubFile[] = [
+    {name: 'retrieve-user.component.html', directory: 'retrieve-api-service/retrieve-user'},
+    {name: 'retrieve-user.component.ts', directory: 'retrieve-api-service/retrieve-user'},
+    {name: 'api.service.ts', directory: 'shared'},
+  ];
 
   constructor() { }
 

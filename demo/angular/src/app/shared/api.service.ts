@@ -225,6 +225,8 @@ export class User extends SerializerService {
   @Field() url: string;
   @Field() id: number;
   @Field() username: string;
+  @Field() email: string;
+  @Field() is_active: boolean;
   @Field() date_joined: Date;
 
   getName() {

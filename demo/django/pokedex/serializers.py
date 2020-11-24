@@ -79,7 +79,7 @@ class SimpleUserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('url', 'id', 'username', 'date_joined')
+        fields = ('url', 'id', 'username', 'email', 'is_active', 'date_joined')
 
 
 class UserSerializer(SimpleUserSerializer):
