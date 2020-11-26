@@ -6,6 +6,8 @@ import {SharedModule} from '../shared/shared.module';
 import {AngularDjangoModule} from 'angular-django';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+import { ListPokemonComponent } from './list-pokemon/list-pokemon.component';
+import {MatCardModule} from '@angular/material/card';
 
 
 const routes: Routes = [
@@ -18,10 +20,12 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    ListApiServiceComponent
+    ListApiServiceComponent,
+    ListPokemonComponent
   ],
   imports: [
     CommonModule,
+    MatCardModule,
     SharedModule,
     HttpClientModule,
     AngularDjangoModule,
