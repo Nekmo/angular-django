@@ -4,6 +4,7 @@
   </select>
 </label>
 <label>Search: <input type="text" [(ngModel)]="search" (ngModelChange)="setSpecies(true)"></label>
+<hr>
 
 <p *ngFor="let specie of species|async">{{ specie.identifier }}</p>
 <div>
