@@ -1,7 +1,13 @@
 <h2>Retrieve api service</h2>
 <p>
   To get an object by its identifier use the <code>retrieve</code> method of the Api class. The object returned by the
-  subscriber is of the serializer type of your model.
+  subscriber is of the serializer type of your model. The <code>getFormFields</code> method allows to get the fields
+  for <a href="https://github.com/ngx-formly/ngx-formly">formly-form</a>, a popular library for generating forms.
+</p>
+
+<p>
+  The <code>getFormFields</code> method creates the fields including the options of the select input.
+  In this example the habitat field is autocompleted via api.
 </p>
 
 <mat-card>

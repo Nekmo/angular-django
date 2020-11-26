@@ -1,0 +1,29 @@
+:host ::ng-deep {
+  .display-flex {
+    display: flex;
+
+    [class*="flex-"] {
+      padding-left: 10px;
+    }
+
+    [class*="flex-"]:first-child {
+      padding-left: 0;
+    }
+  }
+
+  .flex-1 { flex: 1; }
+
+  .flex-2 { flex: 2; }
+
+  .flex-3 { flex: 3; }
+
+  .flex-4 { flex: 4; }
+
+  .flex-5 { flex: 5; }
+
+  .flex-6 { flex: 6; }
+}
+
+code {
+  margin-top: 20px;
+}

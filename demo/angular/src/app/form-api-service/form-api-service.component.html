@@ -1,6 +1,8 @@
-<form [formGroup]="form" (ngSubmit)="submit(model)">
-  <formly-form [form]="form" [fields]="fields" [model]="model">
-    <button mat-raised-button color="primary">Submit</button>
-  </formly-form>
-</form>
-<div>{{ model | json }}</div>
+<h2>Create or update</h2>
+<p>
+  The <code>create</code> and <code>update</code> / <code>partial_update</code> / <code>save</code> methods allow you to
+  create and update objects.
+</p>
+<mat-card><app-form-pokemon></app-form-pokemon></mat-card>
+
+<app-github-code [files]="formPokemonFiles" root="angularDemo"></app-github-code>

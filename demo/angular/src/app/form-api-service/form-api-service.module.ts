@@ -15,6 +15,9 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {AutocompleteTypeComponent} from './autocomplete-type.component';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FormlyMatDatepickerModule} from '@ngx-formly/material/datepicker';
+import { FormPokemonComponent } from './form-pokemon/form-pokemon.component';
+import {MatCardModule} from '@angular/material/card';
+import {HighlightPlusModule} from 'ngx-highlightjs/plus';
 
 
 const routes: Routes = [
@@ -29,6 +32,7 @@ const routes: Routes = [
   declarations: [
     FormApiServiceComponent,
     AutocompleteTypeComponent,
+    FormPokemonComponent,
   ],
   imports: [
     FormlyModule.forRoot({
@@ -36,7 +40,8 @@ const routes: Routes = [
         name: 'autocomplete',
         component: AutocompleteTypeComponent,
         wrappers: ['form-field'],
-      }],    }),
+      }],
+    }),
 
     CommonModule,
     SharedModule,
@@ -49,11 +54,13 @@ const routes: Routes = [
     FormlyMatDatepickerModule,
     FormsModule,
     ReactiveFormsModule,
+    HighlightPlusModule,
     // FormlyModule.forRoot(),
     FormlyMaterialModule,
 
     RouterModule.forChild(routes),
     MatInputModule,
+    MatCardModule,
   ],
 })
 export class FormApiServiceModule { }

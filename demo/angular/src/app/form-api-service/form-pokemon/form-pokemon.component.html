@@ -1,0 +1,6 @@
+<form [formGroup]="form" (ngSubmit)="submit(model)">
+  <formly-form [form]="form" [fields]="fields" [model]="model">
+    <button mat-raised-button color="primary">Submit</button>
+  </formly-form>
+</form>
+<code [highlight]="model | json"></code>

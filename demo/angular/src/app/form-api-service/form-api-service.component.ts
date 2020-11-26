@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FieldType, FormlyFieldConfig} from '@ngx-formly/core';
-import {FormGroup} from '@angular/forms';
-import {Specie, SpecieApi} from '../shared/api.service';
-import {catchError} from 'rxjs/operators';
-import {EMPTY} from 'rxjs';
-import {catchFormError} from 'angular-django';
+import {GithubFile} from '../github-code/github-code.component';
 
 
 @Component({
@@ -15,21 +10,16 @@ import {catchFormError} from 'angular-django';
 })
 export class FormApiServiceComponent implements OnInit {
 
-  form = new FormGroup({});
-  model = {};
-  fields: FormlyFieldConfig[];
+  formPokemonFiles: GithubFile[] = [
+    {name: 'form-pokemon.component.html', directory: 'form-api-service/form-pokemon'},
+    {name: 'form-pokemon.component.ts', directory: 'form-api-service/form-pokemon'},
+    {name: 'form-api-service.module.ts', directory: 'form-api-service'},
+    {name: 'api.service.ts', directory: 'shared'},
+  ];
 
-  constructor(public specieApi: SpecieApi) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.fields = this.specieApi.getFormFields([
-      'identifier', 'habitat', ['color', 'gender_rate', 'capture_rate', 'is_baby']
-    ]);
-  }
-
-  submit(model): void {
-    this.specieApi.create(model)
-      .pipe(catchFormError(this.form)).subscribe();
   }
 
 }
