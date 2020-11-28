@@ -254,7 +254,21 @@ export class ApiService {
     return this.pipeHttp(this.http.get(this.getUrlList(), {params: this.queryParams}), true) as
       Observable<Page<any>>;
   }
-  //
+
+  public all(): Observable<any> {
+    return new Observable(subscriber => {
+      function getNextPage(page): void {
+        for (const item of page) {
+          subscriber.next(item);
+        }
+        if (page.hasNextPage) {
+          page.subscribe((nextPage: Page<any>) => getNextPage(nextPage));
+        }
+      }
+      this.list().subscribe((page: Page<any>) => getNextPage(page));
+    });
+  }
+
   copy(): any {
     const api = new this['__proto__'].constructor(this.injector);
     api.queryParams = Object.assign({}, this.queryParams);
