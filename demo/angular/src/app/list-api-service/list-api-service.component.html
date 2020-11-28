@@ -9,3 +9,14 @@
 </mat-card>
 
 <app-github-code [files]="listPokemonFiles" root="angularDemo"></app-github-code>
+
+<h2>Working with the pages</h2>
+<p>
+  The list method returns the first page by default. The returned object is of type <code>Page</code> and has methods to
+  go to the previous page and to the next page.
+</p>
+<mat-card>
+  <app-paginate-pokemon></app-paginate-pokemon>
+</mat-card>
+
+<app-github-code [files]="pagePokemonFiles" root="angularDemo"></app-github-code>

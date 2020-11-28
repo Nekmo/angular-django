@@ -27,7 +27,6 @@ export class ListPokemonComponent implements OnInit {
       this.page = 1;
     }
     this.species = this.specieApi.page(this.page).search(this.search).list().pipe(map((items: any) => {
-      console.log(items);
       this.count = items.count;
       this.pagesCount = items.pagesCount;
       return items;

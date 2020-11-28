@@ -14,6 +14,12 @@ export class ListApiServiceComponent implements OnInit {
     {name: 'api.service.ts', directory: 'shared'},
   ];
 
+  pagePokemonFiles: GithubFile[] = [
+    {name: 'page-pokemon.component.html', directory: 'list-api-service/page-pokemon'},
+    {name: 'page-pokemon.component.ts', directory: 'list-api-service/page-pokemon'},
+    {name: 'api.service.ts', directory: 'shared'},
+  ];
+
   constructor() {
   }
 

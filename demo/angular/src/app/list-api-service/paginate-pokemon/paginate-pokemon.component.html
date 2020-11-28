@@ -1,0 +1,12 @@
+<div *ngIf="(speciePage$ | async) as page">
+  <ul>
+    <li *ngFor="let specie of page">{{ specie.identifier }}</li>
+  </ul>
+  <div class="change-page">
+    <button [routerLink]="" (click)="speciePage$ = page.previous()"
+            [disabled]="!page.hasPreviousPage">Previous</button>
+    <span>Page {{ page.currentPage }}</span>
+    <button [routerLink]="" (click)="speciePage$ = page.next()"
+            [disabled]="!page.hasNextPage">Next</button>
+  </div>
+</div>

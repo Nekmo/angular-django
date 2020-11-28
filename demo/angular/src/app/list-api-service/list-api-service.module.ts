@@ -8,6 +8,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import { ListPokemonComponent } from './list-pokemon/list-pokemon.component';
 import {MatCardModule} from '@angular/material/card';
+import { PaginatePokemonComponent } from './paginate-pokemon/paginate-pokemon.component';
 
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     ListApiServiceComponent,
-    ListPokemonComponent
+    ListPokemonComponent,
+    PaginatePokemonComponent
   ],
   imports: [
     CommonModule,

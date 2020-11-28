@@ -21,12 +21,24 @@ interface ApiPage {
 export class Page<T> extends Array<T> {
   count: number;
   pagesCount: number | null = null;
-  currentPage = 1;
   hasPreviousPage = false;
   hasNextPage = false;
 
-  constructor(items?: Array<T>) {
+  get currentPage(): number | null {
+    return this.apiService.queryParams['page'] || 1;
+  }
+
+  constructor(public apiService: ApiService, items?: Array<T>) {
     super(...items);
+    this.apiService = apiService;
+  }
+
+  previous(): Observable<Page<any>> {
+    return this.apiService.page(this.currentPage - 1).list();
+  }
+
+  next(): Observable<Page<any>> {
+    return this.apiService.page(this.currentPage + 1).list();
   }
 }
 
@@ -134,7 +146,7 @@ export class ApiService {
   }
 
   pipeHttp(observable: Observable<object | object[] | ApiPage>,
-           listMode: boolean = false): Observable<object | object[] | Page<SerializerService>> {
+           listMode: boolean = false): Observable<object | Page<SerializerService>> {
     return observable.pipe(
       map((resp: object | object[] | ApiPage) => this.convert(resp, listMode))
     );
@@ -144,7 +156,7 @@ export class ApiService {
     if (listMode) {
       const dataList = data as ApiPage;
       const results: object[] = dataList.results || (data as object[]);
-      const page = new Page(results.map((item) => new this.serializer(this, item)));
+      const page = new Page(this, results.map((item) => new this.serializer(this, item)));
       if (dataList.results) {
         // Is paginatinated in server
         page.hasNextPage = dataList.next !== null;
@@ -237,8 +249,10 @@ export class ApiService {
     return this.constructor._options_observer || null;
   }
 
-  public list(): Observable<object | object[]> {
-    return this.pipeHttp(this.http.get(this.getUrlList(), {params: this.queryParams}), true);
+
+  public list(): Observable<Page<any>> {
+    return this.pipeHttp(this.http.get(this.getUrlList(), {params: this.queryParams}), true) as
+      Observable<Page<any>>;
   }
   //
   copy(): any {
