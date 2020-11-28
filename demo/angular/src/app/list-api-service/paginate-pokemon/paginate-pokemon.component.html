@@ -1,4 +1,4 @@
-<div *ngIf="(speciePage$ | async) as page">
+<div *ngIf="(speciePage$ | async) as page; else loading">
   <ul>
     <li *ngFor="let specie of page">{{ specie.identifier }}</li>
   </ul>
@@ -10,3 +10,4 @@
             [disabled]="!page.hasNextPage">Next</button>
   </div>
 </div>
+<ng-template #loading><div class="loading">Loading species...</div></ng-template>
