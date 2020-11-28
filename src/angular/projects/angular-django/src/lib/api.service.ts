@@ -1,20 +1,31 @@
 import {Injectable, Injector} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {SerializerService} from './serializer.service';
 import {map, shareReplay} from 'rxjs/operators';
 import {Observable, Subscriber} from 'rxjs';
 import {isString} from "util";
 import {DjangoFormlyField, toTitleCase} from './form';
-import {Serializer} from '@angular/compiler';
+import {SerializerService} from './serializer.service';
 // import {Observable} from 'rxjs/Rx';
 // import {isEqual} from "lodash";
 
 
-
-export class PagedList extends Array {
+interface ApiPage {
+  // Page served from server
   count: number;
+  next: string | null;
+  previous: string | null;
+  results: object[];
+}
 
-  constructor(items?: Array<any>) {
+
+export class Page<T> extends Array<T> {
+  count: number;
+  pagesCount: number | null = null;
+  currentPage = 1;
+  hasPreviousPage = false;
+  hasNextPage = false;
+
+  constructor(items?: Array<T>) {
     super(...items);
   }
 }
@@ -122,19 +133,29 @@ export class ApiService {
     return {headers: {'X-CSRFToken': getCookie('csrftoken') || ''}};
   }
 
-  pipeHttp(observable: Observable<object>, listMode: boolean = false): Observable<object> {
+  pipeHttp(observable: Observable<object | object[] | ApiPage>,
+           listMode: boolean = false): Observable<object | object[] | Page<SerializerService>> {
     return observable.pipe(
-      map((resp) => this.convert(resp, listMode))
+      map((resp: object | object[] | ApiPage) => this.convert(resp, listMode))
     );
   }
-  //
-  convert(data, listMode: boolean): object[] | object {
+
+  convert(data: object | object[] | ApiPage, listMode: boolean): Page<SerializerService> | SerializerService {
     if (listMode) {
-      let items = data.results || data;
-      items = new PagedList(items.map((item) => new this.serializer(this, item)));
-      items.count = data.count || items.length;
-      items.pagesCount = Math.floor(items.count / items.length);  // Todo: return in api or set in ApiService
-      return items;
+      const dataList = data as ApiPage;
+      const results: object[] = dataList.results || (data as object[]);
+      const page = new Page(results.map((item) => new this.serializer(this, item)));
+      if (dataList.results) {
+        // Is paginatinated in server
+        page.hasNextPage = dataList.next !== null;
+        page.hasPreviousPage = dataList.previous !== null;
+        page.count = dataList.count;
+        page.pagesCount = Math.floor(page.count / page.length);  // Todo: return in api or set in ApiService
+      } else {
+        // Results are not paginated
+        page.count = (data as object[]).length;
+      }
+      return page;
     }
     return new this.serializer(this, data);
   }
