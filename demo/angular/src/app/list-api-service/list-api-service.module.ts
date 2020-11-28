@@ -9,6 +9,7 @@ import {FormsModule} from '@angular/forms';
 import { ListPokemonComponent } from './list-pokemon/list-pokemon.component';
 import {MatCardModule} from '@angular/material/card';
 import { PaginatePokemonComponent } from './paginate-pokemon/paginate-pokemon.component';
+import { AllShapeComponent } from './all-shape/all-shape.component';
 
 
 const routes: Routes = [
@@ -23,7 +24,8 @@ const routes: Routes = [
   declarations: [
     ListApiServiceComponent,
     ListPokemonComponent,
-    PaginatePokemonComponent
+    PaginatePokemonComponent,
+    AllShapeComponent
   ],
   imports: [
     CommonModule,

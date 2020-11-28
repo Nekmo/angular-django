@@ -20,6 +20,12 @@ export class ListApiServiceComponent implements OnInit {
     {name: 'api.service.ts', directory: 'shared'},
   ];
 
+  allShapeFiles: GithubFile[] = [
+    {name: 'all-shape.component.html', directory: 'list-api-service/all-shape'},
+    {name: 'all-shape.component.ts', directory: 'list-api-service/all-shape'},
+    {name: 'api.service.ts', directory: 'shared'},
+  ];
+
   constructor() {
   }
 

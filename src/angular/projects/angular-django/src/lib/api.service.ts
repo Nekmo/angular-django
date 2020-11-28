@@ -262,7 +262,9 @@ export class ApiService {
           subscriber.next(item);
         }
         if (page.hasNextPage) {
-          page.subscribe((nextPage: Page<any>) => getNextPage(nextPage));
+          page.next().subscribe((nextPage: Page<any>) => getNextPage(nextPage));
+        } else {
+          subscriber.complete();
         }
       }
       this.list().subscribe((page: Page<any>) => getNextPage(page));

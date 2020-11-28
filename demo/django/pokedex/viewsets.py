@@ -72,6 +72,7 @@ class ShapeViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'identifier')
     search_fields = ('identifier',)
     filter_fields = ('id', 'identifier')
+    pagination_class = StandardResultsSetPagination
 
 
 class GrowthRateViewSet(viewsets.ModelViewSet):

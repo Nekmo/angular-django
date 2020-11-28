@@ -107,7 +107,7 @@ export class Shape extends SerializerService {
 })
 export class ShapeApi extends ApiService {
 
-  url = '/api/shares/';
+  url = '/api/shapes/';
   serializer = Shape;
 
   constructor(injector: Injector) {
