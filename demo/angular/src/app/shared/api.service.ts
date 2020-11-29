@@ -75,7 +75,9 @@ export class Habitat extends SerializerService {
 }
 
 @Api(Habitat)
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class HabitatApi extends ApiService {
 
   url = '/api/habitats/';
@@ -176,7 +178,9 @@ export class Specie extends SerializerService {
 
 
 @Api(Specie)
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SpecieApi extends ApiService {
 
   url = '/api/species/';

@@ -1,5 +1,9 @@
 import 'reflect-metadata';
 import {Widget} from './widgets';
+import {ApiService} from './api.service';
+import {map} from 'rxjs/operators';
+import {getNestedDictionary} from './utils';
+import {Observable} from 'rxjs';
 
 
 // TODO: remove
@@ -95,7 +99,7 @@ export function Field(options?: FieldOptions): (target: object, key: string) => 
 // })
 export class SerializerService {
     // tslint:disable-next-line:variable-name
-    _api: any;
+    _api: ApiService;
 
     constructor(api, data) {
         this._api = api;
@@ -117,9 +121,13 @@ export class SerializerService {
             if (options['isSerializer'] && options['many']) {
                 data[name] = data[name].map((item) => new type(this._api, item));
             } else if (options['isSerializer']) {
-                data[name] = new type(this._api, data[name]);
+              const apiService = type.apiClass as ApiService;
+              data[name] = new type(this._api.injector.get(apiService), data[name]);
             } else if (type === Date) {
-                data[name] = new type(data[name]);
+              data[name] = new type(data[name]);
+            } else if ([String, Number].indexOf(String) > -1) {
+              // No transform native types
+              return;
             } else if (type && isConstructor(type)) {
                 data[name] = new type(data[name]);
             } else if (type) {
@@ -128,6 +136,14 @@ export class SerializerService {
             }
         });
     }
+
+    getDisplay(fieldName: string): Observable<string> {
+      const value = getNestedDictionary(this, fieldName);
+      return this._api.options().pipe(map(options => {
+        return options.getDisplay(fieldName, value);
+      }));
+    }
+
     //
     // getData() {
     //     let newData = {};

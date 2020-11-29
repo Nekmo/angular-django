@@ -1,8 +1,14 @@
 <h2>Create or update</h2>
 <p>
   The <code>create</code> and <code>update</code> / <code>partial_update</code> / <code>save</code> methods allow you to
-  create and update objects.
+  create and update objects. The <code>getFormFields</code> method allows to get the fields for
+  <a href="https://github.com/ngx-formly/ngx-formly">formly-form</a>, a popular library for generating forms.
 </p>
+<p>
+  The <code>getFormFields</code> method creates the fields including the options of the select input.
+  In this example the habitat field is autocompleted via api.
+</p>
+
 <mat-card><app-form-pokemon></app-form-pokemon></mat-card>
 
 <app-github-code [files]="formPokemonFiles" root="angularDemo"></app-github-code>

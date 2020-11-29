@@ -1,3 +1,5 @@
+import {Dictionary} from './utility-types';
+
 export function getCookie(name: string): null | string {
   if (!document.cookie) {
     return null;
@@ -12,4 +14,18 @@ export function getCookie(name: string): null | string {
   }
 
   return decodeURIComponent(xsrfCookies[0].split('=')[1]);
+}
+
+
+export function getNestedDictionary(dictionary: Dictionary<any>, nestedKey: string): any {
+  nestedKey.split('__').forEach((subFieldName: string) => {
+    dictionary = dictionary[subFieldName];
+    if (dictionary === undefined) {
+        throw new Error(`Invalid item ${subFieldName} on ${nestedKey} query`);
+    }
+    if (dictionary.type === 'nested object') {
+        dictionary = dictionary.children;
+    }
+  });
+  return dictionary;
 }

@@ -1,13 +1,7 @@
 <h2>Retrieve api service</h2>
 <p>
   To get an object by its identifier use the <code>retrieve</code> method of the Api class. The object returned by the
-  subscriber is of the serializer type of your model. The <code>getFormFields</code> method allows to get the fields
-  for <a href="https://github.com/ngx-formly/ngx-formly">formly-form</a>, a popular library for generating forms.
-</p>
-
-<p>
-  The <code>getFormFields</code> method creates the fields including the options of the select input.
-  In this example the habitat field is autocompleted via api.
+  subscriber is of the serializer type of your model.
 </p>
 
 <mat-card>
@@ -15,3 +9,15 @@
 </mat-card>
 
 <app-github-code [files]="retrieveUserFiles" root="angularDemo"></app-github-code>
+
+<h2>Nested serializers</h2>
+<p>
+  Nested objects are also cast to the serializer serializer type. In this example the <em>Pokemon</em> object has a
+  <em>Specie</em> object and its methods and api are available.
+</p>
+
+<mat-card>
+  <app-retrieve-pokemon></app-retrieve-pokemon>
+</mat-card>
+
+<app-github-code [files]="retrievePokemonFiles" root="angularDemo"></app-github-code>

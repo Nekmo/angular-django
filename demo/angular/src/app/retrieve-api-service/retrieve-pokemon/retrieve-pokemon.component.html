@@ -1,0 +1,11 @@
+<dl *ngIf="(pokemon$ | async) as pokemon">
+  <dt>Identifier:</dt>
+  <dd>{{ pokemon.identifier }}</dd>
+  <dt>Number:</dt>
+  <dd>#{{ pokemon.id }}</dd>
+  <dt>Habitat:</dt>
+  <dd>{{ pokemon.specie.habitat.identifier }}</dd>
+  <dt>Color:</dt>
+  <!-- pokemon.specie.color is a number (uses a choice). getDisplay get the color -->
+  <dd>{{ pokemon.specie | getDisplay:'color' | async }}</dd>
+</dl>

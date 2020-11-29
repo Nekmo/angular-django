@@ -17,6 +17,12 @@ export class RetrieveApiServiceComponent implements OnInit {
     {name: 'api.service.ts', directory: 'shared'},
   ];
 
+  retrievePokemonFiles: GithubFile[] = [
+    {name: 'retrieve-pokemon.component.html', directory: 'retrieve-api-service/retrieve-pokemon'},
+    {name: 'retrieve-pokemon.component.ts', directory: 'retrieve-api-service/retrieve-pokemon'},
+    {name: 'api.service.ts', directory: 'shared'},
+  ];
+
   constructor() { }
 
   ngOnInit(): void {

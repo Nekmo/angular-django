@@ -4,7 +4,7 @@ import {map, shareReplay} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {DjangoFormlyField} from './form';
 import {SerializerService} from './serializer.service';
-import {getCookie} from './utils';
+import {getCookie, getNestedDictionary} from './utils';
 import {Dictionary} from './utility-types';
 
 
@@ -27,8 +27,8 @@ export class OptionField {
   // tslint:disable-next-line:variable-name
   read_only: boolean;
   label: string;
-  choices: {value: string | number, display_name: string}[];
-  children?: Dictionary<{OptionField}>;
+  choices?: {value: string | number, display_name: string}[];
+  children?: Dictionary<OptionField>;
 }
 
 
@@ -38,12 +38,32 @@ export class OptionField {
 export class Options {
 
   actions: {
-    POST: OptionField,
+    POST: Dictionary<OptionField>,
     description: string,
     name: string,
   };
   parsers: string[];
   renders: string[];
+
+  constructor(options: any) {
+    this.actions = options.actions;
+    this.parsers = options.parsers;
+    this.renders = options.parsers;
+  }
+
+  get optionsField(): Dictionary<OptionField> {
+    return this.actions.POST;
+  }
+
+  getField(fieldName: string): OptionField {
+    const optionsField: OptionField | Dictionary<OptionField> = this.optionsField;
+    return (getNestedDictionary(optionsField, fieldName) as OptionField);
+  }
+
+  getDisplay(fieldName: string, value: any): string {
+    return this.getField(fieldName).choices.find(
+      (x) => x.value === value).display_name;
+  }
 }
 
 
@@ -170,7 +190,10 @@ export class ApiService {
           observer.next(options);
         });
       } else {
-        (this.constructor as any)._optionsObserver = this.http.options(this.url).pipe(shareReplay(1));
+        (this.constructor as any)._optionsObserver = this.http.options(this.url).pipe(
+          shareReplay(1),
+          map(x => new Options(x))
+        );
         this.optionsObserver.subscribe((options: Options) => {
           (this.constructor as any)._options = options;
           observer.next(options);
@@ -317,20 +340,12 @@ export class ApiService {
   }
 
   getOptionField(name): null | OptionField {
-      if (!this.hasOptions) {
-          return;
-      }
-      let data: OptionField | Dictionary<{OptionField}> = this.cachedOptions.actions.POST;
-      name.split('__').forEach((item, i, array) => {
-          data = data[item];
-          if (data === undefined) {
-              throw new Error(`Invalid item ${item} on ${name} query`);
-          }
-          if (data.type === 'nested object' && i !== array.length - 1) {
-              data = data.children;
-          }
-      });
-      return data;
+    if (!this.hasOptions) {
+      return;
+    }
+    let data: OptionField | Dictionary<OptionField> = this.cachedOptions.optionsField;
+    data = getNestedDictionary(data, name);
+    return (data as unknown as OptionField);
   }
 
   getUrlDetail(pk: string | number): string {

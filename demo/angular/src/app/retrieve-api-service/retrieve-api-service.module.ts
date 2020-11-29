@@ -6,6 +6,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AngularDjangoModule} from 'angular-django';
 import { RetrieveUserComponent } from './retrieve-user/retrieve-user.component';
 import {MatCardModule} from '@angular/material/card';
+import { RetrievePokemonComponent } from './retrieve-pokemon/retrieve-pokemon.component';
 
 
 const routes: Routes = [
@@ -17,7 +18,7 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [RetrieveApiServiceComponent, RetrieveUserComponent],
+  declarations: [RetrieveApiServiceComponent, RetrieveUserComponent, RetrievePokemonComponent],
   imports: [
     CommonModule,
     SharedModule,
