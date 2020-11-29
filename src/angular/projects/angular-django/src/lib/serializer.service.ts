@@ -16,7 +16,9 @@ function isConstructor(f: any): boolean {
   return true;
 }
 
-
+/**
+ * Options for a serializer field. All are optional.
+ */
 export interface FieldOptions {
   type?: any;
   widget?: string | Widget;
@@ -30,6 +32,17 @@ export interface FieldOptions {
 }
 
 
+/**
+ * Set a model field in a serializer. For example:
+ *
+ * export class Specie extends SerializerService {
+ *   @Field() field_name: string;
+ *   @Field() other_model: OtherModel;
+ *   @Field({many: true}) instances: SubModel[];
+ * }
+ *
+ * @param options: options for a field. See FieldOptions.
+ */
 export function Field(options?: FieldOptions): (target: object, key: string) => void {
   if (!options) {
     options = {};
@@ -59,26 +72,51 @@ export class SerializerService {
     Object.assign(this, data);
   }
 
+  /**
+   * Get primary key for this object.
+   */
   get pk(): any {
     return this['id'];
   }
 
+  /**
+   * Update this object using data. All parameters are overwrite using
+   * PUT method.
+   *
+   * @param data: parameters for overwrite.
+   */
   update(data): Observable<any> {
     return this._api.update(this.pk, data);
   }
 
+  /**
+   * Update this object using data. All parameters are overwrite using
+   * PATCH method.
+   *
+   * @param data: parameters for overwrite.
+   */
   partial_update(data): Observable<any> {
     return this._api.partial_update(this.pk, data);
   }
 
+  /**
+   * Update the object server using overwrited data in this instance.
+   *
+   */
   save(): Observable<any> {
     return this._api.update(this.pk, this.getData());
   }
 
+  /**
+   * Delete this object in the server
+   */
   delete(): Observable<any> {
     return this._api.delete(this.pk);
   }
 
+  /**
+   * Get instance parameters.
+   */
   getData(): {} {
     const newData = {};
     Object.keys(this.constructor['fields']).forEach((key: string) => {
@@ -91,10 +129,21 @@ export class SerializerService {
     return newData;
   }
 
+  /**
+   * Get options for a field. It has the information about the field like the label.
+   * The information is loaded from the server using OPTIONS
+   *
+   * @param fieldName: name of the field. Double low bar can be used to access a nested model.
+   */
   getOptionField(fieldName: string): Observable<OptionField> {
     return this._api.options().pipe(map(options => options.getField(fieldName)));
   }
 
+  /**
+   * Get the display name for a field with choices. Names are loaded from the server.
+   *
+   * @param fieldName: name of the field. Double low bar can be used to access a nested model.
+   */
   getDisplay(fieldName: string): Observable<string> {
     const value = getNestedDictionary(this, fieldName);
     return this._api.options().pipe(map(options => {
@@ -102,6 +151,11 @@ export class SerializerService {
     }));
   }
 
+  /**
+   * Get value for a field name in this instance or a nested model in this insntace.
+   *
+   * @param fieldName: name of the field. Double low bar can be used to access a nested model.
+   */
   getValue(fieldName): any {
     return getNestedDictionary(this, fieldName);
   }
