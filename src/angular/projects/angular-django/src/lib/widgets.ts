@@ -46,7 +46,7 @@ export class AutocompleteWidget extends Widget {
       if (typeof term !== 'string') {
         term = '';
       }
-      return formlyField.api.injector.get(field.type.api_class).search(term).list();
+      return formlyField.api.injector.get(field.type.apiClass).search(term).list();
     };
   }
 }

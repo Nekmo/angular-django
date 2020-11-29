@@ -40,7 +40,7 @@ export class Generation extends SerializerService {
   @Field() main_region: string;
   @Field() id: number;
 
-  getName() {
+  getName(): string {
     return this.identifier;
   }
 }
@@ -68,7 +68,7 @@ export class Habitat extends SerializerService {
   @Field() identifier: string;
   @Field() id: number;
 
-  getName() {
+  getName(): string {
     return this.identifier;
   }
 
@@ -95,7 +95,7 @@ export class Shape extends SerializerService {
   @Field() identifier: string;
   @Field() id: number;
 
-  getName() {
+  getName(): string {
     return this.identifier;
   }
 
@@ -125,7 +125,7 @@ export class GrowthRate extends SerializerService {
   @Field() formula: string;
   @Field() id: number;
 
-  getName() {
+  getName(): string {
     return this.identifier;
   }
 
@@ -169,7 +169,7 @@ export class Specie extends SerializerService {
   @Field() evolves_from_specie: string;
   @Field() id: number;
 
-  getName() {
+  getName(): string {
     return this.identifier;
   }
 }
@@ -229,7 +229,7 @@ export class User extends SerializerService {
   @Field() is_active: boolean;
   @Field() date_joined: Date;
 
-  getName() {
+  getName(): string {
     return this.username;
   }
 }

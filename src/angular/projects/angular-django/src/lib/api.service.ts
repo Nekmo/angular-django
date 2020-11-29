@@ -1,23 +1,55 @@
 import {Injectable, Injector} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, shareReplay} from 'rxjs/operators';
-import {Observable, Subscriber} from 'rxjs';
-import {isString} from "util";
-import {DjangoFormlyField, toTitleCase} from './form';
+import {Observable} from 'rxjs';
+import {DjangoFormlyField} from './form';
 import {SerializerService} from './serializer.service';
-// import {Observable} from 'rxjs/Rx';
-// import {isEqual} from "lodash";
+import {getCookie} from './utils';
+import {Dictionary} from './utility-types';
 
 
+/**
+ *  Page returned by apì server
+ */
 interface ApiPage {
-  // Page served from server
   count: number;
   next: string | null;
   previous: string | null;
   results: object[];
 }
 
+/**
+ *  POST Options returned by api server. It has info about serializer.
+ */
+export class OptionField {
+  type: string;
+  required: boolean;
+  // tslint:disable-next-line:variable-name
+  read_only: boolean;
+  label: string;
+  choices: {value: string | number, display_name: string}[];
+  children?: Dictionary<{OptionField}>;
+}
 
+
+/**
+ *  Options returned by api server.
+ */
+export class Options {
+
+  actions: {
+    POST: OptionField,
+    description: string,
+    name: string,
+  };
+  parsers: string[];
+  renders: string[];
+}
+
+
+/**
+ *  Iterable page. It has methods to get the current and next page.
+ */
 export class Page<T> extends Array<T> {
   count: number;
   pagesCount: number | null = null;
@@ -42,65 +74,17 @@ export class Page<T> extends Array<T> {
   }
 }
 
-export interface Dict<TVal, /*TKey = string*/> {
-  [key: string /*TKey*/]: TVal;
-}
-
-
-export type Dictionary<T> = Dict<T>;
-
-
-export class OptionField {
-  type: string;
-  required: boolean;
-  // tslint:disable-next-line:variable-name
-  read_only: boolean;
-  label: string;
-  choices: {value: string | number, display_name: string}[];
-  children?: Dictionary<{OptionField}>;
-}
-
-
-export class Options {
-
-  actions: {
-    POST: OptionField,
-    description: string,
-    name: string,
-  };
-  parsers: string[];
-  renders: string[];
-}
-
-
-export function getCookie(name: string): null | string {
-  if (!document.cookie) {
-    return null;
-  }
-
-  const xsrfCookies = document.cookie.split(';')
-    .map(c => c.trim())
-    .filter(c => c.startsWith(name + '='));
-
-  if (xsrfCookies.length === 0) {
-    return null;
-  }
-
-  return decodeURIComponent(xsrfCookies[0].split('=')[1]);
-}
-
-
+/**
+ * set serializer in Api class
+ */
 // tslint:disable-next-line:typedef
 export function Api(serializer: any) {
   return (constructor: any) => {
-    serializer.api_class = constructor;
+    serializer.apiClass = constructor;
   };
 }
 
 
-// @Injectable({
-//     providedIn: 'root'
-// })
 @Injectable({
   providedIn: 'root'
 })
@@ -109,26 +93,94 @@ export class ApiService {
   http: HttpClient;
   serializer: any;
   url: string;
-  contentType: string;
   queryParams: any = {};
-  // _options: Options;
 
   constructor(public injector: Injector) {
     this.http = injector.get(HttpClient);
   }
 
+  // Common api methods
+
+  /**
+   * Alias for retrieve. Retrieve a element by primary key.
+   *
+   * @param pk: element primary key
+   */
   get(pk): Observable<any> {
     return this.retrieve(pk);
   }
 
+  /**
+   * Retrieve a element by primary key.
+   *
+   * @param pk: element primary key
+   */
   retrieve(pk): Observable<any> {
       return this.pipeHttp(this.http.get(this.getUrlDetail(pk)));
   }
 
-  create(data): Observable<object> {
+  /**
+   * Create a element using data
+   *
+   * @param data: a object with item parameters
+   */
+  create(data: {}): Observable<any> {
     return this.pipeHttp(this.http.post(this.getUrlList(), data, this.defaultHttpOptions()));
   }
-  //
+
+  /**
+   * List elements with api filters. Only one page is returned, use `page()` for change the
+   * api page.
+   */
+  list(): Observable<Page<any>> {
+    return this.pipeHttp(this.http.get(this.getUrlList(), {params: this.queryParams}), true) as
+      Observable<Page<any>>;
+  }
+
+  /**
+   * List elements with api filters
+   */
+  all(): Observable<any> {
+    return new Observable(subscriber => {
+      function getNextPage(page): void {
+        for (const item of page) {
+          subscriber.next(item);
+        }
+        if (page.hasNextPage) {
+          page.next().subscribe((nextPage: Page<any>) => getNextPage(nextPage));
+        } else {
+          subscriber.complete();
+        }
+      }
+      this.list().subscribe((page: Page<any>) => getNextPage(page));
+    });
+  }
+
+  /**
+   * Get options from server. It has information about the api and the serializer.
+   * Options are cached.
+   */
+  options(): Observable<Options> {  // Maybe use a Subject
+    return new Observable((observer) => {
+      if (this.hasOptions) {
+        observer.next(this.cachedOptions);
+        (this.constructor as any)._optionsObserver = null;
+      } else if (this.optionsObserver) {
+        this.optionsObserver.subscribe((options: Options) => {
+          observer.next(options);
+        });
+      } else {
+        (this.constructor as any)._optionsObserver = this.http.options(this.url).pipe(shareReplay(1));
+        this.optionsObserver.subscribe((options: Options) => {
+          (this.constructor as any)._options = options;
+          observer.next(options);
+        });
+      }
+    });
+  }
+
+  // Methods for work with serializers by primary key
+
   // save(pk, data) {
   //     return this.pipeHttp(this.http.put(this.getUrlDetail(pk), data, this.defaultHttpOptions()));
   // }
@@ -137,10 +189,82 @@ export class ApiService {
   //     return this.pipeHttp(this.http.patch(this.getUrlDetail(pk), data, this.defaultHttpOptions()));
   // }
   //
+
   // delete(pk) {
   //     return this.http.delete(this.getUrlDetail(pk), this.defaultHttpOptions());
   // }
+
+  // Methods for filter and change list
+
   //
+  // orderBy(...orderList: string[]) {
+  //     let order: string = orderList.join(',');
+  //     let item = this.copy();
+  //     item.setParams({'ordering': order});
+  //     return item;
+  // }
+  //
+
+  /**
+   * Search in list using a query term
+   * @param query: search term
+   */
+  search(query: string): ApiService {
+    const apiService = this.copy();
+    apiService.setParams({search: query});
+    return apiService;
+  }
+  //
+  // filter(params) {
+  //     let item = this.copy();
+  //     item.setParams(params);
+  //     return item;
+  // }
+  //
+  //
+
+  /**
+   * Set page for list
+   * @param page: page number in list
+   * @param pageSize: page size for pages returned by api
+   */
+  page(page: number = 1, pageSize: number | null = null): any {
+    const item = this.copy();
+    if (pageSize === null) {
+      pageSize = undefined;
+    }
+    item.setParams({page, page_size: pageSize});
+    return item;
+  }
+
+  // Utils for work with this class
+
+  /**
+   * Return a new apiService for not to change the original instance
+   */
+  copy(): any {
+    const api = new this['__proto__'].constructor(this.injector);
+    api.queryParams = Object.assign({}, this.queryParams);
+    return api;
+  }
+  //
+  // isEqual(other) {
+  //     return this.url == other.url && isEqual(this._queryParams, other._queryParams);
+  // }
+  //
+
+  public getFormFields(fields = null): any {
+    const data: DjangoFormlyField[] = [];
+    if (fields === null) {
+      fields = Object.keys(this.serializer.fields);
+    }
+    for (const field of fields) {
+      data.push(new DjangoFormlyField(field, this));
+    }
+    return data;
+  }
+
+
   defaultHttpOptions(): {headers: {}} {
     return {headers: {'X-CSRFToken': getCookie('csrftoken') || ''}};
   }
@@ -172,64 +296,9 @@ export class ApiService {
     return new this.serializer(this, data);
   }
 
-  getUrlDetail(pk: string | number): string {
-      return `${this.url}${pk}/`;
-  }
-
-  getUrlList(): string {
-    return `${this.url}`;
-  }
-  //
-  // orderBy(...orderList: string[]) {
-  //     let order: string = orderList.join(',');
-  //     let item = this.copy();
-  //     item.setParams({'ordering': order});
-  //     return item;
-  // }
-  //
-  search(query) {
-    let item = this.copy();
-    item.setParams({'search': query});
-    return item;
-  }
-  //
-  // filter(params) {
-  //     let item = this.copy();
-  //     item.setParams(params);
-  //     return item;
-  // }
-  //
-  page(page: number = 1, page_size: number = undefined): any {
-    const item = this.copy();
-    item.setParams({page, page_size});
-    return item;
-  }
-  //
   setParams(params): void {
     Object.keys(params).forEach((key) => (params[key] === undefined) && delete params[key]);
     this.queryParams = Object.assign(this.queryParams, params);
-  }
-
-  options(): Observable<Options> {
-    return new Observable((observer) => {
-      if (this.hasOptions) {
-        observer.next(this.cachedOptions);
-        // @ts-ignore
-        this.constructor._options_observer = null;
-      } else if (this.optionsObserver) {
-        this.optionsObserver.subscribe((options: Options) => {
-          observer.next(options);
-        });
-      } else {
-        // @ts-ignore
-        this.constructor._options_observer = this.http.options(this.url).pipe(shareReplay(1));
-        this.optionsObserver.subscribe((options: Options) => {
-          // @ts-ignore
-          this.constructor._options = options;
-          observer.next(options);
-        });
-      }
-    });
   }
 
   get hasOptions(): boolean {
@@ -238,49 +307,15 @@ export class ApiService {
 
   get cachedOptions(): Options | null {
     if (this.hasOptions) {
-      // @ts-ignore
-      return this.constructor._options;
+      return (this.constructor as any)._options;
     }
     return null;
   }
 
   private get optionsObserver(): Observable<Options> | null {
-    // @ts-ignore
-    return this.constructor._options_observer || null;
+    return (this.constructor as any)._optionsObserver || null;
   }
 
-
-  public list(): Observable<Page<any>> {
-    return this.pipeHttp(this.http.get(this.getUrlList(), {params: this.queryParams}), true) as
-      Observable<Page<any>>;
-  }
-
-  public all(): Observable<any> {
-    return new Observable(subscriber => {
-      function getNextPage(page): void {
-        for (const item of page) {
-          subscriber.next(item);
-        }
-        if (page.hasNextPage) {
-          page.next().subscribe((nextPage: Page<any>) => getNextPage(nextPage));
-        } else {
-          subscriber.complete();
-        }
-      }
-      this.list().subscribe((page: Page<any>) => getNextPage(page));
-    });
-  }
-
-  copy(): any {
-    const api = new this['__proto__'].constructor(this.injector);
-    api.queryParams = Object.assign({}, this.queryParams);
-    return api;
-  }
-  //
-  // isEqual(other) {
-  //     return this.url == other.url && isEqual(this._queryParams, other._queryParams);
-  // }
-  //
   getOptionField(name): null | OptionField {
       if (!this.hasOptions) {
           return;
@@ -297,28 +332,13 @@ export class ApiService {
       });
       return data;
   }
-  //
-  // getLabel(name) {
-  //     return (this.getOptionField(name) || {})['label'];
-  // }
-  //
-  // getHelpText(name) {
-  //     return (this.getOptionField(name) || {})['help_text'];
-  // }
-  //
-  // getChoices(name) {
-  //     return (this.getOptionField(name) || {})['choices'];
-  // }
 
-  public getFormFields(fields = null): any {
-    const data: DjangoFormlyField[] = [];
-    if (fields === null) {
-      fields = Object.keys(this.serializer.fields);
-    }
-    for (const field of fields) {
-      data.push(new DjangoFormlyField(field, this));
-    }
-    return data;
+  getUrlDetail(pk: string | number): string {
+      return `${this.url}${pk}/`;
+  }
+
+  getUrlList(): string {
+    return `${this.url}`;
   }
 
 }
