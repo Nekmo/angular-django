@@ -46,6 +46,7 @@ import {HighlightPlusModule} from 'ngx-highlightjs/plus';
           'python-repl': () => import('highlight.js/lib/languages/python-repl'),
           shell: () => import('highlight.js/lib/languages/shell'),
           json: () => import('highlight.js/lib/languages/json'),
+          xml: () => import('highlight.js/lib/languages/xml'),
         }
 
         // fullLibraryLoader: () => import('highlight.js'),
