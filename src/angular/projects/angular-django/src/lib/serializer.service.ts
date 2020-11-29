@@ -94,9 +94,6 @@ export function Field(options?: FieldOptions): (target: object, key: string) => 
 }
 
 
-// @Injectable({
-//     providedIn: 'root'
-// })
 export class SerializerService {
     // tslint:disable-next-line:variable-name
     _api: ApiService;
@@ -119,7 +116,8 @@ export class SerializerService {
                 return;
             }
             if (options['isSerializer'] && options['many']) {
-                data[name] = data[name].map((item) => new type(this._api, item));
+              const apiService = type.apiClass as ApiService;
+              data[name] = data[name].map((item) => new type(this._api.injector.get(apiService), item));
             } else if (options['isSerializer']) {
               const apiService = type.apiClass as ApiService;
               data[name] = new type(this._api.injector.get(apiService), data[name]);
@@ -131,8 +129,7 @@ export class SerializerService {
             } else if (type && isConstructor(type)) {
                 data[name] = new type(data[name]);
             } else if (type) {
-              console.log(type);
-                // data[name] = type(data[name]);
+              throw Error(`Unsupported type ${type}`);
             }
         });
     }
