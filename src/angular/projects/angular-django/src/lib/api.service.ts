@@ -204,18 +204,18 @@ export class ApiService {
 
   // Methods for work with serializers by primary key
 
-  // save(pk, data) {
-  //     return this.pipeHttp(this.http.put(this.getUrlDetail(pk), data, this.defaultHttpOptions()));
-  // }
-  //
-  // patch(pk, data) {
-  //     return this.pipeHttp(this.http.patch(this.getUrlDetail(pk), data, this.defaultHttpOptions()));
-  // }
-  //
+  update(pk, data): Observable<any> {
+      return this.pipeHttp(this.http.patch(this.getUrlDetail(pk), data, this.defaultHttpOptions()));
+  }
 
-  // delete(pk) {
-  //     return this.http.delete(this.getUrlDetail(pk), this.defaultHttpOptions());
-  // }
+  partial_update(pk, data): Observable<any> {
+      return this.pipeHttp(this.http.put(this.getUrlDetail(pk), data, this.defaultHttpOptions()));
+  }
+
+  delete(pk): Observable<any> {
+      return this.http.delete(this.getUrlDetail(pk), this.defaultHttpOptions());
+  }
+
 
   // Methods for filter and change list
 
