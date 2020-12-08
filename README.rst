@@ -28,7 +28,8 @@ angular-django
      :alt: Requirements Status
 
 
-Django Rest Framework API for Angular with self-building classes, forms, and listings
+Django Rest Framework API for Angular with self-building classes, forms, and listings.
+`A demo is available on the website. <https://angular-django.nekmo.org/>`_.
 
 
 To install angular-django, run this command in your terminal:
