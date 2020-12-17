@@ -1,21 +1,24 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import {Component, ViewChild, OnInit, AfterViewInit, ElementRef} from '@angular/core';
 import { FieldType } from '@ngx-formly/material';
 import { MatInput } from '@angular/material/input';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import {MatAutocompleteSelectedEvent, MatAutocompleteTrigger} from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'formly-autocomplete-type',
   template: `
-    <input matInput
+    <input matInput #inputElement
+      (blur)="blur();"
       [matAutocomplete]="auto"
       [formControl]="formControl"
       [formlyAttributes]="field"
       [placeholder]="to.placeholder"
       [errorStateMatcher]="errorStateMatcher">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName">
-      <mat-option *ngFor="let value of filter | async" [value]="value">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayName" (closed)="closed();"
+                      (optionSelected)="focusOut();">
+      <mat-option *ngFor="let value of filter | async" [value]="value || null">
         {{ value.getName() }}
       </mat-option>
     </mat-autocomplete>
@@ -23,8 +26,10 @@ import { startWith, switchMap } from 'rxjs/operators';
 })
 export class AutocompleteTypeComponent extends FieldType implements OnInit, AfterViewInit {
   @ViewChild(MatInput) formFieldControl: MatInput;
+  @ViewChild('inputElement') inputElement: ElementRef;
   @ViewChild(MatAutocompleteTrigger) autocomplete: MatAutocompleteTrigger;
 
+  formControl: FormControl;
   filter: Observable<any>;
 
   ngOnInit() {
@@ -43,9 +48,27 @@ export class AutocompleteTypeComponent extends FieldType implements OnInit, Afte
     return option.getName();
   }
 
+  closed(): void {
+    if (typeof this.formControl.value === 'string') {
+      // Reset invalid choice
+      this.formControl.setValue(null);
+    }
+  }
+
+  blur(): void {
+    setTimeout(() => {
+      // there is a delay between blurring and selecting the element
+      this.closed();
+    }, 100);
+  }
+
+  focusOut(): void {
+    this.inputElement.nativeElement.blur();
+  }
+
   ngAfterViewInit() {
     super.ngAfterViewInit();
     // temporary fix for https://github.com/angular/material2/issues/6728
-    (<any> this.autocomplete)._formField = this.formField;
+    (this.autocomplete as any)._formField = this.formField;
   }
 }

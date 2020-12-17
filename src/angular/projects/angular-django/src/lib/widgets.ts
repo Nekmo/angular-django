@@ -1,5 +1,6 @@
 import {DjangoFormlyField, FormlyTemplateOptions} from './form';
 import {FieldOptions} from './serializer.service';
+import {map} from 'rxjs/operators';
 
 export class Widget {
   name?: string;
@@ -46,7 +47,12 @@ export class AutocompleteWidget extends Widget {
       if (typeof term !== 'string') {
         term = '';
       }
-      return formlyField.api.injector.get(field.type.apiClass).search(term).list();
+      return formlyField.api.injector.get(field.type.apiClass).search(term).list().pipe(map((items: any[]) => {
+        for (const item of items) {
+          item._api = undefined;  // remove _api in serializer. ngx-formly tries to clone it without success.
+        }
+        return items;
+      }));
     };
   }
 }
