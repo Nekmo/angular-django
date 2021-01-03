@@ -13,6 +13,7 @@ import {Dictionary} from './utility-types';
  */
 interface ApiPage {
   count: number;
+  page_size?: number;
   next: string | null;
   previous: string | null;
   results: object[];
@@ -314,7 +315,8 @@ export class ApiService {
         page.hasNextPage = dataList.next !== null;
         page.hasPreviousPage = dataList.previous !== null;
         page.count = dataList.count;
-        page.pagesCount = Math.floor(page.count / page.length);  // Todo: return in api or set in ApiService
+        const size: number = dataList.page_size || page.length;
+        page.pagesCount = Math.floor(page.count / size);
       } else {
         // Results are not paginated
         page.count = (data as object[]).length;
