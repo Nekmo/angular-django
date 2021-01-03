@@ -47,7 +47,7 @@ export function Field(options?: FieldOptions): (target: object, key: string) => 
   if (!options) {
     options = {};
   }
-  return (target: object, key: string) => {
+  return (target: SerializerService, key: string) => {
     const metadata = (Reflect as any).getMetadata('design:type', target, key);
     if (!options.type) {
       options.type = metadata;
