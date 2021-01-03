@@ -217,16 +217,16 @@ export class ApiService {
   }
 
 
-  // Methods for filter and change list
-
-  //
-  // orderBy(...orderList: string[]) {
-  //     let order: string = orderList.join(',');
-  //     let item = this.copy();
-  //     item.setParams({'ordering': order});
-  //     return item;
-  // }
-  //
+  /**
+   * Change the sort order for listings
+   * @param orderList: column names
+   */
+  orderBy(...orderList: string[]): ApiService {
+      const order: string = orderList.join(',');
+      const item = this.copy();
+      item.setParams({ordering: order});
+      return item;
+  }
 
   /**
    * Search in list using a query term
@@ -237,14 +237,16 @@ export class ApiService {
     apiService.setParams({search: query});
     return apiService;
   }
-  //
-  // filter(params) {
-  //     let item = this.copy();
-  //     item.setParams(params);
-  //     return item;
-  // }
-  //
-  //
+
+  /**
+   * Filter on the listings using the set parameters
+   * @param params: parameters dictionary
+   */
+  filter(params: Dictionary<string | number>): ApiService {
+      const item = this.copy();
+      item.setParams(params);
+      return item;
+  }
 
   /**
    * Set page for list
@@ -270,11 +272,14 @@ export class ApiService {
     api.queryParams = Object.assign({}, this.queryParams);
     return api;
   }
-  //
-  // isEqual(other) {
-  //     return this.url == other.url && isEqual(this._queryParams, other._queryParams);
-  // }
-  //
+
+  /**
+   * Compare two ApiService instances
+   * @param other: other ApiService
+   */
+  isEqual(other: ApiService): boolean {
+      return this.url === other.url && JSON.stringify(this.queryParams) === JSON.stringify(other.queryParams);
+  }
 
   public getFormFields(fields = null): any {
     const data: DjangoFormlyField[] = [];
