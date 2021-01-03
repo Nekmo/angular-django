@@ -132,6 +132,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static/'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'angular_django.pagination.StandardResultsSetPagination'
+}
 
 if DEBUG:
     sys.path.append(BASE_DIR.parent.parent.joinpath('src/django'))

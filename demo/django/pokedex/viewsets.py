@@ -9,12 +9,6 @@ from pokedex.serializers import PokemonSerializer, UserSerializer, SpecieSeriali
     ShapeSerializer, HabitatSerializer, GenerationSerializer, RegionSerializer
 
 
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 100
-
-
 class SpecieViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -35,7 +29,6 @@ class SpecieViewSet(viewsets.ModelViewSet):
                      'gender_rate', 'capture_rate', 'base_happiness', 'is_baby', 'hatch_counter',
                      'has_gender_differences', 'growth_rate', 'forms_switchable',
                      'conquest_order')
-    pagination_class = StandardResultsSetPagination
 
 
 class RegionViewSet(viewsets.ModelViewSet):
@@ -72,7 +65,6 @@ class ShapeViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'identifier')
     search_fields = ('identifier',)
     filter_fields = ('id', 'identifier')
-    pagination_class = StandardResultsSetPagination
 
 
 class GrowthRateViewSet(viewsets.ModelViewSet):
@@ -100,7 +92,6 @@ class PokemonViewSet(viewsets.ModelViewSet):
     search_fields = ('identifier',)
     # filter_fields = ('id', 'identifier', 'specie__identifier',
     #                  'specie', 'height', 'weight', 'base_experience', 'is_default')
-    pagination_class = StandardResultsSetPagination
 
 
 
