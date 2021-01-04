@@ -133,7 +133,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/static/'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'angular_django.pagination.StandardResultsSetPagination'
+    'DEFAULT_PAGINATION_CLASS': 'angular_django.pagination.StandardResultsSetPagination',
+    'DEFAULT_METADATA_CLASS': 'angular_django.metadata.AngularDjangoMetadata',
 }
 
 if DEBUG:
