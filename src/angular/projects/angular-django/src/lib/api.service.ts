@@ -205,15 +205,34 @@ export class ApiService {
 
   // Methods for work with serializers by primary key
 
-  update(pk, data): Observable<any> {
+  /**
+   * Update a object by its id using data. All parameters are overwrite using
+   * PUT method.
+   *
+   * @param pk: object primary key.
+   * @param data: parameters for overwrite.
+   */
+  update(pk: number | string, data: Dictionary<any>): Observable<any> {
       return this.pipeHttp(this.http.patch(this.getUrlDetail(pk), data, this.defaultHttpOptions()));
   }
 
-  partial_update(pk, data): Observable<any> {
+  /**
+   * Update a object by its id using data. All parameters are overwrite using
+   * PATCH method.
+   *
+   * @param pk: object primary key.
+   * @param data: parameters for overwrite.
+   */
+  partial_update(pk: number | string, data: Dictionary<any>): Observable<any> {
       return this.pipeHttp(this.http.put(this.getUrlDetail(pk), data, this.defaultHttpOptions()));
   }
 
-  delete(pk): Observable<any> {
+  /**
+   * Delete a object by its id.
+   *
+   * @param pk: object primary key.
+   */
+  delete(pk: number | string): Observable<any> {
       return this.http.delete(this.getUrlDetail(pk), this.defaultHttpOptions());
   }
 

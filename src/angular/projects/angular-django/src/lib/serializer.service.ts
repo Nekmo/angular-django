@@ -4,6 +4,7 @@ import {ApiService, OptionField} from './api.service';
 import {map} from 'rxjs/operators';
 import {getNestedDictionary} from './utils';
 import {Observable} from 'rxjs';
+import {Dictionary} from './utility-types';
 
 
 function isConstructor(f: any): boolean {
@@ -85,7 +86,7 @@ export class SerializerService {
    *
    * @param data: parameters for overwrite.
    */
-  update(data): Observable<any> {
+  update(data: Dictionary<any>): Observable<any> {
     return this._api.update(this.pk, data);
   }
 
@@ -95,7 +96,7 @@ export class SerializerService {
    *
    * @param data: parameters for overwrite.
    */
-  partial_update(data): Observable<any> {
+  partial_update(data: Dictionary<any>): Observable<any> {
     return this._api.partial_update(this.pk, data);
   }
 
