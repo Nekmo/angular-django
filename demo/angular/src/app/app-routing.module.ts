@@ -22,6 +22,10 @@ const routes: Routes = [
         path        : 'form-api-service',
         loadChildren : () => import('./form-api-service/form-api-service.module').then(m => m.FormApiServiceModule),
     },
+    {
+        path        : 'material-components',
+        loadChildren : () => import('./material-components/material-components.module').then(m => m.MaterialComponentsModule),
+    },
 ];
 
 @NgModule({
