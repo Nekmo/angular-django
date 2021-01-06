@@ -3,11 +3,16 @@ import { AngularDjangoComponent } from './angular-django.component';
 import {GetDisplayPipe} from './get-display.pipe';
 
 
-
 @NgModule({
-  declarations: [AngularDjangoComponent, GetDisplayPipe],
+  declarations: [
+    AngularDjangoComponent,
+    GetDisplayPipe
+  ],
   imports: [
   ],
-  exports: [AngularDjangoComponent, GetDisplayPipe]
+  exports: [
+    AngularDjangoComponent,
+    GetDisplayPipe
+  ]
 })
 export class AngularDjangoModule { }
