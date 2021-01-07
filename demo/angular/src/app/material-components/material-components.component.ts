@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {SpecieApi} from '../shared/api.service';
 
 @Component({
   selector: 'app-material-components',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MaterialComponentsComponent implements OnInit {
 
-  constructor() { }
+  constructor(public specieApi: SpecieApi) { }
+
+  columns = ['id'];
 
   ngOnInit(): void {
   }

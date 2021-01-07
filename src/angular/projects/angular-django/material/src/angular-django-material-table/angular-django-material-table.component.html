@@ -1,1 +1,54 @@
-<p>angular-django-material-table works!</p>
+<mat-table [dataSource]="apiList$ | async" matSort matSortDisableClear>
+
+<!--    <ng-container matColumnDef="select">-->
+<!--      <mat-header-cell *matHeaderCellDef>-->
+<!--        <mat-checkbox (change)="$event ? masterToggle() : null"-->
+<!--                      [checked]="selection.hasValue() && isAllSelected()"-->
+<!--                      [indeterminate]="selection.hasValue() && !isAllSelected()">-->
+<!--        </mat-checkbox>-->
+<!--      </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row">-->
+<!--        <mat-checkbox (click)="$event.stopPropagation()"-->
+<!--                      (change)="$event ? selection.toggle(row.id) : null"-->
+<!--                      [checked]="selection.isSelected(row.id)">-->
+<!--        </mat-checkbox>-->
+<!--      </mat-cell>-->
+<!--    </ng-container>-->
+
+
+    <ng-container [matColumnDef]="columnName" *ngFor="let columnName of displayedColumns">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ columnName }}
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let row">
+          {{ row[columnName] }}
+<!--            <ng-container *ngIf="column.hasCustomTemplate; else defaultCell">-->
+<!--                <ng-container *ngTemplateOutlet="column.template.cell.template; context: {$implicit: row}"></ng-container>-->
+<!--            </ng-container>-->
+
+<!--            <ng-template #defaultCell>-->
+<!--                {{ getValue(row, column.columnName) }}-->
+<!--            </ng-template>-->
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row, $event)"></mat-row>
+</mat-table>
+<!--<div fxLayout="row">-->
+<!--    <div fxFlex fxLayoutAlign="left center" class="selections-info">-->
+<!--        <span *ngIf="selection.selected.length > 1 && !selectedAllPages">{{ selection.selected.length }} items selected</span>-->
+<!--        <span *ngIf="selection.selected.length === 1">One item selected</span>-->
+<!--        <span *ngIf="selection.selected.length >= pageSize && itemsLength > selection.selected.length && !selectedAllPages"-->
+<!--              (click)="setSelectedAllPages()" class="select-all">-->
+<!--                (Select {{ itemsLength }} items)-->
+<!--        </span>-->
+<!--        <span *ngIf="selectedAllPages">-->
+<!--            Selected {{ itemsLength }} items-->
+<!--        </span>-->
+<!--    </div>-->
+<!--    <mat-paginator [length]="itemsLength" [pageSize]="pageSize"-->
+<!--                   [pageSizeOptions]="[10, 20, 50, 100]">-->
+<!--    </mat-paginator>-->
+<!--</div>-->

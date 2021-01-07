@@ -1,17 +1,15 @@
 import { NgModule } from '@angular/core';
-import {AngularDjangoMaterialTableComponent} from './angular-django-material-table/angular-django-material-table.component';
-import {AngularDjangoModule} from 'angular-django';
+import {AngularDjangoMaterialTableModule} from './angular-django-material-table/angular-django-material-table.module';
 
 
 @NgModule({
   imports: [
-    AngularDjangoModule,
+    AngularDjangoMaterialTableModule,
   ],
   declarations: [
-    AngularDjangoMaterialTableComponent,
   ],
   exports: [
-    AngularDjangoMaterialTableComponent,
+    AngularDjangoMaterialTableModule,
   ]
 })
 export class AngularDjangoMaterialModule {
