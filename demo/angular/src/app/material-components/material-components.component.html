@@ -1,4 +1,4 @@
-<adm-table [api]="specieApi">
+<adm-table [api]="specieApi" [displayedColumns]="columnNames">
   <ng-container admColumnDef="generation">
       <div *admCellDef="let row">
         {{ row.generation.identifier }}

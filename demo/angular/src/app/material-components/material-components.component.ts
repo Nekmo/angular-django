@@ -8,11 +8,16 @@ import {SpecieApi} from '../shared/api.service';
 })
 export class MaterialComponentsComponent implements OnInit {
 
+  excludedFieldNames: string[] = [
+    'url', 'gender_rate', 'hatch_counter', 'order', 'has_gender_differences', 'forms_switchable', 'conquest_order',
+    'evolves_from_specie', 'base_happiness',
+  ];
+  columnNames: string[];
+
   constructor(public specieApi: SpecieApi) { }
 
-  columns = ['id'];
-
   ngOnInit(): void {
+    this.columnNames = this.specieApi.serializer.fieldNames.filter(name => this.excludedFieldNames.indexOf(name) === -1);
   }
 
 }

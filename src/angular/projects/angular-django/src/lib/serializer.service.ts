@@ -74,6 +74,14 @@ export class SerializerService {
   }
 
   /**
+   * Get field names in this serializer
+   */
+  static get fieldNames(): string[] {
+    return Object.keys(this['fields']);
+  }
+
+
+  /**
    * Get primary key for this object.
    */
   get pk(): any {

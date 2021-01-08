@@ -56,7 +56,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
     this.apiList$ = this.api.list();
 
     if (!this.displayedColumns) {
-      this.displayedColumns = Object.keys(this.api.serializer.fields);
+      this.displayedColumns = this.api.serializer.fieldNames;
     }
   }
 
