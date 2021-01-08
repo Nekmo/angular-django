@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import {
-  AngularDjangoMaterialColumnDefDirective,
   AngularDjangoMaterialTableComponent,
-  DjangoCellDefDirective
 } from './angular-django-material-table.component';
+import {
+  AngularDjangoMaterialColumnDefDirective,
+  DjangoCellDefDirective,
+} from './angular-django-material-table.directive';
 import {AngularDjangoModule} from 'angular-django';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';

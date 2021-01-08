@@ -7,7 +7,7 @@
       "projectType": "library",
       "root": "projects/angular-django",
       "sourceRoot": "projects/angular-django/src",
-      "prefix": "lib",
+      "prefix": "adm",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
