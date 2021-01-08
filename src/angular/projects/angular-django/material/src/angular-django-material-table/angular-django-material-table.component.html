@@ -27,7 +27,10 @@
           </ng-container>
 
           <ng-template #defaultCell>
-            {{ row[columnName] }}
+            <ng-container *ngIf="row[columnName].getName; else defaultValue">
+              {{ row[columnName].getName() }}
+            </ng-container>
+            <ng-template #defaultValue>{{ row[columnName] }}</ng-template>
           </ng-template>
         </mat-cell>
     </ng-container>

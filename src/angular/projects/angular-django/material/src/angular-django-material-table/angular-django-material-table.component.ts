@@ -54,14 +54,12 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
 
   ngOnInit(): void {
     this.apiList$ = this.api.list();
-
-    if (!this.displayedColumns) {
-      this.displayedColumns = this.api.serializer.fieldNames;
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changed');
+    if (!this.displayedColumns) {
+      this.displayedColumns = this.api.serializer.fieldNames;
+    }
   }
 
   onRowClick(row, event): void {
