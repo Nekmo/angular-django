@@ -8,5 +8,6 @@ export * from './lib/angular-django.module';
 export * from './lib/api.service';
 export * from './lib/serializer.service';
 export * from './lib/get-display.pipe';
+export * from './lib/utility-types';
 export * from './lib/form';
 

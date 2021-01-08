@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
-import {AngularDjangoMaterialTableComponent} from './angular-django-material-table.component';
+import {
+  AngularDjangoMaterialColumnDefDirective,
+  AngularDjangoMaterialTableComponent,
+  DjangoCellDefDirective
+} from './angular-django-material-table.component';
 import {AngularDjangoModule} from 'angular-django';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -17,9 +21,13 @@ import {CommonModule} from '@angular/common';
   ],
   declarations: [
     AngularDjangoMaterialTableComponent,
+    DjangoCellDefDirective,
+    AngularDjangoMaterialColumnDefDirective,
   ],
   exports: [
     AngularDjangoMaterialTableComponent,
+    DjangoCellDefDirective,
+    AngularDjangoMaterialColumnDefDirective,
   ]
 })
 export class AngularDjangoMaterialTableModule {

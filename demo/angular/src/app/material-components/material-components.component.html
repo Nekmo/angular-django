@@ -1,1 +1,12 @@
-<adm-table [api]="specieApi"></adm-table>
+<adm-table [api]="specieApi">
+  <ng-container admColumnDef="generation">
+      <div *admCellDef="let row">
+        {{ row.generation.identifier }}
+      </div>
+  </ng-container>
+  <ng-container admColumnDef="color">
+      <div *admCellDef="let row">
+        {{ row|getDisplay:'color'|async }}
+      </div>
+  </ng-container>
+</adm-table>

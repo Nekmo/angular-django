@@ -22,14 +22,13 @@
         </mat-header-cell>
 
         <mat-cell *matCellDef="let row">
-          {{ row[columnName] }}
-<!--            <ng-container *ngIf="column.hasCustomTemplate; else defaultCell">-->
-<!--                <ng-container *ngTemplateOutlet="column.template.cell.template; context: {$implicit: row}"></ng-container>-->
-<!--            </ng-container>-->
+          <ng-container *ngIf="columnDefsByName[columnName]; else defaultCell">
+            <ng-container *ngTemplateOutlet="columnDefsByName[columnName].cell.template; context: {$implicit: row}"></ng-container>
+          </ng-container>
 
-<!--            <ng-template #defaultCell>-->
-<!--                {{ getValue(row, column.columnName) }}-->
-<!--            </ng-template>-->
+          <ng-template #defaultCell>
+            {{ row[columnName] }}
+          </ng-template>
         </mat-cell>
     </ng-container>
 
