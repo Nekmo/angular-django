@@ -108,7 +108,6 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          console.log('loading');
           const pageSize: number|null = (this.paginator && this.paginator.pageSize) || this.pageSize;
           const page = ((this.paginator && this.paginator.pageIndex) || 0) + 1;
           let query = this.api.page(page, pageSize);
@@ -118,7 +117,9 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
           if (this.search) {
             query = query.search(this.search);
           }
-          return query.list();
+          return query.list().pipe(catchError(() => {
+            return observableOf(new Page(this.api, []));
+          }));
         }),
         map((data: Page<any>) => {
           // Flip flag to show that loading has finished.
@@ -133,7 +134,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
           this.isLoadingResults = false;
           // Catch if the GitHub API has reached its rate limit. Return empty data.
           this.isRateLimitReached = true;
-          return observableOf([]);
+          return observableOf(new Page(this.api, []));
         })
       ).subscribe((data: Page<any>) => {
         this.data = data;
