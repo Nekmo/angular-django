@@ -1,16 +1,23 @@
 import {
-  AfterContentInit,
-  ChangeDetectionStrategy,
+  AfterContentInit, AfterViewInit,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  ContentChild,
-  ContentChildren, Directive,
+  ContentChildren,
   Input, OnChanges,
-  OnInit,
-  QueryList, SimpleChanges, TemplateRef
+  OnInit, Output,
+  QueryList, SimpleChanges, ViewChild
 } from '@angular/core';
 import {ApiService, Page, Dictionary} from 'angular-django';
-import {Observable} from 'rxjs';
+import {Observable, of as observableOf, merge} from 'rxjs';
 import {AngularDjangoMaterialColumnDefDirective} from './angular-django-material-table.directive';
+import {Column} from './angular-django-material-table.interface';
+import {strict} from 'assert';
+import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {EventEmitter} from '@angular/core';
+
+
 
 
 @Component({
@@ -19,26 +26,32 @@ import {AngularDjangoMaterialColumnDefDirective} from './angular-django-material
   styleUrls: ['./angular-django-material-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, AfterContentInit {
+export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, AfterContentInit, AfterViewInit {
 
-  constructor() { }
+  constructor(private cdr: ChangeDetectorRef) { }
 
   @Input() api: ApiService;
-  @Input() displayedColumns: string[];
+  @Input() columns: (string|Column)[];
   @ContentChildren(AngularDjangoMaterialColumnDefDirective, {descendants: true}) columnDefs!:
     QueryList<AngularDjangoMaterialColumnDefDirective>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  @Output() loadedResults = new EventEmitter<Page<any>>();
 
-  apiList$: Observable<Page<any>>;
+  data: Page<any>;
   columnDefsByName: Dictionary<AngularDjangoMaterialColumnDefDirective>;
+  displayedColumns: Column[];
+  displayedColumnsNames: string[];
+  orderingByDefault = true;
+  resultsLength = 0;
+  isLoadingResults = true;
+  isRateLimitReached = false;
 
   ngOnInit(): void {
-    this.apiList$ = this.api.list();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!this.displayedColumns) {
-      this.displayedColumns = this.api.serializer.fieldNames;
-    }
+    this.updateColumns();
   }
 
   onRowClick(row, event): void {
@@ -50,5 +63,59 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
         this.columnDefsByName[columnDef.name] = columnDef;
     });
   }
+
+  ngAfterViewInit(): void {
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          let query = this.api.page(this.paginator.pageIndex + 1, this.paginator.pageSize);
+          if (this.sort.active) {
+            query = query.orderBy((this.sort.direction === 'asc' ? '' : '-') + this.sort.active);
+          }
+          return query.list();
+        }),
+        map((data: Page<any>) => {
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.resultsLength = data.count;
+
+          return data;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          // Catch if the GitHub API has reached its rate limit. Return empty data.
+          this.isRateLimitReached = true;
+          return observableOf([]);
+        })
+      ).subscribe((data: Page<any>) => {
+        this.data = data;
+        this.loadedResults.emit(data);
+        this.cdr.detectChanges();
+      });
+
+  }
+
+  updateColumns(): void {
+    let columns: (string|Column)[] = this.columns;
+    if (!columns) {
+      columns = this.api.serializer.fieldNames;
+    }
+    this.displayedColumns = columns.map((x) => {
+      if (typeof x === 'string') {
+        x = {name: x};
+      }
+      if (x.ordering === undefined) {
+        x.ordering = this.orderingByDefault;
+      }
+      return x;
+    });
+    this.displayedColumnsNames = this.displayedColumns.map((x) => x.name);
+  }
+
 
 }

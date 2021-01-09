@@ -242,8 +242,11 @@ export class ApiService {
    * @param orderList: column names
    */
   orderBy(...orderList: string[]): ApiService {
-      const order: string = orderList.join(',');
       const item = this.copy();
+      if (!orderList.length || !orderList[0]) {
+        return item;
+      }
+      const order: string = orderList.join(',');
       item.setParams({ordering: order});
       return item;
   }

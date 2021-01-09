@@ -1,4 +1,4 @@
-<mat-table [dataSource]="apiList$ | async" matSort matSortDisableClear>
+<mat-table [dataSource]="data" matSort matSortDisableClear>
 
 <!--    <ng-container matColumnDef="select">-->
 <!--      <mat-header-cell *matHeaderCellDef>-->
@@ -16,28 +16,31 @@
 <!--    </ng-container>-->
 
 
-    <ng-container [matColumnDef]="columnName" *ngFor="let columnName of displayedColumns">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ columnName }}
+    <ng-container [matColumnDef]="column.name" *ngFor="let column of displayedColumns">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.ordering">
+          {{ column.name }}
         </mat-header-cell>
 
         <mat-cell *matCellDef="let row">
-          <ng-container *ngIf="columnDefsByName[columnName]; else defaultCell">
-            <ng-container *ngTemplateOutlet="columnDefsByName[columnName].cell.template; context: {$implicit: row}"></ng-container>
+          <ng-container *ngIf="columnDefsByName[column.name]; else defaultCell">
+            <ng-container
+              *ngTemplateOutlet="columnDefsByName[column.name].cell.template; context: {$implicit: row}"></ng-container>
           </ng-container>
 
           <ng-template #defaultCell>
-            <ng-container *ngIf="row[columnName].getName; else defaultValue">
-              {{ row[columnName].getName() }}
+            <ng-container *ngIf="row[column.name].getName; else defaultValue">
+              {{ row[column.name].getName() }}
             </ng-container>
-            <ng-template #defaultValue>{{ row[columnName] }}</ng-template>
+            <ng-template #defaultValue>{{ row[column.name] }}</ng-template>
           </ng-template>
         </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row, $event)"></mat-row>
+    <mat-header-row *matHeaderRowDef="displayedColumnsNames"></mat-header-row>
+    <mat-row mat-row *matRowDef="let row; columns: displayedColumnsNames;" (click)="onRowClick(row, $event)"></mat-row>
 </mat-table>
+<mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
+
 <!--<div fxLayout="row">-->
 <!--    <div fxFlex fxLayoutAlign="left center" class="selections-info">-->
 <!--        <span *ngIf="selection.selected.length > 1 && !selectedAllPages">{{ selection.selected.length }} items selected</span>-->

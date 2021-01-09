@@ -11,6 +11,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {CommonModule} from '@angular/common';
+import {MatSortModule} from '@angular/material/sort';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import {CommonModule} from '@angular/common';
     MatTableModule,
     MatCheckboxModule,
     MatPaginatorModule,
+    MatSortModule,
   ],
   declarations: [
     AngularDjangoMaterialTableComponent,
