@@ -9,6 +9,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 const routes: Routes = [
@@ -27,6 +28,7 @@ const routes: Routes = [
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatPaginatorModule,
     FormsModule,
     AngularDjangoMaterialModule,
     RouterModule.forChild(routes),

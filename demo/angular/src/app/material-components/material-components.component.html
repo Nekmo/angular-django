@@ -4,7 +4,8 @@
   <mat-icon matSuffix>search</mat-icon>
 </mat-form-field>
 
-<adm-table [api]="specieApi" [columns]="columnNames" [pageSizeOptions]="pageSizeOptions" [search]="search">
+<adm-table [api]="specieApi" [columns]="columnNames" [(resultsCount)]="resultsCount" [(pageSize)]="pageSize"
+            [pageSizeOptions]="pageSizeOptions" [search]="search" [pageSize]="pageSize" [paginator]="paginator">
   <ng-container admColumnDef="generation">
       <div *admCellDef="let row">
         {{ row.generation.identifier }}
@@ -16,3 +17,5 @@
       </div>
   </ng-container>
 </adm-table>
+<mat-paginator [length]="resultsCount" [pageSize]="pageSize" #paginator
+               [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>

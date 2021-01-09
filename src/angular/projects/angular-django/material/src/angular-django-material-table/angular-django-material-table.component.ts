@@ -39,7 +39,6 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   displayedColumns: Column[];
   displayedColumnsNames: string[];
   orderingByDefault = true;
-  resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
   debounceTimeUpdateResults = 150;
@@ -50,12 +49,15 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   @Input() pageSize: number;
   @Input() pageSizeOptions: number[];
   @Input() search: string;
+  @Input() resultsCount = 0;
   @ContentChildren(AngularDjangoMaterialColumnDefDirective, {descendants: true}) columnDefs!:
     QueryList<AngularDjangoMaterialColumnDefDirective>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @Input() paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @Output() loadedResults = new EventEmitter<Page<any>>();
   @Output() updateResults = new EventEmitter();
+  @Output() pageSizeChange = new EventEmitter<number>();
+  @Output() resultsCountChange = new EventEmitter<number>();
 
 
   constructor(private cdr: ChangeDetectorRef) {
@@ -89,13 +91,27 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    merge(this.sort.sortChange, this.paginator.page, this.updateResults)
+    if (this.paginator) {
+      this.paginator.page.subscribe(() => {
+        this.pageSizeChange.emit(this.paginator.pageSize);
+      });
+    }
+
+    const events: EventEmitter<any>[] = [this.sort.sortChange, this.updateResults];
+
+    if (this.paginator) {
+      events.push(this.paginator.page);
+    }
+
+    merge.apply(merge, events)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          const pageSize: number|null = (this.pageSize && this.paginator.pageSize) || null;
-          let query = this.api.page(this.paginator.pageIndex + 1, pageSize);
+          console.log('loading');
+          const pageSize: number|null = (this.paginator && this.paginator.pageSize) || this.pageSize;
+          const page = ((this.paginator && this.paginator.pageIndex) || 0) + 1;
+          let query = this.api.page(page, pageSize);
           if (this.sort.active) {
             query = query.orderBy((this.sort.direction === 'asc' ? '' : '-') + this.sort.active);
           }
@@ -108,7 +124,8 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
-          this.resultsLength = data.count;
+          this.resultsCount = data.count;
+          this.resultsCountChange.emit(this.resultsCount);
 
           return data;
         }),
@@ -123,10 +140,10 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
         this.loadedResults.emit(data);
         if (!this.pageSize) {
           this.pageSize = data.pagesSize;
+          this.pageSizeChange.emit(data.pagesSize);
         }
         this.cdr.detectChanges();
       });
-
   }
 
   updateColumns(): void {

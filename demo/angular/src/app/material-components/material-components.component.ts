@@ -15,6 +15,8 @@ export class MaterialComponentsComponent implements OnInit {
   ];
   columnNames: string[];
   pageSizeOptions: number[] = [10, 20, 50];
+  pageSize: number;
+  resultsCount = 0;
 
   constructor(public specieApi: SpecieApi) { }
 

@@ -39,7 +39,6 @@
     <mat-header-row *matHeaderRowDef="displayedColumnsNames"></mat-header-row>
     <mat-row mat-row *matRowDef="let row; columns: displayedColumnsNames;" (click)="onRowClick(row, $event)"></mat-row>
 </mat-table>
-<mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
 
 <!--<div fxLayout="row">-->
 <!--    <div fxFlex fxLayoutAlign="left center" class="selections-info">-->
