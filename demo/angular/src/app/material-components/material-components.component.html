@@ -1,4 +1,10 @@
-<adm-table [api]="specieApi" [columns]="columnNames" [pageSizeOptions]="pageSizeOptions">
+<mat-form-field appearance="standard">
+  <mat-label>Search</mat-label>
+  <input matInput placeholder="Placeholder" [(ngModel)]="search">
+  <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
+
+<adm-table [api]="specieApi" [columns]="columnNames" [pageSizeOptions]="pageSizeOptions" [search]="search">
   <ng-container admColumnDef="generation">
       <div *admCellDef="let row">
         {{ row.generation.identifier }}

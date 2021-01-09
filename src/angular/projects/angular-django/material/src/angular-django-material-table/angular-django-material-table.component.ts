@@ -8,11 +8,10 @@ import {
   QueryList, SimpleChanges, ViewChild
 } from '@angular/core';
 import {ApiService, Page, Dictionary} from 'angular-django';
-import {Observable, of as observableOf, merge} from 'rxjs';
+import {Observable, of as observableOf, merge, Subject} from 'rxjs';
 import {AngularDjangoMaterialColumnDefDirective} from './angular-django-material-table.directive';
 import {Column} from './angular-django-material-table.interface';
-import {strict} from 'assert';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {catchError, debounceTime, map, startWith, switchMap} from 'rxjs/operators';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {EventEmitter} from '@angular/core';
@@ -35,18 +34,6 @@ const toTitleCase = (phrase) => {
 })
 export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, AfterContentInit, AfterViewInit {
 
-  constructor(private cdr: ChangeDetectorRef) { }
-
-  @Input() api: ApiService;
-  @Input() columns: (string|Column)[];
-  @Input() pageSize: number;
-  @Input() pageSizeOptions: number[];
-  @ContentChildren(AngularDjangoMaterialColumnDefDirective, {descendants: true}) columnDefs!:
-    QueryList<AngularDjangoMaterialColumnDefDirective>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @Output() loadedResults = new EventEmitter<Page<any>>();
-
   data: Page<any>;
   columnDefsByName: Dictionary<AngularDjangoMaterialColumnDefDirective>;
   displayedColumns: Column[];
@@ -55,12 +42,38 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
+  debounceTimeUpdateResults = 150;
+  debouncedUpdateResults = new Subject();
+
+  @Input() api: ApiService;
+  @Input() columns: (string|Column)[];
+  @Input() pageSize: number;
+  @Input() pageSizeOptions: number[];
+  @Input() search: string;
+  @ContentChildren(AngularDjangoMaterialColumnDefDirective, {descendants: true}) columnDefs!:
+    QueryList<AngularDjangoMaterialColumnDefDirective>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  @Output() loadedResults = new EventEmitter<Page<any>>();
+  @Output() updateResults = new EventEmitter();
+
+
+  constructor(private cdr: ChangeDetectorRef) {
+    this.debouncedUpdateResults.pipe(debounceTime(this.debounceTimeUpdateResults)).subscribe(() => {
+        this.updateResults.emit();
+      });
+  }
 
   ngOnInit(): void {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.updateColumns();
+    if (changes['columns']) {
+      this.updateColumns();
+    }
+    if (changes['search']) {
+      this.debouncedUpdateResults.next();
+    }
   }
 
   onRowClick(row, event): void {
@@ -76,7 +89,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    merge(this.sort.sortChange, this.paginator.page)
+    merge(this.sort.sortChange, this.paginator.page, this.updateResults)
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -85,6 +98,9 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
           let query = this.api.page(this.paginator.pageIndex + 1, pageSize);
           if (this.sort.active) {
             query = query.orderBy((this.sort.direction === 'asc' ? '' : '-') + this.sort.active);
+          }
+          if (this.search) {
+            query = query.search(this.search);
           }
           return query.list();
         }),

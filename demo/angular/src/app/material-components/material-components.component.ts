@@ -8,6 +8,7 @@ import {SpecieApi} from '../shared/api.service';
 })
 export class MaterialComponentsComponent implements OnInit {
 
+  search: string;
   excludedFieldNames: string[] = [
     'url', 'gender_rate', 'hatch_counter', 'order', 'has_gender_differences', 'forms_switchable', 'conquest_order',
     'evolves_from_specie', 'base_happiness',
