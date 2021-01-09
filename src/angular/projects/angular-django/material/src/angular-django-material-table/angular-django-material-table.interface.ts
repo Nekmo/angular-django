@@ -1,5 +1,5 @@
 export interface Column {
   name: string;
-  displayName?: string;
+  label?: string;
   ordering?: boolean;
 }

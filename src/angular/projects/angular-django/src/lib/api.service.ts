@@ -74,6 +74,7 @@ export class Options {
 export class Page<T> extends Array<T> {
   count: number;
   pagesCount: number | null = null;
+  pagesSize: number | null = null;
   hasPreviousPage = false;
   hasNextPage = false;
 
@@ -338,6 +339,7 @@ export class ApiService {
         page.hasPreviousPage = dataList.previous !== null;
         page.count = dataList.count;
         const size: number = dataList.page_size || page.length;
+        page.pagesSize = size;
         page.pagesCount = Math.floor(page.count / size);
       } else {
         // Results are not paginated

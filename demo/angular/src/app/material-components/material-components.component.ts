@@ -13,6 +13,7 @@ export class MaterialComponentsComponent implements OnInit {
     'evolves_from_specie', 'base_happiness',
   ];
   columnNames: string[];
+  pageSizeOptions: number[] = [10, 20, 50];
 
   constructor(public specieApi: SpecieApi) { }
 

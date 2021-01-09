@@ -18,6 +18,13 @@ import {MatSort} from '@angular/material/sort';
 import {EventEmitter} from '@angular/core';
 
 
+const toTitleCase = (phrase) => {
+  return phrase
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
 
 
 @Component({
@@ -32,6 +39,8 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
 
   @Input() api: ApiService;
   @Input() columns: (string|Column)[];
+  @Input() pageSize: number;
+  @Input() pageSizeOptions: number[];
   @ContentChildren(AngularDjangoMaterialColumnDefDirective, {descendants: true}) columnDefs!:
     QueryList<AngularDjangoMaterialColumnDefDirective>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -72,7 +81,8 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          let query = this.api.page(this.paginator.pageIndex + 1, this.paginator.pageSize);
+          const pageSize: number|null = (this.pageSize && this.paginator.pageSize) || null;
+          let query = this.api.page(this.paginator.pageIndex + 1, pageSize);
           if (this.sort.active) {
             query = query.orderBy((this.sort.direction === 'asc' ? '' : '-') + this.sort.active);
           }
@@ -95,27 +105,34 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
       ).subscribe((data: Page<any>) => {
         this.data = data;
         this.loadedResults.emit(data);
+        if (!this.pageSize) {
+          this.pageSize = data.pagesSize;
+        }
         this.cdr.detectChanges();
       });
 
   }
 
   updateColumns(): void {
-    let columns: (string|Column)[] = this.columns;
-    if (!columns) {
-      columns = this.api.serializer.fieldNames;
-    }
-    this.displayedColumns = columns.map((x) => {
-      if (typeof x === 'string') {
-        x = {name: x};
+    this.api.options().subscribe(() => {
+      let columns: (string|Column)[] = this.columns;
+      if (!columns) {
+        columns = this.api.serializer.fieldNames;
       }
-      if (x.ordering === undefined) {
-        x.ordering = this.orderingByDefault;
-      }
-      return x;
+      this.displayedColumns = columns.map((x) => {
+        if (typeof x === 'string') {
+          x = {name: x};
+        }
+        if (x.ordering === undefined) {
+          x.ordering = this.orderingByDefault;
+        }
+        if (x.label === undefined) {
+          x.label = this.api.getOptionField(x.name).label || toTitleCase(x.name.replace('_', ' '));
+        }
+        return x;
+      });
+      this.displayedColumnsNames = this.displayedColumns.map((x) => x.name);
     });
-    this.displayedColumnsNames = this.displayedColumns.map((x) => x.name);
   }
-
 
 }

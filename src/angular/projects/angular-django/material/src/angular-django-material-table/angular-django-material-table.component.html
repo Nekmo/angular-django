@@ -18,7 +18,7 @@
 
     <ng-container [matColumnDef]="column.name" *ngFor="let column of displayedColumns">
         <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.ordering">
-          {{ column.name }}
+          {{ column.label }}
         </mat-header-cell>
 
         <mat-cell *matCellDef="let row">
@@ -39,7 +39,7 @@
     <mat-header-row *matHeaderRowDef="displayedColumnsNames"></mat-header-row>
     <mat-row mat-row *matRowDef="let row; columns: displayedColumnsNames;" (click)="onRowClick(row, $event)"></mat-row>
 </mat-table>
-<mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
+<mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
 
 <!--<div fxLayout="row">-->
 <!--    <div fxFlex fxLayoutAlign="left center" class="selections-info">-->
