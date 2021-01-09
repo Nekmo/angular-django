@@ -58,6 +58,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   @Output() updateResults = new EventEmitter();
   @Output() pageSizeChange = new EventEmitter<number>();
   @Output() resultsCountChange = new EventEmitter<number>();
+  @Output() searchChanged = new EventEmitter<string>();
 
 
   constructor(private cdr: ChangeDetectorRef) {
@@ -74,6 +75,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
       this.updateColumns();
     }
     if (changes['search']) {
+      this.searchChanged.emit(this.search);
       this.debouncedUpdateResults.next();
     }
   }
@@ -89,20 +91,21 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   }
 
   ngAfterViewInit(): void {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
+    // Paginator index subscriber
     if (this.paginator) {
       this.paginator.page.subscribe(() => {
         this.pageSizeChange.emit(this.paginator.pageSize);
       });
     }
 
-    const events: EventEmitter<any>[] = [this.sort.sortChange, this.updateResults];
+    // Reset pageIndex subscriber
+    merge(this.sort.sortChange, this.searchChanged).subscribe(() => this.paginator.pageIndex = 0);
 
+    // Load results subscriber
+    const events: EventEmitter<any>[] = [this.sort.sortChange, this.updateResults];
     if (this.paginator) {
       events.push(this.paginator.page);
     }
-
     merge.apply(merge, events)
       .pipe(
         startWith({}),
@@ -167,6 +170,12 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
       });
       this.displayedColumnsNames = this.displayedColumns.map((x) => x.name);
     });
+  }
+
+  resetPageIndex() {
+    if (this.paginator) {
+      this.paginator.pageSize = 0;
+    }
   }
 
 }
