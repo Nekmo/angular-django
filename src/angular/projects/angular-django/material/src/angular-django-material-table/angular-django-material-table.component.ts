@@ -15,6 +15,7 @@ import {catchError, debounceTime, map, startWith, switchMap} from 'rxjs/operator
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {EventEmitter} from '@angular/core';
+import {SelectionModel} from '@angular/cdk/collections';
 
 
 const toTitleCase = (phrase) => {
@@ -50,6 +51,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   @Input() pageSizeOptions: number[];
   @Input() search: string;
   @Input() resultsCount = 0;
+  @Input() selection: SelectionModel<any>;
   @ContentChildren(AngularDjangoMaterialColumnDefDirective, {descendants: true}) columnDefs!:
     QueryList<AngularDjangoMaterialColumnDefDirective>;
   @Input() paginator: MatPaginator;
@@ -168,14 +170,39 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
         }
         return x;
       });
-      this.displayedColumnsNames = this.displayedColumns.map((x) => x.name);
+      this.displayedColumnsNames = [];
+      if (this.selection) {
+        this.displayedColumnsNames.push('select');
+      }
+      this.displayedColumnsNames.push(...this.displayedColumns.map((x) => x.name));
     });
   }
 
-  resetPageIndex() {
+  resetPageIndex(): void {
     if (this.paginator) {
       this.paginator.pageSize = 0;
     }
+  }
+
+  isAllSelected(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle(): void {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.data.forEach(row => this.selection.select(row));
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: any): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
 }

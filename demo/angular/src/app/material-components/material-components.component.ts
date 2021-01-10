@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {SpecieApi} from '../shared/api.service';
+import {Specie, SpecieApi} from '../shared/api.service';
+import {SelectionModel} from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-material-components',
@@ -17,6 +18,7 @@ export class MaterialComponentsComponent implements OnInit {
   pageSizeOptions: number[] = [10, 20, 50];
   pageSize: number;
   resultsCount = 0;
+  selection = new SelectionModel<Specie>(true, []);
 
   constructor(public specieApi: SpecieApi) { }
 

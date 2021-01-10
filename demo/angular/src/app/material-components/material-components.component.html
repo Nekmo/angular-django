@@ -5,7 +5,8 @@
 </mat-form-field>
 
 <adm-table [api]="specieApi" [columns]="columnNames" [(resultsCount)]="resultsCount" [(pageSize)]="pageSize"
-            [pageSizeOptions]="pageSizeOptions" [search]="search" [pageSize]="pageSize" [paginator]="paginator">
+            [pageSizeOptions]="pageSizeOptions" [search]="search" [pageSize]="pageSize" [paginator]="paginator"
+           [selection]="selection">
   <ng-container admColumnDef="generation">
       <div *admCellDef="let row">
         {{ row.generation.identifier }}
