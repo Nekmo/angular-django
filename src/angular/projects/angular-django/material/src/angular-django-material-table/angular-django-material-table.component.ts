@@ -185,6 +185,9 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   }
 
   isAllSelected(): boolean {
+    if (!this.data) {
+      return false;
+    }
     const numSelected = this.selection.selected.length;
     const numRows = this.data.length;
     return numSelected === numRows;
@@ -192,6 +195,9 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle(): void {
+    if ( !this.data ) {
+      return;
+    }
     this.isAllSelected() ?
         this.selection.clear() :
         this.data.forEach(row => this.selection.select(row));
