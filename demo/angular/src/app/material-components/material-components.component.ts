@@ -20,10 +20,23 @@ export class MaterialComponentsComponent implements OnInit {
   resultsCount = 0;
   selection = new SelectionModel<Specie>(true, []);
 
+  isAllSelected = false;
+  allPagesSelected = false;
+
   constructor(public specieApi: SpecieApi) { }
 
   ngOnInit(): void {
     this.columnNames = this.specieApi.serializer.fieldNames.filter(name => this.excludedFieldNames.indexOf(name) === -1);
+  }
+
+  setAllPagesSelected(): void {
+    this.allPagesSelected = true;
+  }
+
+  clearSelection(): void {
+    // TODO: cdr.detectChanges() in table after change selection. Maybe subscribe to selection change in table?
+    this.selection.clear();
+    this.allPagesSelected = false;
   }
 
 }

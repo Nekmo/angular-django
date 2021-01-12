@@ -1,0 +1,13 @@
+.paginator {
+  display: flex;
+  flex-direction: row;
+  background: #fff;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-left: 24px;
+
+  .selected {
+    color: rgba(0,0,0,.54);
+    font-size: 12px;
+  }
+}

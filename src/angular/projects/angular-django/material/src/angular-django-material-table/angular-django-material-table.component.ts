@@ -61,6 +61,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   @Output() pageSizeChange = new EventEmitter<number>();
   @Output() resultsCountChange = new EventEmitter<number>();
   @Output() searchChanged = new EventEmitter<string>();
+  @Output() isAllSelectedChanged = new EventEmitter<boolean>();
 
 
   constructor(private cdr: ChangeDetectorRef) {
@@ -190,7 +191,9 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
     }
     const numSelected = this.selection.selected.length;
     const numRows = this.data.length;
-    return numSelected === numRows;
+    const isAllSelected = numSelected === numRows;
+    this.isAllSelectedChanged.emit(isAllSelected);
+    return isAllSelected;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
