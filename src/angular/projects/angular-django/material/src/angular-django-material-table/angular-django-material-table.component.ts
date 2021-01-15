@@ -3,12 +3,12 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
-  Input, OnChanges,
+  Input, OnChanges, OnDestroy,
   OnInit, Output,
   QueryList, SimpleChanges, ViewChild
 } from '@angular/core';
 import {ApiService, Page, Dictionary} from 'angular-django';
-import {Observable, of as observableOf, merge, Subject} from 'rxjs';
+import {Observable, of as observableOf, merge, Subject, Subscription} from 'rxjs';
 import {AngularDjangoMaterialColumnDefDirective} from './angular-django-material-table.directive';
 import {Column} from './angular-django-material-table.interface';
 import {catchError, debounceTime, map, startWith, switchMap} from 'rxjs/operators';
@@ -16,6 +16,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {EventEmitter} from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
+import {SelectionChange} from '@angular/cdk/collections/selection-model';
 
 
 const toTitleCase = (phrase) => {
@@ -33,7 +34,8 @@ const toTitleCase = (phrase) => {
   styleUrls: ['./angular-django-material-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, AfterContentInit, AfterViewInit {
+export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, AfterContentInit, AfterViewInit,
+  OnDestroy {
 
   data: Page<any>;
   columnDefsByName: Dictionary<AngularDjangoMaterialColumnDefDirective>;
@@ -44,6 +46,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   isRateLimitReached = false;
   debounceTimeUpdateResults = 150;
   debouncedUpdateResults = new Subject();
+  selectionChanged: Subscription;
 
   @Input() api: ApiService;
   @Input() columns: (string|Column)[];
@@ -68,9 +71,16 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
     this.debouncedUpdateResults.pipe(debounceTime(this.debounceTimeUpdateResults)).subscribe(() => {
         this.updateResults.emit();
       });
+
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    if (this.selectionChanged) {
+      this.selectionChanged.unsubscribe();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -80,6 +90,14 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
     if (changes['search']) {
       this.searchChanged.emit(this.search);
       this.debouncedUpdateResults.next();
+    }
+    if (changes['selection']) {
+      if (this.selectionChanged) {
+        this.selectionChanged.unsubscribe();
+      }
+      this.selectionChanged = this.selection.changed.subscribe(() => {
+        this.cdr.detectChanges();
+      });
     }
   }
 
