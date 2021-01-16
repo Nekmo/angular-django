@@ -1,20 +1,5 @@
 <mat-table [dataSource]="data" matSort matSortDisableClear>
 
-<!--    <ng-container matColumnDef="select">-->
-<!--      <mat-header-cell *matHeaderCellDef>-->
-<!--        <mat-checkbox (change)="$event ? masterToggle() : null"-->
-<!--                      [checked]="selection.hasValue() && isAllSelected()"-->
-<!--                      [indeterminate]="selection.hasValue() && !isAllSelected()">-->
-<!--        </mat-checkbox>-->
-<!--      </mat-header-cell>-->
-<!--      <mat-cell *matCellDef="let row">-->
-<!--        <mat-checkbox (click)="$event.stopPropagation()"-->
-<!--                      (change)="$event ? selection.toggle(row.id) : null"-->
-<!--                      [checked]="selection.isSelected(row.id)">-->
-<!--        </mat-checkbox>-->
-<!--      </mat-cell>-->
-<!--    </ng-container>-->
-
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -57,20 +42,3 @@
     <mat-header-row *matHeaderRowDef="displayedColumnsNames"></mat-header-row>
     <mat-row mat-row *matRowDef="let row; columns: displayedColumnsNames;" (click)="onRowClick(row, $event)"></mat-row>
 </mat-table>
-
-<!--<div fxLayout="row">-->
-<!--    <div fxFlex fxLayoutAlign="left center" class="selections-info">-->
-<!--        <span *ngIf="selection.selected.length > 1 && !selectedAllPages">{{ selection.selected.length }} items selected</span>-->
-<!--        <span *ngIf="selection.selected.length === 1">One item selected</span>-->
-<!--        <span *ngIf="selection.selected.length >= pageSize && itemsLength > selection.selected.length && !selectedAllPages"-->
-<!--              (click)="setSelectedAllPages()" class="select-all">-->
-<!--                (Select {{ itemsLength }} items)-->
-<!--        </span>-->
-<!--        <span *ngIf="selectedAllPages">-->
-<!--            Selected {{ itemsLength }} items-->
-<!--        </span>-->
-<!--    </div>-->
-<!--    <mat-paginator [length]="itemsLength" [pageSize]="pageSize"-->
-<!--                   [pageSizeOptions]="[10, 20, 50, 100]">-->
-<!--    </mat-paginator>-->
-<!--</div>-->
