@@ -146,3 +146,18 @@ export class DjangoFormlyField {
     return templateOptions;
   }
 }
+
+
+export class DjangoFormlyFilterField extends DjangoFormlyField {
+  getFieldOptions(): FieldOptions | null {
+    return {};
+  }
+
+  getWidget(): Widget | null {
+    return null;
+  }
+
+  getTemplateOptions(widget: Widget): FormlyTemplateOptions {
+    return {label: this.key};
+  }
+}

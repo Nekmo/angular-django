@@ -54,6 +54,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   @Input() pageSize: number;
   @Input() pageSizeOptions: number[];
   @Input() search: string;
+  @Input() filters: Dictionary<string | number>;
   @Input() resultsCount = 0;
   @Input() selection: SelectionModel<any>;
   @ContentChildren(AngularDjangoMaterialColumnDefDirective, {descendants: true}) columnDefs!:
@@ -91,6 +92,9 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
     if (changes['search']) {
       this.searchChanged.emit(this.search);
       this.debouncedUpdateResults.next();
+    }
+    if (changes['filters']) {
+      this.updateResults.emit();
     }
     if (changes['selection']) {
       if (this.selectionChanged) {
@@ -144,6 +148,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
           if (this.search) {
             query = query.search(this.search);
           }
+          query = query.filter(this.filters || {});
           return query.list().pipe(catchError(() => {
             return observableOf(new Page(this.api, []));
           }));

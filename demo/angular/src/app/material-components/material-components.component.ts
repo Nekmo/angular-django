@@ -1,8 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Specie, SpecieApi} from '../shared/api.service';
 import {SelectionModel} from '@angular/cdk/collections';
 import {EventEmitter} from '@angular/core';
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
+import {DjangoFormlyFilterField, Options} from 'angular-django';
+import {FormGroup} from '@angular/forms';
+import {FormlyFieldConfig} from '@ngx-formly/core';
+import {MatInput} from '@angular/material/input';
+import {AngularDjangoMaterialTableComponent} from 'angular-django/material';
 
 
 @Component({
@@ -13,6 +18,9 @@ import {takeUntil} from 'rxjs/operators';
 export class MaterialComponentsComponent implements OnInit, OnDestroy {
 
   search: string;
+  filterForm = new FormGroup({});
+  filterFields: DjangoFormlyFilterField[];
+  filters = {};
   excludedFieldNames: string[] = [
     'url', 'gender_rate', 'hatch_counter', 'order', 'has_gender_differences', 'forms_switchable', 'conquest_order',
     'evolves_from_specie', 'base_happiness',
@@ -27,6 +35,8 @@ export class MaterialComponentsComponent implements OnInit, OnDestroy {
   isAllSelected = false;
   allPagesSelected = false;
 
+  @ViewChild('table') table: AngularDjangoMaterialTableComponent;
+
   constructor(public specieApi: SpecieApi) { }
 
   ngOnInit(): void {
@@ -36,6 +46,10 @@ export class MaterialComponentsComponent implements OnInit, OnDestroy {
       if (this.allPagesSelected && this.pageSize > this.selection.selected.length) {
         this.allPagesSelected = false;
       }
+    });
+    this.specieApi.options().pipe(take(1)).subscribe(() => {
+      this.filterFields = this.specieApi.getFilterFormFields();
+      console.log(this.filterFields);
     });
   }
 
@@ -51,5 +65,11 @@ export class MaterialComponentsComponent implements OnInit, OnDestroy {
   clearSelection(): void {
     this.selection.clear();
     this.allPagesSelected = false;
+  }
+
+  updateResults(): void {
+    if (this.table) {
+      this.table.updateResults.emit();
+    }
   }
 }

@@ -4,9 +4,16 @@
   <mat-icon matSuffix>search</mat-icon>
 </mat-form-field>
 
+<form [formGroup]="filterForm" (ngSubmit)="updateResults();">
+  <formly-form [form]="filterForm" [fields]="filterFields" [model]="filters">
+    <button mat-raised-button color="primary">Submit</button>
+  </formly-form>
+</form>
+
 <adm-table [api]="specieApi" [columns]="columnNames" [(resultsCount)]="resultsCount" [(pageSize)]="pageSize"
-            [pageSizeOptions]="pageSizeOptions" [search]="search" [pageSize]="pageSize" [paginator]="paginator"
-           [selection]="selection" (isAllSelectedChanged)="isAllSelected = $event;">
+           [pageSizeOptions]="pageSizeOptions" [search]="search" [pageSize]="pageSize" [paginator]="paginator"
+           [selection]="selection" (isAllSelectedChanged)="isAllSelected = $event;" [filters]="filters"
+           #table>
   <ng-container admColumnDef="generation">
       <div *admCellDef="let row">
         {{ row.generation.identifier }}

@@ -2,7 +2,7 @@ import {Injectable, Injector} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, shareReplay} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {DjangoFormlyField} from './form';
+import {DjangoFormlyField, DjangoFormlyFilterField} from './form';
 import {SerializerService} from './serializer.service';
 import {getCookie, getNestedDictionary} from './utils';
 import {Dictionary} from './utility-types';
@@ -33,6 +33,16 @@ export class OptionField {
 }
 
 
+export interface OptionsFilter {
+  name: string;
+  in: string;
+  required: boolean;
+  schema: {
+    type: string;
+  };
+}
+
+
 /**
  *  Options returned by api server.
  */
@@ -43,13 +53,15 @@ export class Options {
     description: string,
     name: string,
   };
+  filters: OptionsFilter[];
   parsers: string[];
   renders: string[];
 
   constructor(options: any) {
     this.actions = options.actions;
     this.parsers = options.parsers;
-    this.renders = options.parsers;
+    this.renders = options.renders;
+    this.filters = options.filters;
   }
 
   get optionsField(): Dictionary<OptionField> {
@@ -316,6 +328,16 @@ export class ApiService {
     return data;
   }
 
+  public getFilterFormFields(fields = null): any {
+    const data: DjangoFormlyFilterField[] = [];
+    if (fields === null) {
+      fields = this.cachedOptions.filters.map((x) => x.name);
+    }
+    for (const field of fields) {
+      data.push(new DjangoFormlyFilterField(field, this));
+    }
+    return data;
+  }
 
   defaultHttpOptions(): {headers: {}} {
     return {headers: {'X-CSRFToken': getCookie('csrftoken') || ''}};

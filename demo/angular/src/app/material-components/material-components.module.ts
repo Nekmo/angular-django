@@ -8,8 +8,11 @@ import {AngularDjangoModule} from 'angular-django';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {FormlyModule} from '@ngx-formly/core';
+import {MatButtonModule} from '@angular/material/button';
+import {FormlyMaterialModule} from '@ngx-formly/material';
 
 
 const routes: Routes = [
@@ -29,6 +32,10 @@ const routes: Routes = [
     MatIconModule,
     MatInputModule,
     MatPaginatorModule,
+    MatButtonModule,
+    FormlyModule.forRoot(),
+    FormlyMaterialModule,
+    ReactiveFormsModule,
     FormsModule,
     AngularDjangoMaterialModule,
     RouterModule.forChild(routes),
