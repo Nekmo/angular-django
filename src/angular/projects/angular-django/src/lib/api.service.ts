@@ -328,10 +328,11 @@ export class ApiService {
     return data;
   }
 
-  public getFilterFormFields(fields = null): any {
+  public getFilterFormFields(fields = null, excludeFields: string[] = ['search', 'ordering']): any {
     const data: DjangoFormlyFilterField[] = [];
     if (fields === null) {
-      fields = this.cachedOptions.filters.map((x) => x.name);
+      fields = this.cachedOptions.filters.map((x) => x.name)
+        .filter((x) => excludeFields.indexOf(x) === -1);
     }
     for (const field of fields) {
       data.push(new DjangoFormlyFilterField(field, this));

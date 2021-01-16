@@ -53,7 +53,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   @Input() columns: (string|Column)[];
   @Input() pageSize: number;
   @Input() pageSizeOptions: number[];
-  @Input() search: string;
+  @Input() search = '';
   @Input() filters: Dictionary<string | number>;
   @Input() resultsCount = 0;
   @Input() selection: SelectionModel<any>;
@@ -89,7 +89,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
     if (changes['columns']) {
       this.updateColumns();
     }
-    if (changes['search']) {
+    if (changes['search'] && changes['search'].previousValue !== this.search) {
       this.searchChanged.emit(this.search);
       this.debouncedUpdateResults.next();
     }
