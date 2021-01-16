@@ -11,7 +11,7 @@ import {ApiService, Page, Dictionary} from 'angular-django';
 import {Observable, of as observableOf, merge, Subject, Subscription} from 'rxjs';
 import {AngularDjangoMaterialColumnDefDirective} from './angular-django-material-table.directive';
 import {Column} from './angular-django-material-table.interface';
-import {catchError, debounceTime, map, startWith, switchMap} from 'rxjs/operators';
+import {catchError, debounceTime, map, startWith, switchMap, takeUntil} from 'rxjs/operators';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {EventEmitter} from '@angular/core';
@@ -47,6 +47,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   debounceTimeUpdateResults = 150;
   debouncedUpdateResults = new Subject();
   selectionChanged: Subscription;
+  destroy$ = new EventEmitter();
 
   @Input() api: ApiService;
   @Input() columns: (string|Column)[];
@@ -66,21 +67,21 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   @Output() searchChanged = new EventEmitter<string>();
   @Output() isAllSelectedChanged = new EventEmitter<boolean>();
 
-
   constructor(private cdr: ChangeDetectorRef) {
-    this.debouncedUpdateResults.pipe(debounceTime(this.debounceTimeUpdateResults)).subscribe(() => {
+    this.debouncedUpdateResults.pipe(
+      debounceTime(this.debounceTimeUpdateResults),
+      takeUntil(this.destroy$),
+    ).subscribe(() => {
         this.updateResults.emit();
       });
-
   }
 
   ngOnInit(): void {
   }
 
   ngOnDestroy(): void {
-    if (this.selectionChanged) {
-      this.selectionChanged.unsubscribe();
-    }
+    this.destroy$.emit();
+    this.destroy$.complete();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -95,7 +96,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
       if (this.selectionChanged) {
         this.selectionChanged.unsubscribe();
       }
-      this.selectionChanged = this.selection.changed.subscribe(() => {
+      this.selectionChanged = this.selection.changed.pipe(takeUntil(this.destroy$)).subscribe(() => {
         this.cdr.detectChanges();
       });
     }
@@ -114,13 +115,14 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   ngAfterViewInit(): void {
     // Paginator index subscriber
     if (this.paginator) {
-      this.paginator.page.subscribe(() => {
+      this.paginator.page.pipe(takeUntil(this.destroy$)).subscribe(() => {
         this.pageSizeChange.emit(this.paginator.pageSize);
       });
     }
 
     // Reset pageIndex subscriber
-    merge(this.sort.sortChange, this.searchChanged).subscribe(() => this.paginator.pageIndex = 0);
+    merge(this.sort.sortChange, this.searchChanged).pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.paginator.pageIndex = 0);
 
     // Load results subscriber
     const events: EventEmitter<any>[] = [this.sort.sortChange, this.updateResults];
@@ -130,6 +132,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
     merge.apply(merge, events)
       .pipe(
         startWith({}),
+        takeUntil(this.destroy$),
         switchMap(() => {
           this.isLoadingResults = true;
           const pageSize: number|null = (this.paginator && this.paginator.pageSize) || this.pageSize;

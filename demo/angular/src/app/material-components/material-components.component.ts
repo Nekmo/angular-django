@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Specie, SpecieApi} from '../shared/api.service';
 import {SelectionModel} from '@angular/cdk/collections';
+import {EventEmitter} from '@angular/core';
+import {takeUntil} from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-material-components',
   templateUrl: './material-components.component.html',
   styleUrls: ['./material-components.component.scss']
 })
-export class MaterialComponentsComponent implements OnInit {
+export class MaterialComponentsComponent implements OnInit, OnDestroy {
 
   search: string;
   excludedFieldNames: string[] = [
@@ -19,6 +22,7 @@ export class MaterialComponentsComponent implements OnInit {
   pageSize: number;
   resultsCount = 0;
   selection = new SelectionModel<Specie>(true, []);
+  destroy$ = new EventEmitter();
 
   isAllSelected = false;
   allPagesSelected = false;
@@ -27,6 +31,17 @@ export class MaterialComponentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.columnNames = this.specieApi.serializer.fieldNames.filter(name => this.excludedFieldNames.indexOf(name) === -1);
+    this.selection.changed.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      // Reset allPagesSelected after uncheck an element,
+      if (this.allPagesSelected && this.pageSize > this.selection.selected.length) {
+        this.allPagesSelected = false;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.emit();
+    this.destroy$.complete();
   }
 
   setAllPagesSelected(): void {
@@ -34,9 +49,7 @@ export class MaterialComponentsComponent implements OnInit {
   }
 
   clearSelection(): void {
-    // TODO: cdr.detectChanges() in table after change selection. Maybe subscribe to selection change in table?
     this.selection.clear();
     this.allPagesSelected = false;
   }
-
 }
