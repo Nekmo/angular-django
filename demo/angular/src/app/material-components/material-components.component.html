@@ -24,16 +24,16 @@
       {{ selection.selected.length }} elements selected
     </span>
     <span *ngIf="selection.selected.length === 1">1 element selected</span>
-    <span *ngIf="isAllSelected && resultsCount > selection.selected.length && !allPagesSelected"
-          (click)="setAllPagesSelected()">
+    <a href="#" *ngIf="isAllSelected && resultsCount > selection.selected.length && !allPagesSelected"
+          (click)="setAllPagesSelected(); $event.preventDefault();">
       select all {{ resultsCount }}
-    </span>
+    </a>
     <span *ngIf="allPagesSelected">
       All {{ resultsCount }} selected
     </span>
-    <span *ngIf="allPagesSelected" (click)="clearSelection();">
+    <a href="#" *ngIf="allPagesSelected" (click)="clearSelection(); $event.preventDefault();">
       Clear selection
-    </span>
+    </a>
   </div>
   <mat-paginator [length]="resultsCount" [pageSize]="pageSize" #paginator
                  [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
