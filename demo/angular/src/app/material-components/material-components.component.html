@@ -4,11 +4,9 @@
   <mat-icon matSuffix>search</mat-icon>
 </mat-form-field>
 
-<form [formGroup]="filterForm" (ngSubmit)="updateResults();">
-  <formly-form [form]="filterForm" [fields]="filterFields" [model]="filters">
-    <button mat-raised-button color="primary">Submit</button>
-  </formly-form>
-</form>
+<button mat-icon-button aria-label="Filters" (click)="openFiltersDialog();">
+  <mat-icon>more_vert</mat-icon>
+</button>
 
 <adm-table [api]="specieApi" [columns]="columnNames" [(resultsCount)]="resultsCount" [(pageSize)]="pageSize"
            [pageSizeOptions]="pageSizeOptions" [search]="search" [pageSize]="pageSize" [paginator]="paginator"

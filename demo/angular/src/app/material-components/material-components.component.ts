@@ -1,13 +1,56 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Specie, SpecieApi} from '../shared/api.service';
 import {SelectionModel} from '@angular/cdk/collections';
 import {EventEmitter} from '@angular/core';
 import {take, takeUntil} from 'rxjs/operators';
-import {DjangoFormlyFilterField, Options} from 'angular-django';
+import {ApiService, DjangoFormlyFilterField, Options} from 'angular-django';
 import {FormGroup} from '@angular/forms';
-import {FormlyFieldConfig} from '@ngx-formly/core';
-import {MatInput} from '@angular/material/input';
 import {AngularDjangoMaterialTableComponent} from 'angular-django/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+
+
+export interface MaterialComponentsDialogData {
+  api: ApiService;
+}
+
+
+@Component({
+  template: `
+    <h2 mat-dialog-title>Apply filters</h2>
+    <mat-dialog-content class="mat-typography">
+      <form [formGroup]="filterForm" (ngSubmit)="close();">
+        <formly-form [form]="filterForm" [fields]="filterFields" [model]="filters">
+<!--          <button mat-raised-button color="primary">Filter</button>-->
+        </formly-form>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="close();">Filter</button>
+    </mat-dialog-actions>
+  `,
+  // templateUrl: 'dialog-overview-example-dialog.html',
+})
+export class MaterialComponentsDialogComponent {
+
+  filterFields: DjangoFormlyFilterField[];
+  filters = {};
+  filterForm = new FormGroup({});
+
+  constructor(
+    public dialogRef: MatDialogRef<MaterialComponentsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: MaterialComponentsDialogData) {
+
+    this.data.api.options().pipe(take(1)).subscribe(() => {
+      this.filterFields = this.data.api.getFilterFormFields();
+      console.log(this.filterFields);
+    });
+  }
+
+  close(): void {
+    this.dialogRef.close();
+  }
+}
 
 
 @Component({
@@ -18,7 +61,6 @@ import {AngularDjangoMaterialTableComponent} from 'angular-django/material';
 export class MaterialComponentsComponent implements OnInit, OnDestroy {
 
   search: string;
-  filterForm = new FormGroup({});
   filterFields: DjangoFormlyFilterField[];
   filters = {};
   excludedFieldNames: string[] = [
@@ -37,7 +79,7 @@ export class MaterialComponentsComponent implements OnInit, OnDestroy {
 
   @ViewChild('table') table: AngularDjangoMaterialTableComponent;
 
-  constructor(public specieApi: SpecieApi) { }
+  constructor(public specieApi: SpecieApi, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.columnNames = this.specieApi.serializer.fieldNames.filter(name => this.excludedFieldNames.indexOf(name) === -1);
@@ -46,10 +88,6 @@ export class MaterialComponentsComponent implements OnInit, OnDestroy {
       if (this.allPagesSelected && this.pageSize > this.selection.selected.length) {
         this.allPagesSelected = false;
       }
-    });
-    this.specieApi.options().pipe(take(1)).subscribe(() => {
-      this.filterFields = this.specieApi.getFilterFormFields();
-      console.log(this.filterFields);
     });
   }
 
@@ -71,5 +109,16 @@ export class MaterialComponentsComponent implements OnInit, OnDestroy {
     if (this.table) {
       this.table.updateResults.emit();
     }
+  }
+
+  openFiltersDialog(): void {
+    const dialogRef = this.dialog.open(MaterialComponentsDialogComponent, {
+      width: '600px',
+      maxHeight: '80vh',
+      data: {api: this.specieApi}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 }
