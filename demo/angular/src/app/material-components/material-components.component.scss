@@ -15,3 +15,13 @@
     }
   }
 }
+
+
+:host ::ng-deep {
+  .filter-button {
+    .mat-badge-content {
+      top: -5px;
+      right: -5px;
+    }
+  }
+}

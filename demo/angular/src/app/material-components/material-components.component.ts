@@ -10,6 +10,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 
 
 export interface MaterialComponentsDialogData {
+  filters: {};
   api: ApiService;
 }
 
@@ -41,6 +42,7 @@ export class MaterialComponentsDialogComponent {
     public dialogRef: MatDialogRef<MaterialComponentsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: MaterialComponentsDialogData) {
 
+    Object.assign(this.filters, this.data.filters);
     this.data.api.options().pipe(take(1)).subscribe(() => {
       this.filterFields = this.data.api.getFilterFormFields();
       console.log(this.filterFields);
@@ -48,7 +50,7 @@ export class MaterialComponentsDialogComponent {
   }
 
   close(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(this.filters);
   }
 }
 
@@ -76,6 +78,7 @@ export class MaterialComponentsComponent implements OnInit, OnDestroy {
 
   isAllSelected = false;
   allPagesSelected = false;
+  filtersCount: string|number = '';
 
   @ViewChild('table') table: AngularDjangoMaterialTableComponent;
 
@@ -115,10 +118,14 @@ export class MaterialComponentsComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(MaterialComponentsDialogComponent, {
       width: '600px',
       maxHeight: '80vh',
-      data: {api: this.specieApi}
+      data: {api: this.specieApi, filters: this.filters}
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      Object.assign(this.filters, result);
+      this.updateResults();
+
+      this.filtersCount = Object.entries(this.filters).filter((x) => x[1]).length || "";
     });
   }
 }

@@ -14,6 +14,7 @@ import {FormlyModule} from '@ngx-formly/core';
 import {MatButtonModule} from '@angular/material/button';
 import {FormlyMaterialModule} from '@ngx-formly/material';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatBadgeModule} from '@angular/material/badge';
 
 
 const routes: Routes = [
@@ -36,6 +37,7 @@ const routes: Routes = [
     MatDialogModule,
     MatIconModule,
     MatInputModule,
+    MatBadgeModule,
     MatPaginatorModule,
     MatButtonModule,
     FormlyModule.forRoot(),
