@@ -27,10 +27,11 @@ COPY demo/angular ./
 WORKDIR /angular-django
 COPY src/angular ./
 RUN npm install && ng build
+RUN ln -s /angular-django/dist/angular-django /angular-django/node_modules/angular-django
 WORKDIR /app
 RUN ls /angular-django/
 WORKDIR /app
-# RUN npm install /angular-django/dist/angular-django
+RUN npm install /angular-django/dist/angular-django/
 RUN ng build --prod
 
 
