@@ -30,7 +30,7 @@ RUN npm install && ng build
 WORKDIR /app
 RUN ls /angular-django/
 WORKDIR /app
-RUN npm install /angular-django/dist/angular-django
+# RUN npm install /angular-django/dist/angular-django
 RUN ng build --prod
 
 

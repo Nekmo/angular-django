@@ -63,6 +63,7 @@ export function Field(options?: FieldOptions): (target: object, key: string) => 
 }
 
 
+// @dynamic
 export class SerializerService {
   // tslint:disable-next-line:variable-name
   _api: ApiService;
@@ -76,6 +77,7 @@ export class SerializerService {
   /**
    * Get field names in this serializer
    */
+
   static get fieldNames(): string[] {
     return Object.keys(this['fields']);
   }
