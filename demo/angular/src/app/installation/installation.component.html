@@ -4,13 +4,16 @@
   <strong>Angular package</strong>:</p>
 <app-code-highlight code="$ npm i angular-django"></app-code-highlight>
 
-<p>Import AngularDjangoModule in your app:</p>
+<p>Import AngularDjangoModule and HttpClientModule in your app:</p>
 <app-code-highlight code="
 import &#123; AngularDjangoModule } from 'angular-django';
+import &#123; HttpClientModule } from '@angular/common/http';
+
 
   @NgModule(&#123;
     imports: [
        AngularDjangoModule,
+       HttpClientModule,
     ],
   &#125;)
   export class AppModule &#123; &#125;
