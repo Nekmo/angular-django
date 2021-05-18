@@ -67,10 +67,14 @@ export function Field(options?: FieldOptions): (target: object, key: string) => 
 export class SerializerService {
   // tslint:disable-next-line:variable-name
   _api: ApiService;
+  pk: string|number = null;
 
   constructor(api, data) {
     this._api = api;
     this.transformData(data);
+    if (data['pk'] === undefined) {
+      this.pk = data['id'];
+    }
     Object.assign(this, data);
   }
 
@@ -80,14 +84,6 @@ export class SerializerService {
 
   static get fieldNames(): string[] {
     return Object.keys(this['fields']);
-  }
-
-
-  /**
-   * Get primary key for this object.
-   */
-  get pk(): any {
-    return this['id'];
   }
 
   /**
