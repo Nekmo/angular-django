@@ -31,7 +31,7 @@
           </ng-container>
 
           <ng-template #defaultCell>
-            <ng-container *ngIf="row[column.name].getName; else defaultValue">
+            <ng-container *ngIf="row[column.name].getName !== undefined; else defaultValue">
               {{ row[column.name].getName() }}
             </ng-container>
             <ng-template #defaultValue>{{ row[column.name] }}</ng-template>
