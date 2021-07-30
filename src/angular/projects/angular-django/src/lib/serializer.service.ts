@@ -72,7 +72,7 @@ export class SerializerService {
   constructor(api, data) {
     this._api = api;
     this.transformData(data);
-    if (data['pk'] === undefined) {
+    if (data && data['pk'] === undefined) {
       this.pk = data['id'];
     }
     Object.assign(this, data);
