@@ -24,7 +24,7 @@ export function getNestedDictionary(dictionary: Dictionary<any>, nestedKey: stri
         throw new Error(`Invalid item ${subFieldName} on ${nestedKey} query`);
     }
     if (dictionary.type === 'nested object') {
-        dictionary = dictionary.children;
+        dictionary = dictionary.children;  // TODO: al devolverse dictionary.children no se sabe el tipo.
     }
   });
   return dictionary;
