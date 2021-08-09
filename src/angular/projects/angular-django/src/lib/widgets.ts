@@ -2,6 +2,21 @@ import {DjangoFormlyField, FormlyTemplateOptions} from './form';
 import {FieldOptions} from './serializer.service';
 import {map} from 'rxjs/operators';
 
+
+function removeApi(items: any): any {
+  if (items && typeof items === 'object' && (items.hasOwnProperty('_api') || items.hasOwnProperty('apiService'))) {
+    Object.entries(items).forEach(([key, value]) => {
+      if (key === '_api') {
+        items._api = undefined;
+      } else {
+        removeApi(value);
+      }
+    });
+  }
+  return items;
+}
+
+
 export class Widget {
   name?: string;
   type: string;
@@ -47,12 +62,8 @@ export class AutocompleteWidget extends Widget {
       if (typeof term !== 'string') {
         term = '';
       }
-      return formlyField.api.injector.get(field.type.apiClass).search(term).list().pipe(map((items: any[]) => {
-        for (const item of items) {
-          item._api = undefined;  // remove _api in serializer. ngx-formly tries to clone it without success.
-        }
-        return items;
-      }));
+      return formlyField.api.injector.get(field.type.apiClass)
+          .search(term).list().pipe(map((items: any[]) => removeApi(items)));
     };
   }
 }
