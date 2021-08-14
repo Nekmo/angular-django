@@ -1,14 +1,15 @@
 FROM python:3.8 as gunicorn-build
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir -p /app
+RUN mkdir -p /app /tmp/django/src/django
 WORKDIR /app
 COPY demo/django/requirements.txt .
+COPY setup.* *.in LICENSE /tmp/django/
 RUN pip install -r requirements.txt
 COPY compose/gunicorn/entrypoint.sh /
 RUN chmod +x "/entrypoint.sh"
-COPY src/django /tmp/django
-RUN cd /tmp/django && python setup.py install && rm -rf /tmp/django
+COPY src/django/ /tmp/django/src/django
+RUN cd /tmp/django && python setup.py install
 COPY demo/django ./
 
 ENTRYPOINT ["/entrypoint.sh"]

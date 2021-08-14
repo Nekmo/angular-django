@@ -69,7 +69,7 @@ class Specie(models.Model):
     evolves_from_specie = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
     # evolution_chain =
     color = models.CharField(max_length=8, choices=COLORS)
-    shape = models.ForeignKey(Shape, on_delete=models.PROTECT)
+    shape = models.ForeignKey(Shape, on_delete=models.PROTECT, blank=True, null=True)
     habitat = models.ForeignKey(Habitat, on_delete=models.PROTECT, blank=True, null=True)
     gender_rate = models.SmallIntegerField()
     capture_rate = models.PositiveSmallIntegerField()
