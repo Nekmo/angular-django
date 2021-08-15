@@ -30,7 +30,6 @@ export interface MaterialComponentsDialogData {
       <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="close();">Filter</button>
     </mat-dialog-actions>
   `,
-  // templateUrl: 'dialog-overview-example-dialog.html',
 })
 export class MaterialComponentsDialogComponent {
 

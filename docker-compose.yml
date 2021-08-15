@@ -17,7 +17,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-      target: angular-build
+      target: angular-demo-build
 
   gunicorn:
     restart: always
