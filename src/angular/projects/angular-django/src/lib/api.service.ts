@@ -95,7 +95,7 @@ export class Page<T> extends Array<T> {
   }
 
   constructor(public apiService: ApiService, items?: Array<T>) {
-    super(...items);
+    super(...items || []);
     this.apiService = apiService;
   }
 
@@ -106,6 +106,7 @@ export class Page<T> extends Array<T> {
   next(): Observable<Page<any>> {
     return this.apiService.page(this.currentPage + 1).list();
   }
+
 }
 
 /**

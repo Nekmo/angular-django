@@ -12,6 +12,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {CommonModule} from '@angular/common';
 import {MatSortModule} from '@angular/material/sort';
+import {ShiftClickDirective} from './shift-click-directive';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import {MatSortModule} from '@angular/material/sort';
     AngularDjangoMaterialTableComponent,
     DjangoCellDefDirective,
     AngularDjangoMaterialColumnDefDirective,
+    ShiftClickDirective,
   ],
   exports: [
     AngularDjangoMaterialTableComponent,

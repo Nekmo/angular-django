@@ -1,4 +1,8 @@
-<mat-table [dataSource]="data" matSort matSortDisableClear>
+<mat-table
+  [shiftClickSource]="data"
+  [shiftClickSelectModel]="selection"
+  [shiftClickReloadSourceEvent]="listChanged"
+  [dataSource]="data" matSort matSortDisableClear>
 
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
