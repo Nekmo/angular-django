@@ -93,7 +93,10 @@ export class SerializerService {
   static getApiClass(): any {
     const apiClass = this['apiClass'];
     if (!apiClass) {
-      throw Error(`ApiClass is not available in ${this} serializer class. Use @Api() to fix this error.`);
+      throw Error(`
+      ApiClass is not available in serializer class. Use @Api() & add api service to list of providers
+      list of providers in the module file to fix this error.
+      `);
     }
     return apiClass;
   }
@@ -177,6 +180,19 @@ export class SerializerService {
    */
   getValue(fieldName): any {
     return getNestedDictionary(this, fieldName);
+  }
+
+  getName(): string {
+    // Alternative: use abstract method.
+    throw Error(`Missing getName() in ${this} serializer class`);
+  }
+
+  toString(): string {
+    try {
+      return this.getName();
+    } catch {
+      return this.pk.toString();
+    }
   }
 
   private transformData(data): void {
