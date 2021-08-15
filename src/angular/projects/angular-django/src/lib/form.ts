@@ -153,11 +153,11 @@ export class DjangoFormlyFilterField extends DjangoFormlyField {
     return {};
   }
 
-  getWidget(): Widget | null {
-    return null;
-  }
+  // getWidget(): Widget | null {
+  //   return null;
+  // }
 
-  getTemplateOptions(widget: Widget): FormlyTemplateOptions {
-    return {label: this.key};
-  }
+  // getTemplateOptions(widget: Widget): FormlyTemplateOptions {
+  //   return {label: this.key};
+  // }
 }
