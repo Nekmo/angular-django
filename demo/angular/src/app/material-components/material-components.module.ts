@@ -15,6 +15,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {FormlyMaterialModule} from '@ngx-formly/material';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatBadgeModule} from '@angular/material/badge';
+import {AutocompleteTypeComponent} from '../shared/autocomplete-type.component';
 
 
 const routes: Routes = [
@@ -40,7 +41,11 @@ const routes: Routes = [
     MatBadgeModule,
     MatPaginatorModule,
     MatButtonModule,
-    FormlyModule.forRoot(),
+    FormlyModule.forChild({
+      types: [
+        {name: 'autocomplete', component: AutocompleteTypeComponent, wrappers: ['form-field']},
+      ],
+    }),
     FormlyMaterialModule,
     ReactiveFormsModule,
     FormsModule,

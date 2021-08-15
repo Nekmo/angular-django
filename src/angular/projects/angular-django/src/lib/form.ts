@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import {catchError, shareReplay} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
-import {ApiService, OptionField} from './api.service';
+import {ApiService, OptionField, OptionFilterField} from './api.service';
 import {FieldOptions} from './serializer.service';
 import {getWidgetFromName, Widget, DEFAULT_TYPE, FORM_TYPES} from './widgets';
 
@@ -125,7 +125,7 @@ export class DjangoFormlyField {
     }
     if (!widget) {
       // Try to get widget from api OPTIONS request
-      const optionField: OptionField = this.api.getOptionField(this.key);
+      const optionField: OptionField|OptionFilterField = this.getOptionField(this.key);
       widget = ((optionField ? FORM_TYPES[optionField.type] : null) as Widget);
     }
     return widget;
@@ -145,12 +145,20 @@ export class DjangoFormlyField {
     }
     return templateOptions;
   }
+
+  getOptionField(key): null | OptionField | OptionFilterField {
+    return this.api.getOptionField(key);
+  }
 }
 
 
 export class DjangoFormlyFilterField extends DjangoFormlyField {
   getFieldOptions(): FieldOptions | null {
     return {};
+  }
+
+  getOptionField(key): null | OptionFilterField {
+    return this.api.getFiltersOptionField(key);
   }
 
   // getWidget(): Widget | null {

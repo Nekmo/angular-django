@@ -80,7 +80,6 @@ export class ShiftClickDirective implements OnInit, OnDestroy {
   }
 
   reset() {
-    console.log('reset');
     this.lastItem = null;
     this.selecting = false;
     this.userSelect = 'unset';

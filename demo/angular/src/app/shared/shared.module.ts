@@ -15,11 +15,18 @@ import {GithubCodeModule} from '../github-code/github-code.module';
 import {CodeHighlightModule} from '../code-highlight/code-highlight.module';
 import {HttpErrorInterceptor} from './interceptor';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {FormlyModule} from '@ngx-formly/core';
+import {AutocompleteTypeComponent} from './autocomplete-type.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    AutocompleteTypeComponent
+  ],
   providers: [
     RegionApi,
     GenerationApi,
@@ -37,13 +44,28 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
     }
   ],
   imports: [
+    FormsModule,
+    FormlyModule.forChild({
+      types: [
+        {name: 'autocomplete', component: AutocompleteTypeComponent, wrappers: ['form-field']},
+      ],
+    }),
+    ReactiveFormsModule,
+    FormlyModule,
     CommonModule,
     HttpClientModule,
     GithubCodeModule,
     CodeHighlightModule,
+    MatInputModule,
+    MatAutocompleteModule,
     MatSnackBarModule,
   ],
   exports: [
+    FormlyModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    AutocompleteTypeComponent,
     HttpClientModule,
     GithubCodeModule,
     CodeHighlightModule,

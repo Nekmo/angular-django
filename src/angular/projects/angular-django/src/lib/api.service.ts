@@ -33,13 +33,18 @@ export class OptionField {
 }
 
 
-export interface OptionsFilter {
+export interface OptionFilterField {
   name: string;
   in: string;
   required: boolean;
   schema: {
     type: string;
   };
+  type?: string;
+  label: string;
+  read_only?: boolean;
+  choices?: {value: string | number, display_name: string}[];
+
 }
 
 
@@ -53,7 +58,7 @@ export class Options {
     description: string,
     name: string,
   };
-  filters: OptionsFilter[];
+  filters: Dictionary<OptionFilterField>;
   parsers: string[];
   renders: string[];
 
@@ -332,8 +337,9 @@ export class ApiService {
   public getFilterFormFields(fields = null, excludeFields: string[] = ['search', 'ordering']): any {
     const data: DjangoFormlyFilterField[] = [];
     if (fields === null) {
-      fields = this.cachedOptions.filters.map((x) => x.name)
-        .filter((x) => excludeFields.indexOf(x) === -1);
+      fields = Object.entries(this.cachedOptions.filters)
+        .map((x) => x[0])
+        .filter((x: string) => excludeFields.indexOf(x) === -1);
     }
     for (const field of fields) {
       data.push(new DjangoFormlyFilterField(field, this));
@@ -402,6 +408,15 @@ export class ApiService {
     data = getNestedDictionary(data, name);
     return (data as unknown as OptionField);
   }
+
+  getFiltersOptionField(name): null | OptionFilterField {
+    if (!this.hasOptions) {
+      return;
+    }
+    const data: Dictionary<OptionFilterField> = this.cachedOptions.filters;
+    return data[name];
+  }
+
 
   getUrlDetail(pk: string | number): string {
       return `${this.url}${pk}/`;
