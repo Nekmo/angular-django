@@ -1,7 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {HabitatApi, RegionApi, SpecieApi, UserApi} from './api.service';
+import {
+  GenerationApi,
+  GrowthRateApi,
+  HabitatApi,
+  PokemonApi,
+  RegionApi,
+  ShapeApi,
+  SpecieApi,
+  UserApi
+} from './api.service';
 import {GithubCodeModule} from '../github-code/github-code.module';
 import {CodeHighlightModule} from '../code-highlight/code-highlight.module';
 import {HttpErrorInterceptor} from './interceptor';
@@ -13,8 +22,12 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
   declarations: [],
   providers: [
     RegionApi,
+    GenerationApi,
     HabitatApi,
+    ShapeApi,
+    GrowthRateApi,
     SpecieApi,
+    PokemonApi,
     UserApi,
     {
       provide: HTTP_INTERCEPTORS,

@@ -14,11 +14,10 @@ export class Region extends SerializerService {
 }
 
 
-// @Api(Region)
-// @Injectable({
-//   providedIn: 'root'
-// })
-@Injectable()
+@Api(Region)
+@Injectable({
+  providedIn: 'root'
+})
 export class RegionApi extends ApiService {
 // export class RegionApi extends ApiService {
 

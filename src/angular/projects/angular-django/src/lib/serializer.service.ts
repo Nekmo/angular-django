@@ -56,8 +56,8 @@ export function Field(options?: FieldOptions): (target: object, key: string) => 
     if (target.constructor['fields'] === undefined) {
       target.constructor['fields'] = {};
     }
-    options.isSerializer = (options.type && options.type.prototype['__proto__'] &&
-      options.type.prototype['__proto__'].constructor.name === 'SerializerService');
+    options.isSerializer = (options.type && options.type['__proto__'] &&
+      options.type['__proto__']._className === 'SerializerService');
     target.constructor['fields'][key] = options;
   };
 }
@@ -84,6 +84,18 @@ export class SerializerService {
 
   static get fieldNames(): string[] {
     return Object.keys(this['fields']);
+  }
+
+  static get _className(): string {
+    return 'SerializerService';
+  }
+
+  static getApiClass(): any {
+    const apiClass = this['apiClass'];
+    if (!apiClass) {
+      throw Error(`ApiClass is not available in ${this} serializer class. Use @Api() to fix this error.`);
+    }
+    return apiClass;
   }
 
   /**
@@ -179,10 +191,10 @@ export class SerializerService {
         return;
       }
       if (options['isSerializer'] && options['many']) {
-        const apiService = type.apiClass as ApiService;
+        const apiService = type.getApiClass() as ApiService;
         data[name] = data[name].map((item) => new type(this._api.injector.get(apiService), item));
       } else if (options['isSerializer']) {
-        const apiService = type.apiClass as ApiService;
+        const apiService = type.getApiClass() as ApiService;
         data[name] = new type(this._api.injector.get(apiService), data[name]);
       } else if (type === Date) {
         data[name] = new type(data[name]);

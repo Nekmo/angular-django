@@ -149,7 +149,8 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
             query = query.search(this.search);
           }
           query = query.filter(this.filters || {});
-          return query.list().pipe(catchError(() => {
+          return query.list().pipe(catchError((err) => {
+            console.error(err);
             return observableOf(new Page(this.api, []));
           }));
         }),
