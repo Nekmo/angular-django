@@ -62,6 +62,7 @@ export class DjangoFormlyField {
   key: string;
   type: string;
   className?: string;
+  required: boolean;
   defaultValue?: any;
   fieldGroupClassName?: string;
   fieldGroup?: DjangoFormlyField;
@@ -140,6 +141,10 @@ export class DjangoFormlyField {
     if ( this.key && !templateOptions.placeholder ) {
       templateOptions.placeholder = `Enter ${templateOptions.label.toLowerCase()}`;
     }
+    const optionField: OptionField|OptionFilterField = this.getOptionField(this.key);
+    const fieldOptions: FieldOptions | null = this.getFieldOptions();
+    templateOptions.required = [this.required, fieldOptions?.required]
+      .find((x) => x !== undefined);
     if (widget) {
       widget.updateTemplateOptions(templateOptions, this);
     }
