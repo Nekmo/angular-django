@@ -1,5 +1,5 @@
-import "reflect-metadata";
-import {catchError, delay, shareReplay} from 'rxjs/operators';
+import 'reflect-metadata';
+import {catchError} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {ApiService, OptionField, OptionFilterField} from './api.service';
 import {FieldOptions} from './serializer.service';
@@ -138,14 +138,13 @@ export class DjangoFormlyField {
 
   getTemplateOptions(widget: Widget): FormlyTemplateOptions {
     const templateOptions: FormlyTemplateOptions = {};
+    const optionField: OptionField|OptionFilterField = this.getOptionField(this.key);
     if ( this.key && !templateOptions.label ) {
-      const optionField: OptionField = this.api.getOptionField(this.key);
       templateOptions.label = (optionField ? optionField.label : '') || toTitleCase(this.key);
     }
     if ( this.key && !templateOptions.placeholder ) {
       templateOptions.placeholder = `Enter ${templateOptions.label.toLowerCase()}`;
     }
-    const optionField: OptionField|OptionFilterField = this.getOptionField(this.key);
     const fieldOptions: FieldOptions | null = this.getFieldOptions();
     templateOptions.required = [this.required, fieldOptions?.required, optionField?.required]
       .find((x) => x !== undefined);
