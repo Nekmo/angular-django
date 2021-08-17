@@ -6,6 +6,7 @@ import {DjangoFormlyField, DjangoFormlyFilterField} from './form';
 import {SerializerService} from './serializer.service';
 import {getCookie, getNestedDictionary} from './utils';
 import {Dictionary} from './utility-types';
+import {ANGULAR_DJANGO_CONFIG, AngularDjangoConfig} from './angular-django.module';
 
 
 /**
@@ -131,12 +132,14 @@ export function Api(serializer: any) {
 export class ApiService {
 
   http: HttpClient;
+  angularDjangoConfig: AngularDjangoConfig;
   serializer: any;
   url: string;
   queryParams: any = {};
 
   constructor(public injector: Injector) {
     this.http = injector.get(HttpClient);
+    this.angularDjangoConfig = injector.get(ANGULAR_DJANGO_CONFIG) as AngularDjangoConfig;
   }
 
   // Common api methods
@@ -385,6 +388,19 @@ export class ApiService {
     this.queryParams = Object.assign(this.queryParams, params);
   }
 
+  get rootUrl(): string {
+    let rootUrl = this.angularDjangoConfig.rootUrl || '';
+    rootUrl = rootUrl.replace(/\/$/, '');
+    if (rootUrl && !this.url.startsWith('/')) {
+      rootUrl += '/';
+    }
+    return rootUrl;
+  }
+
+  get absoluteUrl(): string {
+    return `${this.rootUrl}${this.url}`;
+  }
+
   get hasOptions(): boolean {
     return '_options' in this.constructor;
   }
@@ -419,11 +435,12 @@ export class ApiService {
 
 
   getUrlDetail(pk: string | number): string {
-      return `${this.url}${pk}/`;
+    const absoluteUrl = this.absoluteUrl.replace(/\/$/, '');
+    return `${absoluteUrl}/${pk}/`;
   }
 
   getUrlList(): string {
-    return `${this.url}`;
+    return this.absoluteUrl;
   }
 
 }
