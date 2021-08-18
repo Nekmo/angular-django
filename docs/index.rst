@@ -11,6 +11,7 @@ Welcome to angular-django's documentation!
    :caption: Contents:
 
    installation
+   first_steps
 
 
 Indices and tables
