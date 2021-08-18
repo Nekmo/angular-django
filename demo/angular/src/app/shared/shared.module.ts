@@ -20,6 +20,7 @@ import {AutocompleteTypeComponent} from './autocomplete-type.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
+import {ExternalHtmlModule} from '../external-html/external-html.module';
 
 
 
@@ -55,6 +56,7 @@ import {MatInputModule} from '@angular/material/input';
     CommonModule,
     HttpClientModule,
     GithubCodeModule,
+    ExternalHtmlModule,
     CodeHighlightModule,
     MatInputModule,
     MatAutocompleteModule,
@@ -68,6 +70,7 @@ import {MatInputModule} from '@angular/material/input';
     AutocompleteTypeComponent,
     HttpClientModule,
     GithubCodeModule,
+    ExternalHtmlModule,
     CodeHighlightModule,
   ]
 })
