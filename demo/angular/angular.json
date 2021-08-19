@@ -25,7 +25,12 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/assets/docs/",
+                "output": "/assets/docs/"
+              }
             ],
             "styles": [
               "./node_modules/highlight.js/styles/github.css",

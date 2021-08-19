@@ -43,8 +43,8 @@ COPY demo/angular/package.json demo/angular/package-lock.json ./
 RUN npm ci && ngcc
 COPY --from=angular-src-build /angular-django/dist/ /app/node_modules/
 COPY demo/angular ./
-RUN ng build --prod
 COPY --from=docs /docs/_build/ demo/angular/src/assets/
+RUN ng build --prod
 
 
 FROM nginx:1.19 as nginx-build
