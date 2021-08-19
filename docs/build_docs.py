@@ -5,7 +5,8 @@ from bs4 import BeautifulSoup
 
 
 INPUT_DOCS_DIRECTORY = '_build/htmlhelp/'
-OUTPUT_DOCS_DIRECTORY = Path('../demo/angular/src/assets/docs/')
+OUTPUT_DOCS_DIRECTORY_DEFAULT = '../demo/angular/src/assets/docs/'
+OUTPUT_DOCS_DIRECTORY = Path(os.environ.get('OUTPUT_DOCS_DIRECTORY') or OUTPUT_DOCS_DIRECTORY_DEFAULT)
 
 
 os.makedirs(OUTPUT_DOCS_DIRECTORY, exist_ok=True)

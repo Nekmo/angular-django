@@ -1,4 +1,9 @@
 *
+!docs/*.txt
+!docs/*.py
+!docs/*.rst
+!docs/Makefile
+!docs/_static
 !demo/angular/src
 !demo/angular/*.json
 !src/angular/projects

@@ -16,6 +16,14 @@ ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/local/bin/gunicorn", "-b", "0.0.0.0:8000", "demo.wsgi:application"]
 
 
+FROM python:3.8 as docs
+ENV OUTPUT_DOCS_DIRECTORY _build/docs
+WORKDIR /docs
+COPY docs/ .
+RUN pip install -r requirements.txt
+RUN make docs
+
+
 FROM node:14.12 as angular-src-build
 ENV PATH /angular-django/node_modules/.bin:$PATH
 RUN mkdir /angular-django
@@ -36,6 +44,7 @@ RUN npm ci && ngcc
 COPY --from=angular-src-build /angular-django/dist/ /app/node_modules/
 COPY demo/angular ./
 RUN ng build --prod
+COPY --from=docs /docs/ demo/angular/src/assets/
 
 
 FROM nginx:1.19 as nginx-build
