@@ -2,6 +2,57 @@ API guide
 =========
 The following guide allows you to delve into the use of Angular Django for more advanced uses.
 
+Serializer fields
+-----------------
+Angular Django will transform all response values using the ``@Field()`` decorator in the serializer to the correct
+type. Even if the server sends a value with another type, such as a string:
+
+.. code-block:: json
+
+    {"date_joined": "2020-10-04T01:37:56.460648Z"}
+
+The server will convert it to the type declared in the serializer:
+
+.. code-block:: typescript
+
+    export class User extends SerializerService {
+      @Field() date_joined: Date;
+    }
+
+
+This will also work with **nested serializers** but **multiple nested serializers** must be declared specially:
+
+.. code-block:: typescript
+
+    export class Permission extends SerializerService {
+      @Field() code_name: string;
+      @Field() name: string;
+    }
+
+    export class User extends SerializerService {
+      @Field({many: true}) permissions: Permission[];
+    }
+
+The fields declared with the ``Field()`` decorator will also be used for building forms with the ``getFormFields()``
+method. The forms fields created with ``getFormFields()`` can also be customized using ``Field()``. The following are
+the available options:
+
+.. code-block:: typescript
+
+    export interface FieldOptions {
+      widget?: string | Widget;
+      many?: boolean;
+      required?: boolean;
+      defaultValue?: any;
+      readOnly?: boolean;
+      writeOnly?: boolean;
+      helpText?: string;
+    }
+
+Most options like ``is_required`` are obtained from the server automatically. Angular Django uses the server's
+``HTTP OPTIONS`` method to get these options. ``@Field()``'s options take precedence over server options.
+
+
 API & serializer extra actions
 ------------------------------
 `Django Rest Framework extra actions`_ allow you to perform additional actions on objects or on lists. For example,
