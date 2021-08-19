@@ -12,6 +12,7 @@ Welcome to angular-django's documentation!
 
    installation
    first_steps
+   api_guide
 
 
 Indices and tables

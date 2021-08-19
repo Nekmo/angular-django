@@ -11,6 +11,10 @@ const routes: Routes = [
         loadChildren : () => import('./first-steps/first-steps.module').then(m => m.FirstStepsModule),
     },
     {
+        path        : 'api-guide',
+        loadChildren : () => import('./api-guide/api-guide.module').then(m => m.ApiGuideModule),
+    },
+    {
         path        : 'retrieve-api-service',
         loadChildren : () => import('./retrieve-api-service/retrieve-api-service.module').then(m => m.RetrieveApiServiceModule),
     },

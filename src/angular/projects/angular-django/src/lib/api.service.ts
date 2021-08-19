@@ -354,6 +354,11 @@ export class ApiService {
     return {headers: {'X-CSRFToken': getCookie('csrftoken') || ''}};
   }
 
+  /**
+   * Transform the observable object or objects with the API serializer.
+   * @param observable: observable to add the pipe to.
+   * @param listMode: Apply the serializer to an object (retrieve) or several (list).
+   */
   pipeHttp(observable: Observable<object | object[] | ApiPage>,
            listMode: boolean = false): Observable<object | Page<SerializerService>> {
     return observable.pipe(
