@@ -44,7 +44,7 @@ RUN npm ci && ngcc
 COPY --from=angular-src-build /angular-django/dist/ /app/node_modules/
 COPY demo/angular ./
 RUN ng build --prod
-COPY --from=docs /docs/ demo/angular/src/assets/
+COPY --from=docs /docs/_build/docs/ demo/angular/src/assets/
 
 
 FROM nginx:1.19 as nginx-build
