@@ -5,6 +5,13 @@
 //  flex-direction: column;
 //}
 
+mat-toolbar {
+  a {
+    color: white;
+    text-decoration: none;
+  }
+}
+
 .container {
   margin: 1em auto;
   padding: 0 1em;

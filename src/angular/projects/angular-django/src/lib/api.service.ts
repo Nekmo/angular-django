@@ -105,6 +105,10 @@ export class Page<T> extends Array<T> {
     this.apiService = apiService;
   }
 
+  first(): any {
+    return this[0] || null;
+  }
+
   previous(): Observable<Page<any>> {
     return this.apiService.page(this.currentPage - 1).list();
   }
