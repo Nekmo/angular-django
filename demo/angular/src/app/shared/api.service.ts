@@ -222,7 +222,7 @@ export class PokemonApi extends ApiService {
 
 
 ///////////////////////////////////////
-// Pokemon API
+// User API
 ///////////////////////////////////////
 export class User extends SerializerService {
   @Field() url: string;

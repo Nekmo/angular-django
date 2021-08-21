@@ -15,15 +15,29 @@
   </p>
 </div>
 
-<div class="flex">
+<div class="flex" style="margin-top: -20px;">
   <p>Easy-to-implement <em>filtering</em>, <em>paging</em>, and <em>searching </em> <strong>listings</strong>.</p>
   <app-list style="min-width: 60%"></app-list>
 </div>
 
-<p>Use your Django classes and types in Angular. The library will transform the API values to the correct types.</p>
+<div class="flex">
+  <app-code-highlight [code]="CODE_EXAMPLE_2"></app-code-highlight>
+  <p class="right">
+    Use your <strong>Django classes</strong> and types <em>in Angular</em>. The library will transform
+    the API values to the correct types.
+  </p>
+</div>
 
 <h2>How does it work?</h2>
-<p>Angular generates typescript classes from your Django Rest Framework viewsets and serializers classes.</p>
+
+<div class="flex" style="flex-direction: column; align-items: flex-start">
+  <p>Angular Django <strong>generates typescript classes</strong>
+    from your <em>Django Rest Framework viewsets and serializers classes</em>.</p>
+  <div style="display: flex;">
+    <app-code-highlight [code]="CODE_EXAMPLE_3_1" style="margin-right: 10px;"></app-code-highlight>
+    <app-code-highlight [code]="CODE_EXAMPLE_3_2" style="margin-left: 10px;"></app-code-highlight>
+  </div>
+</div>
 
 <p>In Angular Django the viewsets are called Apis and the serializers are called serializers too.</p>
 
