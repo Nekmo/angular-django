@@ -31,6 +31,10 @@
   }
 }
 
+strong {
+  color: #3F51B5;
+}
+
 h1 {
   font-size: 400%;
 }
@@ -47,8 +51,8 @@ h2 {
 .flex {
   display: flex;
   align-items: center;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 80px;
+  margin-bottom: 80px;
 
   p {
     font-size: 150%;
@@ -64,4 +68,39 @@ h2 {
     text-align: left;
     padding-left: 20px;
   }
+}
+
+
+.example-3 {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@media screen and (max-width: 1024px) {
+  .flex {
+    flex-direction: column;
+
+    .left, .right {
+      text-align: left;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    p {
+      order: 1;
+      margin-right: 20px;
+    }
+  }
+
+  .example-3 {
+    align-items: center;
+    > div {
+      flex-direction: column;
+
+      app-code-highlight {
+        width: 100%;
+      }
+    }
+  }
+
 }
