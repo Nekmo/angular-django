@@ -16,6 +16,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {AngularDjangoModule} from 'angular-django';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {MatCardModule} from '@angular/material/card';
 
 const routes: Routes = [
   {
@@ -39,6 +40,7 @@ const routes: Routes = [
     MatFormFieldModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatCardModule,
 
     MatTableModule,
     MatBadgeModule,

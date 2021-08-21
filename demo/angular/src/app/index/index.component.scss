@@ -22,6 +22,13 @@
   .flex-5 { flex: 5; }
 
   .flex-6 { flex: 6; }
+
+  .list {
+    mat-card {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
 }
 
 h1 {
@@ -40,8 +47,8 @@ h2 {
 .flex {
   display: flex;
   align-items: center;
-  margin-top: 40px;
-  margin-bottom: 40px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 
   p {
     font-size: 150%;
