@@ -66,6 +66,18 @@ const CODE_EXAMPLE_3_2 = '' +
   '  }\n' +
   '}\n';
 
+const CODE_EXAMPLE_4 = '' +
+  'Django                  Angular\n' +
+  '-----------------       ----------\n' +
+  'PokemonSerializer  -->  Pokemon\n' +
+  'PokemonViewSet     -->  PokemonApi\n';
+
+const CODE_EXAMPLE_5 = '' +
+  'const pokemons: Page<Pokemon> = await PokemonApi.list();\n' +
+  'const specie: Specie = pokemons[0].specie;\n' +
+  '// The methods in the serializer Specie are available\n' +
+  'specie.getName()';
+
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -77,6 +89,8 @@ export class IndexComponent implements OnInit {
   CODE_EXAMPLE_2 = CODE_EXAMPLE_2;
   CODE_EXAMPLE_3_1 = CODE_EXAMPLE_3_1;
   CODE_EXAMPLE_3_2 = CODE_EXAMPLE_3_2;
+  CODE_EXAMPLE_4 = CODE_EXAMPLE_4;
+  CODE_EXAMPLE_5 = CODE_EXAMPLE_5;
 
   constructor() { }
 
