@@ -1,0 +1,48 @@
+
+<mat-form-field appearance="standard">
+  <mat-label>Search</mat-label>
+  <input matInput placeholder="Placeholder" [(ngModel)]="search">
+  <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
+
+<button mat-icon-button aria-label="Filters" (click)="openFiltersDialog();" style="top: -7px;" class="filter-button"
+        matBadge="{{ filtersCount }}" matBadgeColor="accent">
+  <mat-icon>filter_alt</mat-icon>
+</button>
+
+
+<adm-table [api]="specieApi" [columns]="columnNames" [(resultsCount)]="resultsCount" [(pageSize)]="pageSize"
+           [pageSizeOptions]="pageSizeOptions" [search]="search" [pageSize]="pageSize" [paginator]="paginator"
+           [selection]="selection" (isAllSelectedChanged)="isAllSelected = $event;" [filters]="filters"
+           #table>
+  <ng-container admColumnDef="generation">
+      <div *admCellDef="let row">
+        {{ row.generation.identifier }}
+      </div>
+  </ng-container>
+  <ng-container admColumnDef="color">
+      <div *admCellDef="let row">
+        {{ row|getDisplay:'color'|async }}
+      </div>
+  </ng-container>
+</adm-table>
+<div class="paginator">
+  <div class="selected">
+    <span *ngIf="!allPagesSelected && selection.selected.length > 1">
+      {{ selection.selected.length }} elements selected
+    </span>
+    <span *ngIf="selection.selected.length === 1">1 element selected</span>
+    <a href="#" *ngIf="isAllSelected && resultsCount > selection.selected.length && !allPagesSelected"
+          (click)="setAllPagesSelected(); $event.preventDefault();">
+      select all {{ resultsCount }}
+    </a>
+    <span *ngIf="allPagesSelected">
+      All {{ resultsCount }} selected
+    </span>
+    <a href="#" *ngIf="allPagesSelected" (click)="clearSelection(); $event.preventDefault();">
+      Clear selection
+    </a>
+  </div>
+  <mat-paginator [length]="resultsCount" [pageSize]="pageSize" #paginator
+                 [pageSizeOptions]="pageSizeOptions" showFirstLastButtons></mat-paginator>
+</div>

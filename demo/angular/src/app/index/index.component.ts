@@ -14,9 +14,12 @@ export class IndexComponent implements OnInit {
 
   CODE_EXAMPLE_1 = CODE_EXAMPLE_1;
 
+
   constructor() { }
 
   ngOnInit(): void {
   }
+
+
 
 }
