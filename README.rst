@@ -64,7 +64,7 @@ Full instructions are available `on the website. <https://angular-django.nekmo.o
 
 Features
 ========
-Some of the features available:
+Some features available:
 
 * Use the methods and filters available in the Django Rest Framework to work with the API.
 * Build forms in minutes. Includes validation on frontend and backend. Selector choices are built with the server.
