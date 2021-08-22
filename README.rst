@@ -28,17 +28,33 @@ angular-django
      :alt: Requirements Status
 
 
-Django Rest Framework API for Angular with self-building classes, forms, and listings.
-`A demo is available on the website. <https://angular-django.nekmo.org/>`_.
+.. image:: https://img.shields.io/requires/github/Nekmo/angular-django.svg?style=flat-square
+     :target: https://requires.io/github/Nekmo/angular-django/requirements/?branch=master
+     :alt: Requirements Status
+
+.. image:: https://raw.githubusercontent.com/Nekmo/angular-django/master/angular_django.svg
+     :width: 256px
+     :height: 256px
+     :align: center
+
+**Angular Django** is a framework to work in *Angular* as in *Django*. Use the Django classes in Angular to build
+**forms** and **data** grids in minutes. `A demo is available on the website. <https://angular-django.nekmo.org/>`_.
+
+Angular-django consists of **two packages**: a package for *Angular* and an optional package for *Django*. To install
+the Angular package:
+
+.. code-block:: shell
+
+    $ npm i angular-django
 
 
-To install angular-django, run this command in your terminal:
+To install the Django package:
 
-.. code-block:: console
+.. code-block:: shell
 
-    $ sudo pip install angular-django
+    $ pip install -U angular-django
 
-This is the preferred method to install angular-django, as it will always install the most recent stable release.
+Full instructions are available `on the website. <https://angular-django.nekmo.org/installation>`_.
 
 
 Features
