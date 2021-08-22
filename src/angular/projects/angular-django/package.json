@@ -1,6 +1,6 @@
 {
   "name": "angular-django",
-  "version": "0.0.1",
+  "version": "0.0.6",
   "peerDependencies": {
     "@angular/common": "^10.1.3",
     "@angular/core": "^10.1.3"
