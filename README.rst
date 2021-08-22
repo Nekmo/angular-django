@@ -32,10 +32,15 @@ angular-django
      :target: https://requires.io/github/Nekmo/angular-django/requirements/?branch=master
      :alt: Requirements Status
 
-.. image:: https://raw.githubusercontent.com/Nekmo/angular-django/master/angular_django.svg
-     :width: 256px
-     :height: 256px
-     :align: center
+
+.. raw:: html
+
+    <p align="center">
+      <img src="https://raw.githubusercontent.com/Nekmo/angular-django/master/angular_django.svg"
+           width="256px" height="256px" alt="Angular Django"/>
+    </p>
+    <p align="center"><strong><em>Work in Angular as in Django</em></strong></p>
+
 
 **Angular Django** is a framework to work in *Angular* as in *Django*. Use the Django classes in Angular to build
 **forms** and **data** grids in minutes. `A demo is available on the website. <https://angular-django.nekmo.org/>`_.
@@ -59,6 +64,9 @@ Full instructions are available `on the website. <https://angular-django.nekmo.o
 
 Features
 ========
+Some of the features available:
 
-* TODO
-
+* Use the methods and filters available in the Django Rest Framework to work with the API.
+* Build forms in minutes. Includes validation on frontend and backend. Selector choices are built with the server.
+* Easy-to-implement filtering, paging, and searching listings.
+* Use your Django classes and types in Angular. The library will transform the API values to the correct types.
