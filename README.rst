@@ -43,7 +43,7 @@ angular-django
 
 
 **Angular Django** is a framework to work in *Angular* as in *Django*. Use the Django classes in Angular to build
-**forms** and **data** grids in minutes. `A demo is available on the website. <https://angular-django.nekmo.org/>`_.
+**forms** and **data** grids in minutes. `A demo is available on the website <https://angular-django.nekmo.org/>`_.
 
 Angular-django consists of **two packages**: a package for *Angular* and an optional package for *Django*. To install
 the Angular package:
@@ -59,7 +59,7 @@ To install the Django package:
 
     $ pip install -U angular-django
 
-Full instructions are available `on the website. <https://angular-django.nekmo.org/installation>`_.
+Full instructions are available `on the website <https://angular-django.nekmo.org/installation>`_.
 
 
 Features
