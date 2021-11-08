@@ -10,8 +10,12 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
-import {HIGHLIGHT_OPTIONS, HighlightModule} from 'ngx-highlightjs';
+import {HIGHLIGHT_OPTIONS} from 'ngx-highlightjs';
 import {HighlightPlusModule} from 'ngx-highlightjs/plus';
+import {FormlyModule} from '@ngx-formly/core';
+import {AutocompleteTypeComponent} from './shared/autocomplete-type.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {FormlyMaterialModule} from '@ngx-formly/material';
 
 @NgModule({
   declarations: [
@@ -24,11 +28,18 @@ import {HighlightPlusModule} from 'ngx-highlightjs/plus';
     BrowserAnimationsModule,
 
 
+    MatAutocompleteModule,
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
+    FormlyMaterialModule,
+    FormlyModule.forRoot({
+      types: [
+        {name: 'autocomplete', component: AutocompleteTypeComponent, wrappers: ['form-field']},
+      ],
+    }),
 
     // HighlightModule,
     HighlightPlusModule,

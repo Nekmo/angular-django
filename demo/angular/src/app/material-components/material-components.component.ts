@@ -30,7 +30,6 @@ export interface MaterialComponentsDialogData {
       <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="close();">Filter</button>
     </mat-dialog-actions>
   `,
-  // templateUrl: 'dialog-overview-example-dialog.html',
 })
 export class MaterialComponentsDialogComponent {
 
@@ -121,6 +120,7 @@ export class MaterialComponentsComponent implements OnInit, OnDestroy {
       data: {api: this.specieApi, filters: this.filters}
     });
 
+    // TODO: cancel is not working
     dialogRef.afterClosed().subscribe(result => {
       Object.assign(this.filters, result);
       this.updateResults();

@@ -6,6 +6,7 @@ import {DjangoFormlyField, DjangoFormlyFilterField} from './form';
 import {SerializerService} from './serializer.service';
 import {getCookie, getNestedDictionary} from './utils';
 import {Dictionary} from './utility-types';
+import {ANGULAR_DJANGO_CONFIG, AngularDjangoConfig} from './angular-django.module';
 
 
 /**
@@ -33,13 +34,18 @@ export class OptionField {
 }
 
 
-export interface OptionsFilter {
+export interface OptionFilterField {
   name: string;
   in: string;
   required: boolean;
   schema: {
     type: string;
   };
+  type?: string;
+  label: string;
+  read_only?: boolean;
+  choices?: {value: string | number, display_name: string}[];
+
 }
 
 
@@ -53,7 +59,7 @@ export class Options {
     description: string,
     name: string,
   };
-  filters: OptionsFilter[];
+  filters: Dictionary<OptionFilterField>;
   parsers: string[];
   renders: string[];
 
@@ -95,8 +101,12 @@ export class Page<T> extends Array<T> {
   }
 
   constructor(public apiService: ApiService, items?: Array<T>) {
-    super(...items);
+    super(...items || []);
     this.apiService = apiService;
+  }
+
+  first(): any {
+    return this[0] || null;
   }
 
   previous(): Observable<Page<any>> {
@@ -106,6 +116,7 @@ export class Page<T> extends Array<T> {
   next(): Observable<Page<any>> {
     return this.apiService.page(this.currentPage + 1).list();
   }
+
 }
 
 /**
@@ -125,12 +136,14 @@ export function Api(serializer: any) {
 export class ApiService {
 
   http: HttpClient;
+  angularDjangoConfig: AngularDjangoConfig;
   serializer: any;
   url: string;
   queryParams: any = {};
 
   constructor(public injector: Injector) {
     this.http = injector.get(HttpClient);
+    this.angularDjangoConfig = injector.get(ANGULAR_DJANGO_CONFIG) as AngularDjangoConfig;
   }
 
   // Common api methods
@@ -331,8 +344,9 @@ export class ApiService {
   public getFilterFormFields(fields = null, excludeFields: string[] = ['search', 'ordering']): any {
     const data: DjangoFormlyFilterField[] = [];
     if (fields === null) {
-      fields = this.cachedOptions.filters.map((x) => x.name)
-        .filter((x) => excludeFields.indexOf(x) === -1);
+      fields = Object.entries(this.cachedOptions.filters)
+        .map((x) => x[0])
+        .filter((x: string) => excludeFields.indexOf(x) === -1);
     }
     for (const field of fields) {
       data.push(new DjangoFormlyFilterField(field, this));
@@ -344,6 +358,11 @@ export class ApiService {
     return {headers: {'X-CSRFToken': getCookie('csrftoken') || ''}};
   }
 
+  /**
+   * Transform the observable object or objects with the API serializer.
+   * @param observable: observable to add the pipe to.
+   * @param listMode: Apply the serializer to an object (retrieve) or several (list).
+   */
   pipeHttp(observable: Observable<object | object[] | ApiPage>,
            listMode: boolean = false): Observable<object | Page<SerializerService>> {
     return observable.pipe(
@@ -378,6 +397,19 @@ export class ApiService {
     this.queryParams = Object.assign(this.queryParams, params);
   }
 
+  get rootUrl(): string {
+    let rootUrl = this.angularDjangoConfig.rootUrl || '';
+    rootUrl = rootUrl.replace(/\/$/, '');
+    if (rootUrl && !this.url.startsWith('/')) {
+      rootUrl += '/';
+    }
+    return rootUrl;
+  }
+
+  get absoluteUrl(): string {
+    return `${this.rootUrl}${this.url}`;
+  }
+
   get hasOptions(): boolean {
     return '_options' in this.constructor;
   }
@@ -402,12 +434,22 @@ export class ApiService {
     return (data as unknown as OptionField);
   }
 
+  getFiltersOptionField(name): null | OptionFilterField {
+    if (!this.hasOptions) {
+      return;
+    }
+    const data: Dictionary<OptionFilterField> = this.cachedOptions.filters;
+    return data[name];
+  }
+
+
   getUrlDetail(pk: string | number): string {
-      return `${this.url}${pk}/`;
+    const absoluteUrl = this.absoluteUrl.replace(/\/$/, '');
+    return `${absoluteUrl}/${pk}/`;
   }
 
   getUrlList(): string {
-    return `${this.url}`;
+    return this.absoluteUrl;
   }
 
 }

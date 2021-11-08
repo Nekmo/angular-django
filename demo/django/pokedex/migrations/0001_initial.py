@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
                 ('generation', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='pokedex.Generation')),
                 ('growth_rate', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='pokedex.GrowthRate')),
                 ('habitat', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='pokedex.Habitat')),
-                ('shape', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='pokedex.Shape')),
+                ('shape', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='pokedex.Shape', blank=True, null=True)),
             ],
         ),
         migrations.AddField(

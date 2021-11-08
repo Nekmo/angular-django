@@ -1,0 +1,106 @@
+:host ::ng-deep {
+  .display-flex {
+    display: flex;
+
+    [class*="flex-"] {
+      padding-left: 10px;
+    }
+
+    [class*="flex-"]:first-child {
+      padding-left: 0;
+    }
+  }
+
+  .flex-1 { flex: 1; }
+
+  .flex-2 { flex: 2; }
+
+  .flex-3 { flex: 3; }
+
+  .flex-4 { flex: 4; }
+
+  .flex-5 { flex: 5; }
+
+  .flex-6 { flex: 6; }
+
+  .list {
+    mat-card {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+}
+
+strong {
+  color: #3F51B5;
+}
+
+h1 {
+  font-size: 400%;
+}
+
+h2 {
+  font-size: 300%;
+}
+
+.subtitle {
+  font-size: 150%;
+}
+
+
+.flex {
+  display: flex;
+  align-items: center;
+  margin-top: 80px;
+  margin-bottom: 80px;
+
+  p {
+    font-size: 150%;
+    line-height: 1.5;
+  }
+
+  .left {
+    text-align: right;
+    padding-right: 20px;
+  }
+
+  .right {
+    text-align: left;
+    padding-left: 20px;
+  }
+}
+
+
+.example-3 {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@media screen and (max-width: 1024px) {
+  .flex {
+    flex-direction: column;
+
+    .left, .right {
+      text-align: left;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    p {
+      order: 1;
+      margin-right: 20px;
+    }
+  }
+
+  .example-3 {
+    align-items: center;
+    > div {
+      flex-direction: column;
+
+      app-code-highlight {
+        width: 100%;
+      }
+    }
+  }
+
+}

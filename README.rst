@@ -28,21 +28,45 @@ angular-django
      :alt: Requirements Status
 
 
-Django Rest Framework API for Angular with self-building classes, forms, and listings.
-`A demo is available on the website. <https://angular-django.nekmo.org/>`_.
+.. image:: https://img.shields.io/requires/github/Nekmo/angular-django.svg?style=flat-square
+     :target: https://requires.io/github/Nekmo/angular-django/requirements/?branch=master
+     :alt: Requirements Status
 
 
-To install angular-django, run this command in your terminal:
+.. raw:: html
 
-.. code-block:: console
+    <p align="center">
+      <img src="https://raw.githubusercontent.com/Nekmo/angular-django/master/angular_django.svg"
+           width="256px" height="256px" alt="Angular Django"/>
+    </p>
+    <p align="center"><strong><em>Work in Angular as in Django</em></strong></p>
 
-    $ sudo pip install angular-django
 
-This is the preferred method to install angular-django, as it will always install the most recent stable release.
+**Angular Django** is a framework to work in *Angular* as in *Django*. Use the Django classes in Angular to build
+**forms** and **data** grids in minutes. `A demo is available on the website <https://angular-django.nekmo.org/>`_.
+
+Angular-django consists of **two packages**: a package for *Angular* and an optional package for *Django*. To install
+the Angular package:
+
+.. code-block:: shell
+
+    $ npm i angular-django
+
+
+To install the Django package:
+
+.. code-block:: shell
+
+    $ pip install -U angular-django
+
+Full instructions are available `on the website <https://angular-django.nekmo.org/installation>`_.
 
 
 Features
 ========
+Some features available:
 
-* TODO
-
+* Use the methods and filters available in the Django Rest Framework to work with the API.
+* Build forms in minutes. Includes validation on frontend and backend. Selector choices are built with the server.
+* Easy-to-implement filtering, paging, and searching listings.
+* Use your Django classes and types in Angular. The library will transform the API values to the correct types.

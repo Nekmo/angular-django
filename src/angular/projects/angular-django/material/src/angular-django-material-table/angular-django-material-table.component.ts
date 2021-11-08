@@ -67,6 +67,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   @Output() resultsCountChange = new EventEmitter<number>();
   @Output() searchChanged = new EventEmitter<string>();
   @Output() isAllSelectedChanged = new EventEmitter<boolean>();
+  @Output() listChanged = new EventEmitter();
 
   constructor(private cdr: ChangeDetectorRef) {
     this.debouncedUpdateResults.pipe(
@@ -78,6 +79,9 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
   }
 
   ngOnInit(): void {
+    this.listChanged
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.selection && this.selection.clear());
   }
 
   ngOnDestroy(): void {
@@ -149,7 +153,8 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
             query = query.search(this.search);
           }
           query = query.filter(this.filters || {});
-          return query.list().pipe(catchError(() => {
+          return query.list().pipe(catchError((err) => {
+            console.error(err);
             return observableOf(new Page(this.api, []));
           }));
         }),
@@ -176,6 +181,7 @@ export class AngularDjangoMaterialTableComponent implements OnInit, OnChanges, A
           this.pageSizeChange.emit(data.pagesSize);
         }
         this.cdr.detectChanges();
+        this.listChanged.emit();
       });
   }
 

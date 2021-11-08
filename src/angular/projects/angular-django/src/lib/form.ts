@@ -1,7 +1,7 @@
-import "reflect-metadata";
-import {catchError, shareReplay} from 'rxjs/operators';
+import 'reflect-metadata';
+import {catchError} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
-import {ApiService, OptionField} from './api.service';
+import {ApiService, OptionField, OptionFilterField} from './api.service';
 import {FieldOptions} from './serializer.service';
 import {getWidgetFromName, Widget, DEFAULT_TYPE, FORM_TYPES} from './widgets';
 
@@ -62,6 +62,7 @@ export class DjangoFormlyField {
   key: string;
   type: string;
   className?: string;
+  required: boolean;
   defaultValue?: any;
   fieldGroupClassName?: string;
   fieldGroup?: DjangoFormlyField;
@@ -94,6 +95,10 @@ export class DjangoFormlyField {
     }
     if (fieldOptions && fieldOptions.defaultValue !== undefined) {
       this.defaultValue = this.getFieldOptions().defaultValue;
+    } else if ( this.type === 'input' && widget?.name === undefined ) {
+      this.defaultValue = '';
+    } else {
+      this.defaultValue = null;
     }
     if (this.key && !this.api.hasOptions) {
       this.lifecycle = {
@@ -125,7 +130,7 @@ export class DjangoFormlyField {
     }
     if (!widget) {
       // Try to get widget from api OPTIONS request
-      const optionField: OptionField = this.api.getOptionField(this.key);
+      const optionField: OptionField|OptionFilterField = this.getOptionField(this.key);
       widget = ((optionField ? FORM_TYPES[optionField.type] : null) as Widget);
     }
     return widget;
@@ -133,17 +138,24 @@ export class DjangoFormlyField {
 
   getTemplateOptions(widget: Widget): FormlyTemplateOptions {
     const templateOptions: FormlyTemplateOptions = {};
+    const optionField: OptionField|OptionFilterField = this.getOptionField(this.key);
     if ( this.key && !templateOptions.label ) {
-      const optionField: OptionField = this.api.getOptionField(this.key);
       templateOptions.label = (optionField ? optionField.label : '') || toTitleCase(this.key);
     }
     if ( this.key && !templateOptions.placeholder ) {
       templateOptions.placeholder = `Enter ${templateOptions.label.toLowerCase()}`;
     }
+    const fieldOptions: FieldOptions | null = this.getFieldOptions();
+    templateOptions.required = [this.required, fieldOptions?.required, optionField?.required]
+      .find((x) => x !== undefined);
     if (widget) {
       widget.updateTemplateOptions(templateOptions, this);
     }
     return templateOptions;
+  }
+
+  getOptionField(key): null | OptionField | OptionFilterField {
+    return this.api.getOptionField(key);
   }
 }
 
@@ -153,11 +165,15 @@ export class DjangoFormlyFilterField extends DjangoFormlyField {
     return {};
   }
 
-  getWidget(): Widget | null {
-    return null;
+  getOptionField(key): null | OptionFilterField {
+    return this.api.getFiltersOptionField(key);
   }
 
-  getTemplateOptions(widget: Widget): FormlyTemplateOptions {
-    return {label: this.key};
-  }
+  // getWidget(): Widget | null {
+  //   return null;
+  // }
+
+  // getTemplateOptions(widget: Widget): FormlyTemplateOptions {
+  //   return {label: this.key};
+  // }
 }

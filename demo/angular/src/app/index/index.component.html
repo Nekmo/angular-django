@@ -1,0 +1,73 @@
+<div style="text-align: center">
+  <img src="/assets/angular_django.svg" alt="Angular Django" style="width: 256px; height: 256px;">
+  <h1>Angular Django</h1>
+  <em class="subtitle">Work in Angular as in Django</em>
+</div>
+
+<div class="flex">
+  <p class="left">Use the methods and filters available in the <strong>Django Rest Framework</strong> to work with the API.</p>
+  <app-code-highlight [code]="CODE_EXAMPLE_1"></app-code-highlight>
+</div>
+
+<div class="flex">
+  <mat-card style="min-width: 50%">
+    <mat-card-content>
+      <app-form></app-form>
+    </mat-card-content>
+  </mat-card>
+  <p class="right">
+    Build <strong>forms</strong> in minutes. Includes
+    <span style="color: #d14; border-bottom: 2px dotted #d14;">validation</span> on <em>frontend</em> and
+    <em>backend</em>. Selector choices are built with the server.
+  </p>
+</div>
+
+<div class="flex list">
+  <p>Easy-to-implement <em>filtering</em>, <em>paging</em>, and <em>searching </em> <strong>listings</strong>.</p>
+  <mat-card style="min-width: 60%">
+    <mat-card-content>
+      <app-list></app-list>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="flex">
+  <app-code-highlight [code]="CODE_EXAMPLE_2"></app-code-highlight>
+  <p class="right">
+    Use your <strong>Django classes</strong> and types <em>in Angular</em>. The library will transform
+    the API values to the correct types.
+  </p>
+</div>
+
+<h2>How does it work?</h2>
+
+<div class="flex example-3">
+  <p>Angular Django <strong>generates typescript classes</strong>
+    from your <em>Django Rest Framework viewsets and serializers classes</em>.</p>
+  <div style="display: flex;">
+    <app-code-highlight [code]="CODE_EXAMPLE_3_1" style="margin-right: 10px;"></app-code-highlight>
+    <app-code-highlight [code]="CODE_EXAMPLE_3_2" style="margin-left: 10px;"></app-code-highlight>
+  </div>
+</div>
+
+<div class="flex">
+  <p class="left">In Angular Django the <strong>viewsets are called Apis</strong> and the
+    <strong>serializers are called serializers</strong> too.</p>
+  <app-code-highlight [code]="CODE_EXAMPLE_4" style="min-width: 50%;"></app-code-highlight>
+</div>
+
+<div class="flex">
+  <app-code-highlight [code]="CODE_EXAMPLE_5" style="min-width: 50%;"></app-code-highlight>
+  <p class="right">
+    Use APIs to make requests to the API such as listing items. The <strong>elements will be instantiated using
+    the serializers</strong>.
+  </p>
+</div>
+
+<p style="font-size: 150%; text-align: center">
+  This project is under development. Play the demo on your machine, it is available with docker-compose.
+</p>
+
+<p style="font-size: 180%; text-align: center; margin-bottom: 50px;">
+  You can contribute to this project on <a href="https://github.com/Nekmo/angular-django">Github</a>.
+</p>

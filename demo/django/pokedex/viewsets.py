@@ -3,10 +3,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
 from rest_framework.pagination import PageNumberPagination
 
-from pokedex.filters import PokemonFilter
+from pokedex.filters import PokemonFilter, SpecieFilter
 from pokedex.models import Pokemon, Specie, GrowthRate, Generation, Habitat, Shape, Region
 from pokedex.serializers import PokemonSerializer, UserSerializer, SpecieSerializer, GrowthRateSerializer, \
     ShapeSerializer, HabitatSerializer, GenerationSerializer, RegionSerializer
+
 
 
 class SpecieViewSet(viewsets.ModelViewSet):
@@ -19,16 +20,13 @@ class SpecieViewSet(viewsets.ModelViewSet):
     queryset = Specie.objects.all()
     serializer_class = SpecieSerializer
     filter_backends = (filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend)
+    filter_class = SpecieFilter
     ordering_fields = ('identifier', 'generation', 'evolves_from_specie', 'color', 'shape', 'habitat',
                        'gender_rate', 'capture_rate', 'base_happiness', 'is_baby', 'hatch_counter',
                        'has_gender_differences', 'growth_rate', 'forms_switchable', 'order',
                        'conquest_order')
     search_fields = ('identifier', 'generation__identifier', 'shape__identifier', 'habitat__identifier',
                      'growth_rate__identifier', 'forms_switchable')
-    filter_fields = ('identifier', 'generation', 'evolves_from_specie', 'color', 'shape', 'habitat',
-                     'gender_rate', 'capture_rate', 'base_happiness', 'is_baby', 'hatch_counter',
-                     'has_gender_differences', 'growth_rate', 'forms_switchable',
-                     'conquest_order')
 
 
 class RegionViewSet(viewsets.ModelViewSet):
@@ -90,8 +88,6 @@ class PokemonViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'identifier', 'specie__generation__identifier', 'height',
                        'weight', 'base_experience', 'order', 'is_default')
     search_fields = ('identifier',)
-    # filter_fields = ('id', 'identifier', 'specie__identifier',
-    #                  'specie', 'height', 'weight', 'base_experience', 'is_default')
 
 
 

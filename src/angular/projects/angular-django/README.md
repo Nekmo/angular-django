@@ -1,24 +1,35 @@
-# AngularDjango
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Nekmo/angular-django/master/angular_django.svg"
+       width="256px" height="256px" alt="Angular Django"/>
+</p>
+<p align="center"><strong><em>Work in Angular as in Django</em></strong></p>
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.3.
 
-## Code scaffolding
+**Angular Django** is a framework to work in *Angular* as in *Django*. Use the Django classes in Angular to build
+**forms** and **data** grids in minutes. [A demo is available on the website](https://angular-django.nekmo.org/).
 
-Run `ng generate component component-name --project angular-django` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project angular-django`.
-> Note: Don't forget to add `--project angular-django` or else it will be added to the default project in your `angular.json` file. 
+Angular-django consists of **two packages**: a package for *Angular* and an optional package for *Django*. To install
+the Angular package:
 
-## Build
+```shell
+$ npm i angular-django
+```
+    
 
-Run `ng build angular-django` to build the project. The build artifacts will be stored in the `dist/` directory.
+To install the Django package:
 
-## Publishing
+```shell
+$ pip install -U angular-django
+```
 
-After building your library with `ng build angular-django`, go to the dist folder `cd dist/angular-django` and run `npm publish`.
+Full instructions are available [on the website](https://angular-django.nekmo.org/installation>).
 
-## Running unit tests
 
-Run `ng test angular-django` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Features
+========
+Some features available:
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+* Use the methods and filters available in the Django Rest Framework to work with the API.
+* Build forms in minutes. Includes validation on frontend and backend. Selector choices are built with the server.
+* Easy-to-implement filtering, paging, and searching listings.
+* Use your Django classes and types in Angular. The library will transform the API values to the correct types.

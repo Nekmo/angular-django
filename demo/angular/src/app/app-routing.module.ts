@@ -3,12 +3,20 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
     {
+        path        : '',
+        loadChildren : () => import('./index/index.module').then(m => m.IndexModule),
+    },
+    {
         path        : 'installation',
         loadChildren : () => import('./installation/installation.module').then(m => m.InstallationModule),
     },
     {
         path        : 'first-steps',
         loadChildren : () => import('./first-steps/first-steps.module').then(m => m.FirstStepsModule),
+    },
+    {
+        path        : 'api-guide',
+        loadChildren : () => import('./api-guide/api-guide.module').then(m => m.ApiGuideModule),
     },
     {
         path        : 'retrieve-api-service',
