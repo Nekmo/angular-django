@@ -4,6 +4,7 @@ from itertools import chain
 from django.conf import settings
 from django.urls import URLResolver, URLPattern
 from django.utils.module_loading import import_string
+from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
@@ -27,6 +28,7 @@ def get_api_views():
     views = set(list(chain(*[get_views(pattern) for pattern in patterns])))
     views = [view for view in views
              if inspect.isclass(view[0]) and issubclass(view[0], GenericViewSet) and \
+                issubclass(view[0].serializer_class, ModelSerializer) and
                 '(?P<format>[a-z0-9]+)' not in view[1][-1]._regex and \
                 '(?P<pk>[^/.]+)' not in view[1][-1]._regex]
     return views
