@@ -19,21 +19,13 @@ angular-django
   :target: https://pypi.org/project/angular-django/
   :alt: Python versions
 
-.. image:: https://img.shields.io/codeclimate/github/Nekmo/angular-django.svg?style=flat-square
+.. image:: https://img.shields.io/codeclimate/maintainability/Nekmo/angular-django.svg?style=flat-square
   :target: https://codeclimate.com/github/Nekmo/angular-django
   :alt: Code Climate
 
-.. image:: https://img.shields.io/codeclimate/maintainability/Nekmo/angular-django.svg?style=flat-square
-  :target: https://codecov.io/github/Nekmo/angular-django
-  :alt: Test coverage
-
 .. image:: https://img.shields.io/codecov/c/github/Nekmo/angular-django/master.svg?style=flat-square
   :target: https://codecov.io/github/Nekmo/angular-django
-
-
-.. image:: https://img.shields.io/requires/github/Nekmo/angular-django.svg?style=flat-square
-     :target: https://requires.io/github/Nekmo/angular-django/requirements/?branch=master
-     :alt: Requirements Status
+  :alt: Test coverage
 
 
 .. raw:: html
