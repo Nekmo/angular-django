@@ -3,9 +3,13 @@ angular-django
 ##############
 
 
-.. image:: https://img.shields.io/travis/Nekmo/angular-django.svg?style=flat-square&maxAge=2592000
-  :target: https://travis-ci.org/Nekmo/angular-django
-  :alt: Latest Travis CI build status
+.. image:: https://raw.githubusercontent.com/Nekmo/angular-django/pip-rating-badge/pip-rating-badge.svg
+  :target: https://github.com/Nekmo/angular-django/actions/workflows/pip-rating.yml
+  :alt: pip-rating badge
+
+.. image:: https://img.shields.io/github/actions/workflow/status/Nekmo/angular-django/test.yml?style=flat-square&maxAge=2592000&branch=master
+  :target: https://github.com/Nekmo/angular-django/actions?query=workflow%3ATests
+  :alt: Latest Tests CI build status
 
 .. image:: https://img.shields.io/pypi/v/angular-django.svg?style=flat-square
   :target: https://pypi.org/project/angular-django/
@@ -19,13 +23,12 @@ angular-django
   :target: https://codeclimate.com/github/Nekmo/angular-django
   :alt: Code Climate
 
-.. image:: https://img.shields.io/codecov/c/github/Nekmo/angular-django/master.svg?style=flat-square
+.. image:: https://img.shields.io/codeclimate/maintainability/Nekmo/angular-django.svg?style=flat-square
   :target: https://codecov.io/github/Nekmo/angular-django
   :alt: Test coverage
 
-.. image:: https://img.shields.io/requires/github/Nekmo/angular-django.svg?style=flat-square
-     :target: https://requires.io/github/Nekmo/angular-django/requirements/?branch=master
-     :alt: Requirements Status
+.. image:: https://img.shields.io/codecov/c/github/Nekmo/angular-django/master.svg?style=flat-square
+  :target: https://codecov.io/github/Nekmo/angular-django
 
 
 .. image:: https://img.shields.io/requires/github/Nekmo/angular-django.svg?style=flat-square
